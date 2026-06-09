@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soko Kuu - Pro Multi-Vendor Marketplace</title>
+    <title>Soko Kuu - Autonomous Camera & Chat Marketplace</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -14,11 +14,12 @@
             --light: #f8fafc;
             --border: #e2e8f0;
             --orange: #f97316;
+            --whatsapp: #25d366;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
         body { background: var(--light); color: var(--dark); padding-bottom: 60px; }
 
-        /* Navigation Header */
+        /* Header Layout */
         header {
             background: #fff; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 100; padding: 12px 20px;
@@ -38,17 +39,17 @@
         }
         .user-welcome { font-size: 13px; font-weight: 600; color: var(--orange); display: none; background: #ffedd5; padding: 4px 10px; border-radius: 12px; }
 
-        /* Vendor Dashboard Area */
+        /* Dashboard Vendor Form Layout */
         .vendor-panel {
             background: #fff; border: 2px dashed var(--orange); margin: 20px; padding: 20px;
             border-radius: 12px; display: none; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
         }
-        .vendor-panel h2 { font-size: 18px; color: var(--orange); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .vendor-panel h2 { font-size: 18px; color: var(--orange); margin-bottom: 15px; }
         .upload-form-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
         }
 
-        /* Search Banner */
+        /* Search Engine Container */
         .search-container {
             background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff;
             padding: 30px 20px; text-align: center;
@@ -60,7 +61,7 @@
         }
         .search-box input { flex: 1; border: none; padding: 12px 20px; font-size: 15px; outline: none; }
 
-        /* Categories Ribbon */
+        /* Ribbon Navbar Categories */
         .categories-ribbon {
             display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto;
             white-space: nowrap; background: #fff; border-bottom: 1px solid var(--border);
@@ -71,81 +72,68 @@
         }
         .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Main Catalog Grid */
+        /* Main Catalogue Grid Settings */
         .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .grid-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; }
         .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
         }
         
-        /* Product Visual Cards */
+        /* Premium Card Framework UI */
         .product-card {
-            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            background: #fff; border: 1px solid var(--border); border-radius: 14px;
             overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;
         }
-        .product-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .p-image-placeholder {
-            background: #e2e8f0; width: 100%; height: 140px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 38px; color: #94a3b8;
-        }
-        .p-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
-        .p-vendor { font-size: 11px; color: var(--orange); margin-bottom: 4px; text-transform: uppercase; font-weight: bold; }
-        .p-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
-        .p-meta { font-size: 12px; color: #64748b; margin-bottom: 8px; line-height: 1.4; }
-        .p-price { font-size: 16px; font-weight: 700; color: var(--dark); margin-top: auto; margin-bottom: 10px; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
+        .p-img-box { width: 100%; height: 180px; background: #e2e8f0; position: relative; }
+        .p-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .p-img-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #94a3b8; }
         
-        .btn-action {
-            border: none; padding: 8px; border-radius: 6px; font-weight: bold; 
-            font-size: 12px; cursor: pointer; text-align: center; width: 100%;
+        .p-details { padding: 15px; display: flex; flex-direction: column; flex: 1; }
+        .p-vendor { font-size: 11px; color: var(--orange); margin-bottom: 4px; text-transform: uppercase; font-weight: 800; }
+        .p-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
+        .p-meta { font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4; }
+        .p-price { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 12px; margin-top: auto; }
+        
+        /* Communication Connect Buttons Grid */
+        .connect-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+        .btn-connect {
+            border: none; padding: 10px; border-radius: 8px; font-weight: bold;
+            font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; text-align: center;
         }
-        .add-to-cart-btn { background: var(--primary); color: #fff; }
+        .btn-wa { background: var(--whatsapp); color: #fff; }
+        .btn-call { background: var(--primary); color: #fff; }
+        .btn-cart { background: var(--light); color: var(--dark); border: 1px solid var(--border); width: 100%; padding: 10px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+
         .submit-post-btn { background: var(--orange); color: #fff; padding: 12px; font-size: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
 
-        /* Auth Popups Modal */
+        /* Auth Popups Modals */
         .modal-overlay {
             position: fixed; top:0; left:0; right:0; bottom:0;
             background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
             z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px;
         }
         .modal-card {
-            background: #fff; width: 100%; max-width: 400px; border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;
-            animation: slideUp 0.3s ease-out;
+            background: #fff; width: 100%; max-width: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .modal-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--light); }
-        .tab-btn {
-            flex: 1; padding: 15px; border: none; background: none; font-weight: bold;
-            font-size: 14px; cursor: pointer; color: #64748b; text-align: center;
-        }
+        .modal-tabs { display: flex; background: var(--light); border-bottom: 1px solid var(--border); }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; font-size: 14px; cursor: pointer; color: #64748b; }
         .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #fff; }
-        
         .modal-body { padding: 25px; }
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #334155; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
-            outline: none; font-size: 14px;
-        }
+        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; }
         .close-modal-x { float: right; font-size: 20px; background: none; border: none; cursor: pointer; color: #64748b; }
 
-        /* Shopping Basket Sliding Drawer */
+        /* Cart Sliding Panel Drawer */
         .cart-drawer {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
-            border-top-left-radius: 20px; border-top-right-radius: 20px;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.15); z-index: 200;
-            max-height: 70%; display: flex; flex-direction: column;
-            transform: translateY(100%); transition: transform 0.3s ease-out;
+            position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top-left-radius: 20px; border-top-right-radius: 20px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.15); z-index: 200; max-height: 70%; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease-out;
         }
         .cart-drawer.open { transform: translateY(0); }
         .cart-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-items-list { padding: 15px 20px; overflow-y: auto; flex: 1; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--light); }
-        .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: var(--light); }
-        .total-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; font-size: 18px; }
-        .checkout-btn { background: var(--accent); color: #fff; border: none; width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -162,51 +150,48 @@
     </header>
 
     <div class="vendor-panel" id="vendor-dashboard">
-        <h2>🛠️ PANEL YA MUUZAJI: Pandisha Bidhaa Sokoni (Bila Thibitisho)</h2>
+        <h2 style="margin-bottom: 15px;">📸 PANEL YA MUUZAJI: Piga Picha & Pandisha Bidhaa Papo Hapo</h2>
         <form onsubmit="handleVendorPublishProduct(event)">
             <div class="upload-form-grid">
                 <div class="form-group">
                     <label>Jina la Bidhaa</label>
-                    <input type="text" id="new-p-title" placeholder="Mfano: iPhone 13 Pro Max" required>
+                    <input type="text" id="new-p-title" placeholder="Mfano: Viatu vya Ngozi" required>
                 </div>
                 <div class="form-group">
                     <label>Bei ya Bidhaa (TZS)</label>
-                    <input type="number" id="new-p-price" placeholder="Mfano: 1500000" required>
+                    <input type="number" id="new-p-price" placeholder="Mfano: 75000" required>
                 </div>
                 <div class="form-group">
                     <label>Location / Mkoa ulipo</label>
                     <input type="text" id="new-p-location" placeholder="Mfano: Kariakoo, Dar" required>
                 </div>
                 <div class="form-group">
-                    <label>Namba ya Mawasiliano</label>
+                    <label>Namba yako ya Simu (Mawasiliano)</label>
                     <input type="tel" id="new-p-phone" placeholder="Mfano: 0712345678" required>
                 </div>
                 <div class="form-group">
                     <label>Kundi la Bidhaa</label>
                     <select id="new-p-cat">
-                        <option value="electronics">Electronics</option>
                         <option value="fashion">Fashion & Nguo</option>
+                        <option value="electronics">Electronics & Simu</option>
                         <option value="home">Home & Living</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Alama ya Bidhaa (Icon/Emoji)</label>
-                    <select id="new-p-icon">
-                        <option value="📱">📱 Simu / Kompyuta</option>
-                        <option value="👟">👟 Viatu / Raba</option>
-                        <option value="👕">👕 Nguo / Mashati</option>
-                        <option value="📺">📺 TV / Vyombo</option>
-                        <option value="👜">👜 Mikoba / Bag</option>
-                        <option value="📦">📦 Bidhaa Nyingine</option>
-                    </select>
+                    <label>Piga Picha ya Bidhaa (Kamera Moja kwa Moja)</label>
+                    <input type="file" id="new-p-image-file" accept="image/*" capture="environment" onchange="processCapturedPhoto(this)" required>
                 </div>
+            </div>
+            <div id="photo-preview-box" style="margin-top:10px; display:none; text-align:center;">
+                <p style="font-size:12px; font-weight:bold; color:var(--accent);">✓ Picha Imenaswa Vizuri!</p>
+                <img id="photo-preview-element" src="" style="width:70px; height:70px; object-fit:cover; border-radius:8px; margin-top:5px; border:1px solid var(--border);">
             </div>
             <button type="submit" class="submit-post-btn" style="width: 100%; margin-top: 15px;">🚀 PANDISHA BIDHAA SOKONI RASMI</button>
         </form>
     </div>
 
     <div class="search-container">
-        <h1>Tafuta Bidhaa Kwenye Soko Kuu</h1>
+        <h1>Soko la Mtandaoni la Wafanyabiashara Hurubani</h1>
         <div class="search-box">
             <input type="text" id="search-input" placeholder="Tafuta jina la bidhaa, duka au mkoa..." oninput="handleSearchFilter()">
         </div>
@@ -214,13 +199,13 @@
 
     <div class="categories-ribbon">
         <button class="cat-btn active" onclick="filterCategory('all', this)">Zote</button>
-        <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
         <button class="cat-btn" onclick="filterCategory('fashion', this)">Fashion</button>
+        <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
         <button class="cat-btn" onclick="filterCategory('home', this)">Home & Living</button>
     </div>
 
     <div class="main-container">
-        <h2 class="grid-title">Bidhaa Zilizopo Sokoni (Wauzaji Wote)</h2>
+        <h2 class="grid-title">Bidhaa Zilizopo Sokoni hivi sasa</h2>
         <div class="products-grid" id="products-catalog"></div>
     </div>
 
@@ -231,11 +216,11 @@
         </div>
         <div class="cart-items-list" id="cart-items-container"></div>
         <div class="cart-footer">
-            <div class="total-row">
+            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:15px; font-size:18px;">
                 <span>JUMLA KUU:</span>
                 <span id="cart-total-price">0 TZS</span>
             </div>
-            <button class="checkout-btn" onclick="triggerCheckoutAlert()">ENDELEA NA MALIPO</button>
+            <button style="background:var(--accent); color:#fff; border:none; width:100%; padding:14px; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer;" onclick="alert('Kamilisha manunuzi kwa kuwasiliana na wauzaji kwenye bidhaa husika!')">ENDELEA</button>
         </div>
     </div>
 
@@ -248,33 +233,29 @@
             <div class="modal-body">
                 <button class="close-modal-x" onclick="closeAuthModal()">✕</button>
                 <h3 id="auth-title" style="margin-bottom: 20px; font-size: 18px;">Ukurasa wa Usajili wa Mteja</h3>
-                
                 <form id="auth-form" onsubmit="handleRegistrationSubmit(event)">
                     <div class="form-group">
                         <label>Jina Kamili</label>
-                        <input type="text" id="auth-name" placeholder="Mfano: Ally Juma" required>
+                        <input type="text" id="auth-name" placeholder="Mfano: John Doe" required>
                     </div>
                     <div class="form-group">
                         <label>Namba ya Simu</label>
                         <input type="tel" id="auth-phone" placeholder="Mfano: 0712345678" required>
                     </div>
-
                     <div id="vendor-fields" style="display: none;">
                         <div class="form-group">
                             <label>Jina la Duka Lako</label>
-                            <input type="text" id="auth-shop" placeholder="Mfano: Ally Smart Gadgets">
+                            <input type="text" id="auth-shop" placeholder="Mfano: John Trend Store">
                         </div>
                         <div class="form-group">
                             <label>Mkoa / Eneo la Biashara Kuu</label>
-                            <input type="text" id="auth-shop-loc" placeholder="Mfano: Arusha Mjini">
+                            <input type="text" id="auth-shop-loc" placeholder="Mfano: Mwanza Mjini">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>Neno la Siri (Password)</label>
                         <input type="password" placeholder="••••••••" required>
                     </div>
-
                     <button type="submit" class="submit-auth-btn" id="auth-submit-text">Tengeneza Akaunti ya Mteja</button>
                 </form>
             </div>
@@ -282,12 +263,10 @@
     </div>
 
     <script>
-        // Core Database Schema Matrix
+        // Pre-Populated Mockup Database Matrix 
         let productsDatabase = [
-            { id: 1, title: "Smart TV Inch 43 4K UHD", price: 650000, category: "electronics", vendor: "Alpha Electronics", location: "Dar es Salaam", phone: "0711223344", icon: "📺" },
-            { id: 2, title: "Raba za Kisasa za Michezo", price: 45000, category: "fashion", vendor: "Kasi Sports Shoes", location: "Mwanza", phone: "0755667788", icon: "👟" },
-            { id: 3, title: "Blender ya Matunda yenye Nguvu", price: 85000, category: "home", vendor: "Mama Kitchen Utensils", location: "Dodoma", phone: "0622990011", icon: "🍹" },
-            { id: 4, title: "Simu ya Mkononi Pro 128GB", price: 450000, category: "electronics", vendor: "Smart & Gadgets Ltd", location: "Dar es Salaam", phone: "0788334455", icon: "📱" }
+            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, category: "fashion", vendor: "Vazi Bora Store", location: "Dar es Salaam", phone: "0711223344", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
+            { id: 2, title: "Smart Watch Series 9", price: 120000, category: "electronics", vendor: "Bongo Tech Lab", location: "Arusha", phone: "0755667788", image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
         ];
 
         let shoppingCart = [];
@@ -296,8 +275,9 @@
         let activeVendorName = "";
         let activeVendorPhone = "";
         let activeVendorLocation = "";
+        let capturedPhotoBase64 = ""; // Inashikilia picha iliyopigwa na kamera
 
-        // UI View Port Rendering Controller
+        // Rendering Engine Interface Dashboard 
         function renderCatalog(itemsToRender) {
             const catalogContainer = document.getElementById('products-catalog');
             catalogContainer.innerHTML = '';
@@ -308,26 +288,50 @@
             }
 
             itemsToRender.forEach(p => {
+                // Tunatengeneza ujumbe maalum wa Whatsapp kwa ajili ya bidhaa hii
+                const whatsappMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako ya "${p.title}" yenye bei ya ${p.price.toLocaleString()} TZS kwenye Soko Kuu, nahitaji kuinunua!`);
+                const whatsappLink = `https://wa.me/255${p.phone.replace(/^0/, '')}?text=${whatsappMessage}`;
+
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
-                    <div class="p-image-placeholder">${p.icon}</div>
+                    <div class="p-img-box">
+                        ${p.image ? `<img src="${p.image}" alt="Product image">` : `<div class="p-img-fallback">📦</div>`}
+                    </div>
                     <div class="p-details">
                         <span class="p-vendor">🏬 ${p.vendor}</span>
                         <h3 class="p-title">${p.title}</h3>
-                        <div class="p-meta">
-                            📍 ${p.location}<br>
-                            📞 Mpigie: ${p.phone}
-                        </div>
+                        <div class="p-meta">📍 Eneo: ${p.location}</div>
                         <div class="p-price">${p.price.toLocaleString()} TZS</div>
-                        <button class="btn-action add-to-cart-btn" onclick="addToCart(${p.id})">WEKA KWENYE KAPU</button>
+                        
+                        <div class="connect-buttons-grid">
+                            <a href="${whatsappLink}" target="_blank" class="btn-connect btn-wa">💬 CHAT WA</a>
+                            <a href="tel:${p.phone}" class="btn-connect btn-call">📞 PIGA SIMU</a>
+                        </div>
+                        <button class="btn-cart" onclick="addToCart(${p.id})">🛒 WEKA KAPU</button>
                     </div>
                 `;
                 catalogContainer.appendChild(card);
             });
         }
 
-        // Live Dynamic Upload Engine for Autonomous Vendors
+        // Process File Input Stream from Mobile/PC Cameras
+        function processCapturedPhoto(inputElement) {
+            const file = inputElement.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    capturedPhotoBase64 = e.target.result; // URL ya picha iliyopigwa
+                    
+                    // Onyesha preview ya picha ndogo kwenye fomu
+                    document.getElementById('photo-preview-element').src = capturedPhotoBase64;
+                    document.getElementById('photo-preview-box').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Autonomous Live Vendor Post Mechanics
         function handleVendorPublishProduct(event) {
             event.preventDefault();
 
@@ -336,9 +340,7 @@
             const location = document.getElementById('new-p-location').value;
             const phone = document.getElementById('new-p-phone').value;
             const category = document.getElementById('new-p-cat').value;
-            const icon = document.getElementById('new-p-icon').value;
 
-            // Tengeneza Object mpya ya bidhaa
             const newProduct = {
                 id: productsDatabase.length + 1,
                 title: title,
@@ -347,28 +349,27 @@
                 vendor: activeVendorName,
                 location: location,
                 phone: phone,
-                icon: icon
+                image: capturedPhotoBase64 // Picha kutoka kwenye kamera yako!
             };
 
-            // Sukuma kwenye Database yetu hapo hapo bila thibitisho!
             productsDatabase.unshift(newProduct); 
-            
-            // Re-render catalog kuonyesha bidhaa mpya juu kabisa
             applyFilters();
 
-            // Safisha Fomu ya kupost
+            // Clear Fomu kabisa
             document.getElementById('new-p-title').value = "";
             document.getElementById('new-p-price').value = "";
-            
-            alert(`🚀 Kijanja kabisa!\nBidhaa yako ya "${title}" imepandishwa sokoni moja kwa moja na wateja wote wanaiona sasa hivi!`);
+            document.getElementById('new-p-image-file').value = "";
+            document.getElementById('photo-preview-box').style.display = 'none';
+            capturedPhotoBase64 = "";
+
+            alert(`🚀 Kazi Safi!\nBidhaa yako imepandishwa na picha uliyopiga imewekwa sokoni moja kwa moja!\nWateja sasa hivi wanaweza kukupigia au kukutumia ujumbe WhatsApp.`);
         }
 
-        // Auth Tabs Swapper Mechanics
+        // Auth management core 
         function switchAuthTab(role) {
             currentRoleType = role;
             document.getElementById('tab-buyer').classList.remove('active');
             document.getElementById('tab-vendor').classList.remove('active');
-            
             const vendorFields = document.getElementById('vendor-fields');
             const submitBtn = document.getElementById('auth-submit-text');
             const title = document.getElementById('auth-title');
@@ -378,20 +379,17 @@
                 vendorFields.style.display = 'none';
                 title.innerText = "Ukurasa wa Usajili wa Mteja";
                 submitBtn.innerText = "Tengeneza Akaunti ya Mteja";
-                document.getElementById('auth-shop').removeAttribute('required');
             } else {
                 document.getElementById('tab-vendor').classList.add('active');
                 vendorFields.style.display = 'block';
                 title.innerText = "Sajili Duka Lako Kama Muuzaji";
                 submitBtn.innerText = "Fungua Duka Lako Sokoni";
-                document.getElementById('auth-shop').setAttribute('required', 'true');
             }
         }
 
         function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
 
-        // Handle Registration Submit Simulation
         function handleRegistrationSubmit(event) {
             event.preventDefault();
             const nameInput = document.getElementById('auth-name').value;
@@ -400,36 +398,29 @@
             const locationInput = document.getElementById('auth-shop-loc').value || "Tanzania";
 
             closeAuthModal();
-            
             const welcomeLabel = document.getElementById('user-display');
             const authNavBtn = document.getElementById('auth-nav-btn');
             const dashboard = document.getElementById('vendor-dashboard');
 
             if (currentRoleType === 'buyer') {
                 welcomeLabel.innerText = `👤 ${nameInput} (Mteja)`;
-                dashboard.style.display = 'none'; // Ficha dashboard ya muuzaji
-                alert(`Karibu sana ${nameInput}!\nAkaunti yako ipo tayari. Unaweza kuanza kununua na kutafuta bidhaa za watu wote.`);
+                dashboard.style.display = 'none';
             } else {
-                // Hifadhi taarifa za Muuzaji aliyeingia sasa hivi
                 activeVendorName = shopInput;
                 activeVendorPhone = phoneInput;
                 activeVendorLocation = locationInput;
 
-                // Jaza data za muuzaji kwenye fomu ya kupost moja kwa moja ili kukurahisishia
                 document.getElementById('new-p-phone').value = activeVendorPhone;
                 document.getElementById('new-p-location').value = activeVendorLocation;
 
-                welcomeLabel.innerText = `🏪 ${shopInput} (Muuzaji)`;
-                dashboard.style.display = 'block'; // Washa Dashboard ya kupost bidhaa!
-                
-                alert(`Hongera Mkuu!\nDuka la "${shopInput}" liko wazi sasa hivi.\nUnaweza kupost bidhaa zako kupitia Panel iliyotokea juu, na hapo hapo chini unaweza kuona na kununua bidhaa za wenzako!`);
+                welcomeLabel.innerText = `🏪 ${shopInput}`;
+                dashboard.style.display = 'block'; // Fungua Kamera Dashboard
             }
-
             welcomeLabel.style.display = 'inline-block';
-            authNavBtn.innerText = "⚙️ AKAUNTI";
+            authNavBtn.style.display = 'none';
         }
 
-        // Search and Filters Logic Controllers
+        // Search engine core matrix
         function filterCategory(cat, element) {
             selectedCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
@@ -443,15 +434,12 @@
             const keyword = document.getElementById('search-input').value.toLowerCase();
             let results = productsDatabase.filter(p => {
                 const mCat = selectedCategory === 'all' || p.category === selectedCategory;
-                const mKey = p.title.toLowerCase().includes(keyword) || 
-                             p.vendor.toLowerCase().includes(keyword) || 
-                             p.location.toLowerCase().includes(keyword);
+                const mKey = p.title.toLowerCase().includes(keyword) || p.vendor.toLowerCase().includes(keyword) || p.location.toLowerCase().includes(keyword);
                 return mCat && mKey;
             });
             renderCatalog(results);
         }
 
-        // Cart Actions Management
         function addToCart(productId) {
             const item = productsDatabase.find(p => p.id === productId);
             if (item) { shoppingCart.push(item); updateCartUI(); }
@@ -462,31 +450,18 @@
             const container = document.getElementById('cart-items-container');
             container.innerHTML = '';
             let total = 0;
-
             shoppingCart.forEach((item, idx) => {
                 total += item.price;
                 const row = document.createElement('div');
                 row.className = 'cart-item';
-                row.innerHTML = `
-                    <div>
-                        <div style="font-weight:600; font-size:14px;">${item.title}</div>
-                        <div style="font-size:11px; color:var(--orange);">Kutoka: ${item.vendor} (${item.location})</div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-weight:bold; font-size:13px;">${item.price.toLocaleString()} TZS</span>
-                        <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:red; font-weight:bold; cursor:pointer;">❌</button>
-                    </div>
-                `;
+                row.innerHTML = `<div><div style="font-weight:600; font-size:14px;">${item.title}</div></div><span style="font-weight:bold;">${item.price.toLocaleString()} TZS</span>`;
                 container.appendChild(row);
             });
             document.getElementById('cart-total-price').innerText = `${total.toLocaleString()} TZS`;
         }
 
-        function removeFromCart(index) { shoppingCart.splice(index, 1); updateCartUI(); }
         function toggleCartDrawer() { document.getElementById('cart-panel').classList.toggle('open'); }
-        function triggerCheckoutAlert() { alert("Mifumo ya malipo na simu itaunganishwa ukishaweka Database ya kweli."); }
 
-        // Start initialization setup
         renderCatalog(productsDatabase);
     </script>
 </body>
