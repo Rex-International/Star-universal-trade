@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soko Kuu - Autonomous Camera & Chat Marketplace</title>
+    <title>Soko Kuu - Premium Multilingual Marketplace</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -15,125 +15,93 @@
             --border: #e2e8f0;
             --orange: #f97316;
             --whatsapp: #25d366;
+            --gold: #f59e0b;
+            --red: #ef4444;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: var(--light); color: var(--dark); padding-bottom: 60px; }
+        body { background: var(--light); color: var(--dark); padding-bottom: 80px; }
 
-        /* Header Layout */
+        /* Top Navigation Navbar */
         header {
             background: #fff; border-bottom: 1px solid var(--border);
             position: sticky; top: 0; z-index: 100; padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
         }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
-        .nav-actions { display: flex; gap: 10px; align-items: center; }
+        .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .btn-nav {
-            background: var(--light); border: 1px solid var(--border); padding: 8px 16px;
-            border-radius: 20px; font-weight: bold; cursor: pointer; position: relative;
-            font-size: 13px;
+            background: var(--light); border: 1px solid var(--border); padding: 8px 14px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; position: relative; font-size: 12px;
         }
-        .cart-count {
-            background: var(--accent); color: #fff; font-size: 11px;
-            padding: 2px 6px; border-radius: 50%; position: absolute; top: -5px; right: -5px;
-        }
-        .user-welcome { font-size: 13px; font-weight: 600; color: var(--orange); display: none; background: #ffedd5; padding: 4px 10px; border-radius: 12px; }
+        .select-lang { padding: 6px 10px; border-radius: 15px; border: 1px solid var(--border); font-size: 12px; font-weight: bold; background: #fff; cursor: pointer; }
+        
+        /* Subscription Status Badges */
+        .sub-badge { font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: bold; margin-left: 5px; cursor: pointer; }
+        .sub-active { background: #dcfce7; color: #15803d; }
+        .sub-expired { background: #fee2e2; color: #b91c1c; animation: blink 1.5s infinite; }
+        @keyframes blink { 50% { opacity: 0.5; } }
 
-        /* Dashboard Vendor Form Layout */
+        /* Premium Vendor Panel */
         .vendor-panel {
             background: #fff; border: 2px dashed var(--orange); margin: 20px; padding: 20px;
             border-radius: 12px; display: none; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1);
         }
-        .vendor-panel h2 { font-size: 18px; color: var(--orange); margin-bottom: 15px; }
-        .upload-form-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;
-        }
+        .commission-note { background: #eff6ff; color: var(--primary); padding: 10px; border-radius: 8px; font-size: 13px; margin-top: 10px; font-weight: 600; }
 
-        /* Search Engine Container */
+        /* Paywall Blockout Message Banner */
+        .paywall-alert-banner {
+            background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b;
+            padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; font-weight: bold; text-align: center;
+        }
+        .paywall-locked-content { background: #f1f5f9; padding: 10px; border-radius: 8px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; margin: 10px 0; border: 1px dashed #cbd5e1; }
+
+        /* Search Section Banner */
         .search-container {
-            background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff;
-            padding: 30px 20px; text-align: center;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 30px 20px; text-align: center;
         }
-        .search-container h1 { font-size: 24px; margin-bottom: 15px; }
-        .search-box {
-            display: flex; max-width: 500px; margin: 0 auto; background: #fff;
-            border-radius: 25px; overflow: hidden; padding: 2px;
-        }
+        .search-box { display: flex; max-width: 500px; margin: 15px auto 0 auto; background: #fff; border-radius: 25px; overflow: hidden; padding: 2px; }
         .search-box input { flex: 1; border: none; padding: 12px 20px; font-size: 15px; outline: none; }
 
-        /* Ribbon Navbar Categories */
-        .categories-ribbon {
-            display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto;
-            white-space: nowrap; background: #fff; border-bottom: 1px solid var(--border);
-        }
-        .cat-btn {
-            background: var(--light); border: 1px solid var(--border); padding: 8px 16px;
-            border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer;
-        }
+        /* Filter Toolbar */
+        .filter-section { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 20px; }
+        .filter-label { font-size: 11px; font-weight: bold; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
+        .categories-ribbon { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
+        .cat-btn { background: var(--light); border: 1px solid var(--border); padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; cursor: pointer; }
         .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Main Catalogue Grid Settings */
+        /* Grid Framework */
         .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .grid-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; }
-        .products-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;
-        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
         
-        /* Premium Card Framework UI */
-        .product-card {
-            background: #fff; border: 1px solid var(--border); border-radius: 14px;
-            overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;
-        }
-        .product-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        .p-img-box { width: 100%; height: 180px; background: #e2e8f0; position: relative; }
+        /* Premium Cards Framework */
+        .product-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        .p-img-box { width: 100%; height: 160px; background: #e2e8f0; }
         .p-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .p-img-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 40px; color: #94a3b8; }
         
         .p-details { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-        .p-vendor { font-size: 11px; color: var(--orange); margin-bottom: 4px; text-transform: uppercase; font-weight: 800; }
-        .p-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: var(--dark); }
-        .p-meta { font-size: 12px; color: #64748b; margin-bottom: 10px; line-height: 1.4; }
+        .p-vendor { font-size: 11px; color: var(--orange); margin-bottom: 2px; text-transform: uppercase; font-weight: 800; }
+        .p-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--dark); }
+        .rating-stars { color: var(--gold); font-size: 12px; margin-bottom: 6px; }
         .p-price { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 12px; margin-top: auto; }
         
-        /* Communication Connect Buttons Grid */
+        /* Action Buttons Grid */
         .connect-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
         .btn-connect {
-            border: none; padding: 10px; border-radius: 8px; font-weight: bold;
-            font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; text-decoration: none; text-align: center;
+            border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; text-align: center;
         }
         .btn-wa { background: var(--whatsapp); color: #fff; }
         .btn-call { background: var(--primary); color: #fff; }
-        .btn-cart { background: var(--light); color: var(--dark); border: 1px solid var(--border); width: 100%; padding: 10px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        .btn-pay-now { background: var(--red); color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; font-size:12px; cursor:pointer; width:100%; text-align:center; }
 
-        .submit-post-btn { background: var(--orange); color: #fff; padding: 12px; font-size: 14px; border-radius: 8px; cursor: pointer; border: none; font-weight: bold; }
-
-        /* Auth Popups Modals */
-        .modal-overlay {
-            position: fixed; top:0; left:0; right:0; bottom:0;
-            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
-            z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px;
-        }
-        .modal-card {
-            background: #fff; width: 100%; max-width: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-        .modal-tabs { display: flex; background: var(--light); border-bottom: 1px solid var(--border); }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; font-size: 14px; cursor: pointer; color: #64748b; }
-        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #fff; }
+        /* Auth Popups */
+        .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .modal-body { padding: 25px; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #334155; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 14px; }
-        .close-modal-x { float: right; font-size: 20px; background: none; border: none; cursor: pointer; color: #64748b; }
-
-        /* Cart Sliding Panel Drawer */
-        .cart-drawer {
-            position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top-left-radius: 20px; border-top-right-radius: 20px;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.15); z-index: 200; max-height: 70%; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.3s ease-out;
-        }
-        .cart-drawer.open { transform: translateY(0); }
-        .cart-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .cart-items-list { padding: 15px 20px; overflow-y: auto; flex: 1; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--light); }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline:none; }
     </style>
 </head>
 <body>
@@ -141,286 +109,365 @@
     <header>
         <div class="logo">SOKO KUU</div>
         <div class="nav-actions">
+            <select class="select-lang" id="language-selector" onchange="changeSystemLanguage(this.value)">
+                <option value="sw">🇹🇿 Kiswahili</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="fr">🇫🇷 Français</option>
+            </select>
+            
             <span class="user-welcome" id="user-display">🏪 Duka Lako</span>
+            <span class="sub-badge sub-expired" id="account-sub-badge" onclick="simulatePaymentProcess()" style="display:none;">UNPAID</span>
+            
             <button class="btn-nav" id="auth-nav-btn" onclick="openAuthModal()">👤 REG / INGIA</button>
-            <button class="btn-nav" onclick="toggleCartDrawer()">
-                🛒 KAPU <span class="cart-count" id="cart-counter">0</span>
-            </button>
         </div>
     </header>
 
     <div class="vendor-panel" id="vendor-dashboard">
-        <h2 style="margin-bottom: 15px;">📸 PANEL YA MUUZAJI: Piga Picha & Pandisha Bidhaa Papo Hapo</h2>
-        <form onsubmit="handleVendorPublishProduct(event)">
+        <div id="vendor-paywall-msg" class="paywall-alert-banner" style="display:none;"></div>
+        <h2 id="lang-vendor-panel-title" style="margin-bottom: 15px; color: var(--orange);">🛠️ PANEL YA MUUZAJI: Pandisha Bidhaa</h2>
+        
+        <form id="vendor-publish-form" onsubmit="handleVendorPublishProduct(event)">
             <div class="upload-form-grid">
                 <div class="form-group">
-                    <label>Jina la Bidhaa</label>
-                    <input type="text" id="new-p-title" placeholder="Mfano: Viatu vya Ngozi" required>
+                    <label id="lang-lbl-pname">Jina la Bidhaa</label>
+                    <input type="text" id="new-p-title" required>
                 </div>
                 <div class="form-group">
-                    <label>Bei ya Bidhaa (TZS)</label>
-                    <input type="number" id="new-p-price" placeholder="Mfano: 75000" required>
+                    <label id="lang-lbl-pprice">Bei ya Bidhaa (TZS)</label>
+                    <input type="number" id="new-p-price" oninput="calculateAdminCommission(this.value)" required>
                 </div>
                 <div class="form-group">
-                    <label>Location / Mkoa ulipo</label>
-                    <input type="text" id="new-p-location" placeholder="Mfano: Kariakoo, Dar" required>
-                </div>
-                <div class="form-group">
-                    <label>Namba yako ya Simu (Mawasiliano)</label>
-                    <input type="tel" id="new-p-phone" placeholder="Mfano: 0712345678" required>
-                </div>
-                <div class="form-group">
-                    <label>Kundi la Bidhaa</label>
-                    <select id="new-p-cat">
-                        <option value="fashion">Fashion & Nguo</option>
-                        <option value="electronics">Electronics & Simu</option>
-                        <option value="home">Home & Living</option>
+                    <label id="lang-lbl-ploc">Mkoa ulipo</label>
+                    <select id="new-p-location">
+                        <option value="Dar es Salaam">Dar es Salaam</option>
+                        <option value="Arusha">Arusha</option>
+                        <option value="Mwanza">Mwanza</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Piga Picha ya Bidhaa (Kamera Moja kwa Moja)</label>
+                    <label id="lang-lbl-pphone">Namba ya WhatsApp</label>
+                    <input type="tel" id="new-p-phone" required>
+                </div>
+                <div class="form-group">
+                    <label id="lang-lbl-pimage">Picha ya Bidhaa (Kamera)</label>
                     <input type="file" id="new-p-image-file" accept="image/*" capture="environment" onchange="processCapturedPhoto(this)" required>
                 </div>
             </div>
-            <div id="photo-preview-box" style="margin-top:10px; display:none; text-align:center;">
-                <p style="font-size:12px; font-weight:bold; color:var(--accent);">✓ Picha Imenaswa Vizuri!</p>
-                <img id="photo-preview-element" src="" style="width:70px; height:70px; object-fit:cover; border-radius:8px; margin-top:5px; border:1px solid var(--border);">
-            </div>
-            <button type="submit" class="submit-post-btn" style="width: 100%; margin-top: 15px;">🚀 PANDISHA BIDHAA SOKONI RASMI</button>
+            <div class="commission-note" id="commission-display"></div>
+            <button type="submit" class="submit-post-btn" id="lang-btn-publish" style="width: 100%; margin-top: 15px;">🚀 PANDISHA BIDHAA SOKONI</button>
         </form>
     </div>
 
     <div class="search-container">
-        <h1>Soko la Mtandaoni la Wafanyabiashara Hurubani</h1>
+        <h1 id="lang-main-banner-title">Soko Kuu la Mtandaoni la Wafanyabiashara</h1>
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="Tafuta jina la bidhaa, duka au mkoa..." oninput="handleSearchFilter()">
+            <input type="text" id="search-input" placeholder="..." oninput="applyFilters()">
         </div>
     </div>
 
-    <div class="categories-ribbon">
-        <button class="cat-btn active" onclick="filterCategory('all', this)">Zote</button>
-        <button class="cat-btn" onclick="filterCategory('fashion', this)">Fashion</button>
-        <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
-        <button class="cat-btn" onclick="filterCategory('home', this)">Home & Living</button>
+    <div class="filter-section">
+        <p class="filter-label" id="lang-lbl-filter-cat">Chuja kwa Makundi:</p>
+        <div class="categories-ribbon">
+            <button class="cat-btn active" id="cat-all" onclick="filterCategory('all', this)">Zote / All</button>
+            <button class="cat-btn" onclick="filterCategory('fashion', this)">Fashion</button>
+            <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
+        </div>
     </div>
 
     <div class="main-container">
-        <h2 class="grid-title">Bidhaa Zilizopo Sokoni hivi sasa</h2>
+        <h2 class="grid-title" id="lang-grid-main-title">Bidhaa Zilizopo Sokoni</h2>
         <div class="products-grid" id="products-catalog"></div>
-    </div>
-
-    <div class="cart-drawer" id="cart-panel">
-        <div class="cart-header">
-            <h3>Kapu Lako la Manunuzi</h3>
-            <button onclick="toggleCartDrawer()" style="background:none; border:none; font-size:14px; font-weight:bold; color:red; cursor:pointer;">FUNGA</button>
-        </div>
-        <div class="cart-items-list" id="cart-items-container"></div>
-        <div class="cart-footer">
-            <div style="display:flex; justify-content:space-between; font-weight:bold; margin-bottom:15px; font-size:18px;">
-                <span>JUMLA KUU:</span>
-                <span id="cart-total-price">0 TZS</span>
-            </div>
-            <button style="background:var(--accent); color:#fff; border:none; width:100%; padding:14px; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer;" onclick="alert('Kamilisha manunuzi kwa kuwasiliana na wauzaji kwenye bidhaa husika!')">ENDELEA</button>
-        </div>
     </div>
 
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-card">
-            <div class="modal-tabs">
-                <button class="tab-btn active" id="tab-buyer" onclick="switchAuthTab('buyer')">MTEJA (BUYER)</button>
-                <button class="tab-btn" id="tab-vendor" onclick="switchAuthTab('vendor')">MUUZAJI (VENDOR)</button>
-            </div>
             <div class="modal-body">
-                <button class="close-modal-x" onclick="closeAuthModal()">✕</button>
-                <h3 id="auth-title" style="margin-bottom: 20px; font-size: 18px;">Ukurasa wa Usajili wa Mteja</h3>
-                <form id="auth-form" onsubmit="handleRegistrationSubmit(event)">
+                <h3 id="lang-auth-modal-title" style="margin-bottom: 15px; font-size: 18px;">Jisajili Kwenye Soko Kuu</h3>
+                <form onsubmit="handleRegistrationSubmit(event)">
                     <div class="form-group">
-                        <label>Jina Kamili</label>
-                        <input type="text" id="auth-name" placeholder="Mfano: John Doe" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Namba ya Simu</label>
-                        <input type="tel" id="auth-phone" placeholder="Mfano: 0712345678" required>
-                    </div>
-                    <div id="vendor-fields" style="display: none;">
-                        <div class="form-group">
-                            <label>Jina la Duka Lako</label>
-                            <input type="text" id="auth-shop" placeholder="Mfano: John Trend Store">
-                        </div>
-                        <div class="form-group">
-                            <label>Mkoa / Eneo la Biashara Kuu</label>
-                            <input type="text" id="auth-shop-loc" placeholder="Mfano: Mwanza Mjini">
-                        </div>
+                        <label id="lang-lbl-regname">Jina Kamili</label>
+                        <input type="text" id="auth-name" required>
                     </div>
                     <div class="form-group">
-                        <label>Neno la Siri (Password)</label>
-                        <input type="password" placeholder="••••••••" required>
+                        <label id="lang-lbl-regrole">Chagua Aina ya Akaunti</label>
+                        <select id="auth-role" onchange="toggleRegRoleFields(this.value)">
+                            <option value="buyer">Mteja / Buyer (Tsh 1,000 / $0.5 pm)</option>
+                            <option value="vendor">Muuzaji / Vendor (Tsh 2,500 / $1.0 pm)</option>
+                        </select>
                     </div>
-                    <button type="submit" class="submit-auth-btn" id="auth-submit-text">Tengeneza Akaunti ya Mteja</button>
+                    <div class="form-group" id="reg-shop-field" style="display:none;">
+                        <label id="lang-lbl-regshop">Jina la Duka Lako</label>
+                        <input type="text" id="auth-shop">
+                    </div>
+                    <div class="form-group">
+                        <label id="lang-lbl-regphone">Namba ya Simu</label>
+                        <input type="tel" id="auth-phone" required>
+                    </div>
+                    <button type="submit" style="width:100%; background:var(--primary); color:#fff; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;" id="lang-btn-regsubmit">Tengeneza Akaunti</button>
                 </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Pre-Populated Mockup Database Matrix 
+        // System Multilingual Dictionary Tree Matrix 
+        const dictionary = {
+            sw: {
+                searchPlace: "Tafuta bidhaa au duka...", bannerTitle: "Soko Kuu la Wafanyabiashara Hurubani", gridTitle: "Bidhaa Zilizopo Sokoni",
+                pName: "Jina la Bidhaa", pPrice: "Bei ya Bidhaa (TZS)", pLoc: "Mkoa ulipo", pPhone: "Namba ya WhatsApp", pImg: "Picha ya Bidhaa (Kamera)",
+                btnPublish: "🚀 PANDISHA BIDHAA SOKONI RASMI", vendorPanelTitle: "🛠️ PANEL YA MUUZAJI: Pandisha Bidhaa", filterCat: "Chuja kwa Makundi:",
+                regTitle: "Jisajili Kwenye Soko Kuu", regName: "Jina Kamili", regRole: "Chagua Aina ya Akaunti", regShop: "Jina la Duka Lako", regPhone: "Namba ya Simu", btnReg: "Tengeneza Akaunti",
+                buyerLockMsg: "🔒 MAWASILIANO YAMEFUNGLIWA! Lipia Tsh 1,000 ($0.5) kwa mwezi ili kuona namba ya duka hili na kuwasiliana nao.",
+                vendorLockMsg: "❌ ACCOUNT EXPIRED! Huwezi kupost bidhaa mpya. Lipia Tsh 2,500 ($1.0) ili kuamsha duka lako.",
+                btnPayNow: "💳 LIPIA AKAUNTI SASA HIVI", subActive: "IMELIPIWA", subExpired: "HAIJALIPIWA", commissionLbl: "Ripoti ya soko"
+            },
+            en: {
+                searchPlace: "Search products or shops...", bannerTitle: "Multi-Vendor Digital Autonomous Market", gridTitle: "Live Catalog Products",
+                pName: "Product Name", pPrice: "Price (TZS)", pLoc: "Location/Region", pPhone: "WhatsApp Number", pImg: "Product Image (Camera)",
+                btnPublish: "🚀 PUBLISH PRODUCT TO MARKET NOW", vendorPanelTitle: "🛠️ VENDOR PANEL: Post New Product", filterCat: "Filter by Categories:",
+                regTitle: "Register to Soko Kuu Marketplace", regName: "Full Name", regRole: "Select Account Type", regShop: "Your Shop Name", regPhone: "Phone Number", btnReg: "Create Account Now",
+                buyerLockMsg: "🔒 COMMUNICATIONS LOCKED! Pay TZS 1,000 ($0.5) per month to view seller contact details and open chats.",
+                vendorLockMsg: "❌ ACCOUNT EXPIRED! You cannot post new products. Pay TZS 2,500 ($1.0) to unlock your digital vendor storefront.",
+                btnPayNow: "💳 RENEW SUBSCRIPTION NOW", subActive: "PAID / ACTIVE", subExpired: "UNPAID / EXPIRED", commissionLbl: "Market Report"
+            },
+            fr: {
+                searchPlace: "Rechercher des produits...", bannerTitle: "Marché Numérique Autonome Premium", gridTitle: "Catalogue des Produits en Direct",
+                pName: "Nom du produit", pPrice: "Prix (TZS)", pLoc: "Région / Emplacement", pPhone: "Numéro WhatsApp", pImg: "Image du produit (Caméra)",
+                btnPublish: "🚀 PUBLIER LE PRODUIT SUR LE MARCHÉ", vendorPanelTitle: "🛠️ PANNEAU VENDRE: Publier un produit", filterCat: "Filtrer par Catégories:",
+                regTitle: "Inscrivez-vous sur Soko Kuu", regName: "Nom Complet", regRole: "Type de Compte", regShop: "Nom de votre Boutique", regPhone: "Numéro de Téléphone", btnReg: "Créer un Compte",
+                buyerLockMsg: "🔒 CONTACTS VERROUILLÉS! Payez 1 000 TZS (0,5 $) par mois pour débloquer les coordonnées du vendeur.",
+                vendorLockMsg: "❌ COMPTE EXPIRÉ! Impossible de publier. Payez 2 500 TZS (1,0 $) pour activer votre panneau de vente.",
+                btnPayNow: "💳 PAYER L'ABONNEMENT MAINTENANT", subActive: "ACTIF", subExpired: "NON PAYÉ", commissionLbl: "Rapport du Marché"
+            }
+        };
+
+        let currentLanguage = 'sw';
+        
+        // Initial Core Database Scheme
         let productsDatabase = [
-            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, category: "fashion", vendor: "Vazi Bora Store", location: "Dar es Salaam", phone: "0711223344", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
-            { id: 2, title: "Smart Watch Series 9", price: 120000, category: "electronics", vendor: "Bongo Tech Lab", location: "Arusha", phone: "0755667788", image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
+            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, category: "fashion", vendor: "Vazi Bora Store", location: "Dar es Salaam", phone: "0711223344", rating: 4.9, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
+            { id: 2, title: "Smart Watch Series 9", price: 120000, category: "electronics", vendor: "Bongo Tech Lab", location: "Arusha", phone: "0755667788", rating: 5.0, image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
         ];
 
-        let shoppingCart = [];
-        let selectedCategory = 'all';
-        let currentRoleType = 'buyer'; 
-        let activeVendorName = "";
-        let activeVendorPhone = "";
-        let activeVendorLocation = "";
-        let capturedPhotoBase64 = ""; // Inashikilia picha iliyopigwa na kamera
+        // Subscription State Logic Matrix
+        let currentUserAccount = {
+            role: 'buyer', // buyer au vendor
+            name: '',
+            shopName: '',
+            isSubscriptionPaid: false // Hapa ndipo paywall inapoamuliwa! False = Hujalipia, True = Umelipia
+        };
 
-        // Rendering Engine Interface Dashboard 
+        let selectedCategory = 'all';
+        let capturedPhotoBase64 = "";
+
+        // Language Engine Switcher View Component
+        function changeSystemLanguage(lang) {
+            currentLanguage = lang;
+            const ln = dictionary[lang];
+            
+            // Re-render strings inside elements
+            document.getElementById('search-input').placeholder = ln.searchPlace;
+            document.getElementById('lang-main-banner-title').innerText = ln.bannerTitle;
+            document.getElementById('lang-grid-main-title').innerText = ln.gridTitle;
+            document.getElementById('lang-vendor-panel-title').innerText = ln.vendorPanelTitle;
+            document.getElementById('lang-lbl-pname').innerText = ln.pName;
+            document.getElementById('lang-lbl-pprice').innerText = ln.pPrice;
+            document.getElementById('lang-lbl-ploc').innerText = ln.pLoc;
+            document.getElementById('lang-lbl-pphone').innerText = ln.pPhone;
+            document.getElementById('lang-lbl-pimage').innerText = ln.pImg;
+            document.getElementById('lang-btn-publish').innerText = ln.btnPublish;
+            document.getElementById('lang-lbl-filter-cat').innerText = ln.filterCat;
+            document.getElementById('lang-auth-modal-title').innerText = ln.regTitle;
+            document.getElementById('lang-lbl-regname').innerText = ln.regName;
+            document.getElementById('lang-lbl-regrole').innerText = ln.regRole;
+            document.getElementById('lang-lbl-regshop').innerText = ln.regShop;
+            document.getElementById('lang-lbl-regphone').innerText = ln.regPhone;
+            document.getElementById('lang-btn-regsubmit').innerText = ln.btnReg;
+
+            updateSubscriptionBadgeUI();
+            applyFilters();
+        }
+
+        // Main Catalog Interface Interface Engine
         function renderCatalog(itemsToRender) {
             const catalogContainer = document.getElementById('products-catalog');
             catalogContainer.innerHTML = '';
-            
-            if(itemsToRender.length === 0) {
-                catalogContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:20px;">Hakuna bidhaa iliyopatikana.</p>`;
-                return;
-            }
+            const ln = dictionary[currentLanguage];
 
             itemsToRender.forEach(p => {
-                // Tunatengeneza ujumbe maalum wa Whatsapp kwa ajili ya bidhaa hii
-                const whatsappMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako ya "${p.title}" yenye bei ya ${p.price.toLocaleString()} TZS kwenye Soko Kuu, nahitaji kuinunua!`);
-                const whatsappLink = `https://wa.me/255${p.phone.replace(/^0/, '')}?text=${whatsappMessage}`;
-
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                card.innerHTML = `
-                    <div class="p-img-box">
-                        ${p.image ? `<img src="${p.image}" alt="Product image">` : `<div class="p-img-fallback">📦</div>`}
-                    </div>
-                    <div class="p-details">
-                        <span class="p-vendor">🏬 ${p.vendor}</span>
-                        <h3 class="p-title">${p.title}</h3>
-                        <div class="p-meta">📍 Eneo: ${p.location}</div>
-                        <div class="p-price">${p.price.toLocaleString()} TZS</div>
-                        
+                
+                // Content Switcher and Paywall Filter Gate
+                let communicationBlockHTML = "";
+                if (currentUserAccount.isSubscriptionPaid) {
+                    // Kama amelipia akaunti yake anaona kila kitu kama kawaida
+                    const whatsappMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako ya "${p.title}" kwenye Soko Kuu, nahitaji kuinunua!`);
+                    const whatsappLink = `https://wa.me/255${p.phone.replace(/^0/, '')}?text=${whatsappMessage}`;
+                    
+                    communicationBlockHTML = `
+                        <div class="p-meta">📍 ${p.location}</div>
                         <div class="connect-buttons-grid">
                             <a href="${whatsappLink}" target="_blank" class="btn-connect btn-wa">💬 CHAT WA</a>
-                            <a href="tel:${p.phone}" class="btn-connect btn-call">📞 PIGA SIMU</a>
+                            <a href="tel:${p.phone}" class="btn-connect btn-call">📞 CALL</a>
                         </div>
-                        <button class="btn-cart" onclick="addToCart(${p.id})">🛒 WEKA KAPU</button>
+                    `;
+                } else {
+                    // Kama HAJALIPIA akaunti, tunaficha contacts na kuweka kufuli na bango linalomkumbusha kulipia!
+                    communicationBlockHTML = `
+                        <div class="paywall-locked-content">${ln.buyerLockMsg}</div>
+                        <button class="btn-pay-now" onclick="simulatePaymentProcess()">${ln.btnPayNow}</button>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="p-img-box"><img src="${p.image}" alt="Product"></div>
+                    <div class="p-details">
+                        <span class="p-vendor">🏬 ${currentUserAccount.isSubscriptionPaid ? p.vendor : "🔒 LOCKED STORE"}</span>
+                        <h3 class="p-title">${p.title}</h3>
+                        <div class="rating-stars">⭐ ${p.rating.toFixed(1)}</div>
+                        <div class="p-price">${p.price.toLocaleString()} TZS</div>
+                        ${communicationBlockHTML}
                     </div>
                 `;
                 catalogContainer.appendChild(card);
             });
         }
 
-        // Process File Input Stream from Mobile/PC Cameras
-        function processCapturedPhoto(inputElement) {
-            const file = inputElement.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    capturedPhotoBase64 = e.target.result; // URL ya picha iliyopigwa
-                    
-                    // Onyesha preview ya picha ndogo kwenye fomu
-                    document.getElementById('photo-preview-element').src = capturedPhotoBase64;
-                    document.getElementById('photo-preview-box').style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        // Autonomous Live Vendor Post Mechanics
+        // Paywall Logic Engine for Vendors on Submission
         function handleVendorPublishProduct(event) {
             event.preventDefault();
+            const ln = dictionary[currentLanguage];
+
+            // Gati la Paywall: Kama muuzaji hajalipia, mfumo unazuia fomu isitume data!
+            if (!currentUserAccount.isSubscriptionPaid) {
+                alert(ln.vendorLockMsg + "\n\nKifurushi cha Muuzaji: Tsh 2,500 / $1.0 kwa mwezi.");
+                simulatePaymentProcess();
+                return;
+            }
 
             const title = document.getElementById('new-p-title').value;
             const price = parseInt(document.getElementById('new-p-price').value);
             const location = document.getElementById('new-p-location').value;
             const phone = document.getElementById('new-p-phone').value;
-            const category = document.getElementById('new-p-cat').value;
 
             const newProduct = {
                 id: productsDatabase.length + 1,
                 title: title,
                 price: price,
-                category: category,
-                vendor: activeVendorName,
+                category: 'electronics',
+                vendor: currentUserAccount.shopName,
                 location: location,
                 phone: phone,
-                image: capturedPhotoBase64 // Picha kutoka kwenye kamera yako!
+                rating: 5.0,
+                image: capturedPhotoBase64 || "https://via.placeholder.com/400x300?text=Soko+Kuu"
             };
 
-            productsDatabase.unshift(newProduct); 
+            productsDatabase.unshift(newProduct);
             applyFilters();
 
-            // Clear Fomu kabisa
+            // Kusafisha fomu
             document.getElementById('new-p-title').value = "";
             document.getElementById('new-p-price').value = "";
             document.getElementById('new-p-image-file').value = "";
-            document.getElementById('photo-preview-box').style.display = 'none';
             capturedPhotoBase64 = "";
-
-            alert(`🚀 Kazi Safi!\nBidhaa yako imepandishwa na picha uliyopiga imewekwa sokoni moja kwa moja!\nWateja sasa hivi wanaweza kukupigia au kukutumia ujumbe WhatsApp.`);
+            
+            alert("🚀 Umefanikiwa kupost!");
         }
 
-        // Auth management core 
-        function switchAuthTab(role) {
-            currentRoleType = role;
-            document.getElementById('tab-buyer').classList.remove('active');
-            document.getElementById('tab-vendor').classList.remove('active');
-            const vendorFields = document.getElementById('vendor-fields');
-            const submitBtn = document.getElementById('auth-submit-text');
-            const title = document.getElementById('auth-title');
-
-            if (role === 'buyer') {
-                document.getElementById('tab-buyer').classList.add('active');
-                vendorFields.style.display = 'none';
-                title.innerText = "Ukurasa wa Usajili wa Mteja";
-                submitBtn.innerText = "Tengeneza Akaunti ya Mteja";
-            } else {
-                document.getElementById('tab-vendor').classList.add('active');
-                vendorFields.style.display = 'block';
-                title.innerText = "Sajili Duka Lako Kama Muuzaji";
-                submitBtn.innerText = "Fungua Duka Lako Sokoni";
+        // Simulate Subscription Payment Window
+        function simulatePaymentProcess() {
+            const amountNeeded = currentUserAccount.role === 'buyer' ? "Tsh 1,000 ($0.5)" : "Tsh 2,500 ($1.0)";
+            const choice = confirm(`💳 LUKU YA SOKO KUU\n\nAkaunti yako ipo NYUMA YA PAYWALL hivi sasa.\nIli kuamsha akaunti yako kwa siku 30 zijazo, unapaswa kulipia ${amountNeeded}.\n\nJe, unahitaji kulipia sasa hivi kupitia M-Pesa / Tigo Pesa / Airtel Money / Card?`);
+            
+            if(choice) {
+                currentUserAccount.isSubscriptionPaid = true; // Washa ruhusa ya akaunti!
+                updateSubscriptionBadgeUI();
+                
+                // Ficha bango la onyo la muuzaji kama lilikuwepo
+                document.getElementById('vendor-paywall-msg').style.display = 'none';
+                
+                applyFilters(); // Re-render soko kuonyesha contacts zilizofunguliwa
+                alert("🎉 Hongera! Malipo yako yamepokelewa na akaunti yako imezinduliwa rasmi kwa mwezi mmoja!");
             }
         }
 
+        // Update Account Badges and Text Layout Strings
+        function updateSubscriptionBadgeUI() {
+            const badge = document.getElementById('account-sub-badge');
+            const ln = dictionary[currentLanguage];
+            badge.style.display = 'inline-block';
+
+            if(currentUserAccount.isSubscriptionPaid) {
+                badge.className = "sub-badge sub-active";
+                badge.innerText = ln.subActive;
+            } else {
+                badge.className = "sub-badge sub-expired";
+                badge.innerText = ln.subExpired;
+            }
+        }
+
+        // Process File Input Stream Images from Device Cam
+        function processCapturedPhoto(inputElement) {
+            const file = inputElement.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { capturedPhotoBase64 = e.target.result; };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Live Commission Estimation Component
+        function calculateAdminCommission(val) {
+            const price = parseFloat(val);
+            const displayBox = document.getElementById('commission-display');
+            const ln = dictionary[currentLanguage];
+            if(!price || price <= 0) { displayBox.innerHTML = ""; return; }
+            const commission = price * 0.05;
+            displayBox.innerHTML = `💰 <strong>${ln.commissionLbl}:</strong> Makato ya Mfumo (5%): <span style="color:red;">${commission.toLocaleString()} TZS</span>`;
+        }
+
+        // Authentication Controllers
         function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+        function toggleRegRoleFields(val) { document.getElementById('reg-shop-field').style.display = val === 'vendor' ? 'block' : 'none'; }
 
         function handleRegistrationSubmit(event) {
             event.preventDefault();
-            const nameInput = document.getElementById('auth-name').value;
-            const shopInput = document.getElementById('auth-shop').value;
-            const phoneInput = document.getElementById('auth-phone').value;
-            const locationInput = document.getElementById('auth-shop-loc').value || "Tanzania";
+            currentUserAccount.name = document.getElementById('auth-name').value;
+            currentUserAccount.role = document.getElementById('auth-role').value;
+            currentUserAccount.shopName = document.getElementById('auth-shop').value || "Mteja";
+            currentUserAccount.isSubscriptionPaid = false; // Mtumiaji mpya anaanza akiwa hajalipia (Expired state) hadi alipie!
 
             closeAuthModal();
+            
             const welcomeLabel = document.getElementById('user-display');
-            const authNavBtn = document.getElementById('auth-nav-btn');
             const dashboard = document.getElementById('vendor-dashboard');
+            const ln = dictionary[currentLanguage];
 
-            if (currentRoleType === 'buyer') {
-                welcomeLabel.innerText = `👤 ${nameInput} (Mteja)`;
+            if (currentUserAccount.role === 'buyer') {
+                welcomeLabel.innerText = `👤 ${currentUserAccount.name}`;
                 dashboard.style.display = 'none';
+                alert("Karibu! Akaunti yako ya Mteja imefunguliwa lakini bado haujalipia kifurushi cha mwezi. Utapokea ujumbe wa kulipia ili ufungue mawasiliano.");
+                simulatePaymentProcess();
             } else {
-                activeVendorName = shopInput;
-                activeVendorPhone = phoneInput;
-                activeVendorLocation = locationInput;
+                welcomeLabel.innerText = `🏪 ${currentUserAccount.shopName}`;
+                dashboard.style.display = 'block';
+                
+                // Washa bango la onyo la muuzaji kwenye Panel yake
+                const paywallBanner = document.getElementById('vendor-paywall-msg');
+                paywallBanner.innerText = ln.vendorLockMsg;
+                paywallBanner.style.display = 'block';
 
-                document.getElementById('new-p-phone').value = activeVendorPhone;
-                document.getElementById('new-p-location').value = activeVendorLocation;
-
-                welcomeLabel.innerText = `🏪 ${shopInput}`;
-                dashboard.style.display = 'block'; // Fungua Kamera Dashboard
+                alert("Duka lako limeandaliwa! Lakini kama Muuzaji huwezi kupost chochote hadi utakapolipia kifurushi cha Tsh 2,500 / $1.0 cha mwezi.");
+                simulatePaymentProcess();
             }
-            welcomeLabel.style.display = 'inline-block';
-            authNavBtn.style.display = 'none';
+
+            document.getElementById('auth-nav-btn').style.display = 'none';
+            updateSubscriptionBadgeUI();
         }
 
-        // Search engine core matrix
+        // Filters Engine
         function filterCategory(cat, element) {
             selectedCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
@@ -428,41 +475,18 @@
             applyFilters();
         }
 
-        function handleSearchFilter() { applyFilters(); }
-
         function applyFilters() {
             const keyword = document.getElementById('search-input').value.toLowerCase();
             let results = productsDatabase.filter(p => {
                 const mCat = selectedCategory === 'all' || p.category === selectedCategory;
-                const mKey = p.title.toLowerCase().includes(keyword) || p.vendor.toLowerCase().includes(keyword) || p.location.toLowerCase().includes(keyword);
+                const mKey = p.title.toLowerCase().includes(keyword) || p.vendor.toLowerCase().includes(keyword);
                 return mCat && mKey;
             });
             renderCatalog(results);
         }
 
-        function addToCart(productId) {
-            const item = productsDatabase.find(p => p.id === productId);
-            if (item) { shoppingCart.push(item); updateCartUI(); }
-        }
-
-        function updateCartUI() {
-            document.getElementById('cart-counter').innerText = shoppingCart.length;
-            const container = document.getElementById('cart-items-container');
-            container.innerHTML = '';
-            let total = 0;
-            shoppingCart.forEach((item, idx) => {
-                total += item.price;
-                const row = document.createElement('div');
-                row.className = 'cart-item';
-                row.innerHTML = `<div><div style="font-weight:600; font-size:14px;">${item.title}</div></div><span style="font-weight:bold;">${item.price.toLocaleString()} TZS</span>`;
-                container.appendChild(row);
-            });
-            document.getElementById('cart-total-price').innerText = `${total.toLocaleString()} TZS`;
-        }
-
-        function toggleCartDrawer() { document.getElementById('cart-panel').classList.toggle('open'); }
-
-        renderCatalog(productsDatabase);
+        // Initialize setup with default settings
+        changeSystemLanguage('sw');
     </script>
 </body>
 </html>
