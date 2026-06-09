@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soko Kuu - Freemium Growth Engine</title>
+    <title>Soko Kuu - Ultra Ads & Profile Engine</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -20,7 +20,7 @@
             --purple: #8b5cf6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: var(--light); color: var(--dark); padding-bottom: 80px; }
+        body { background: var(--light); color: var(--dark); padding-bottom: 120px; } /* Nafasi kwa ajili ya ad banner */
 
         header {
             background: #fff; border-bottom: 1px solid var(--border);
@@ -31,34 +31,35 @@
         .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .btn-nav { background: var(--light); border: 1px solid var(--border); padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        .select-lang { padding: 6px 10px; border-radius: 15px; border: 1px solid var(--border); font-size: 12px; font-weight: bold; background: #fff; cursor: pointer; }
         
-        /* Premium Subscription Dynamic Badges */
-        .sub-badge { font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: bold; margin-left: 5px; }
+        /* Profile Navigation Components */
+        .profile-nav-trigger { display: none; align-items: center; gap: 8px; cursor: pointer; background: #ffedd5; padding: 4px 12px; border-radius: 15px; font-weight: 600; font-size: 13px; color: var(--orange); }
+        .profile-nav-trigger img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #cbd5e1; }
+
+        .sub-badge { font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: bold; margin-left: 5px; cursor: pointer;}
         .sub-trial { background: #ede9fe; color: var(--purple); border: 1px solid #c084fc; }
         .sub-active { background: #dcfce7; color: #15803d; }
-        .sub-expired { background: #fee2e2; color: #b91c1c; animation: blink 1.5s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
+        .sub-expired { background: #fee2e2; color: #b91c1c; }
 
-        /* Simulator Fast Forward Button Style */
-        .btn-simulator { background: var(--dark); color: #fff; border: none; padding: 6px 12px; border-radius: 12px; font-size: 11px; font-weight: bold; cursor: pointer; display: none; }
+        /* Generic Master Panels */
+        .app-panel { background: #fff; border: 1px solid var(--border); margin: 20px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .vendor-panel { border: 2px dashed var(--orange); display: none; }
+        .profile-panel { border: 2px solid var(--primary); display: none; }
+        .ads-post-panel { border: 2px solid var(--accent); }
 
-        .vendor-panel { background: #fff; border: 2px dashed var(--orange); margin: 20px; padding: 20px; border-radius: 12px; display: none; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.1); }
         .upload-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-        .commission-note { background: #eff6ff; color: var(--primary); padding: 10px; border-radius: 8px; font-size: 13px; margin-top: 10px; font-weight: 600; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline:none; }
+        
+        /* Profile Image Edit Box */
+        .profile-pic-uploader { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .profile-preview-lg { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; background: #cbd5e1; border: 2px solid var(--primary); }
 
-        .paywall-alert-banner { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; font-weight: bold; text-align: center; }
-        .paywall-locked-content { background: #f1f5f9; padding: 10px; border-radius: 8px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; margin: 10px 0; border: 1px dashed #cbd5e1; }
-
+        /* Search & Catalog Layouts */
         .search-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 30px 20px; text-align: center; }
         .search-box { display: flex; max-width: 500px; margin: 15px auto 0 auto; background: #fff; border-radius: 25px; overflow: hidden; padding: 2px; }
         .search-box input { flex: 1; border: none; padding: 12px 20px; font-size: 15px; outline: none; }
-
-        .filter-section { background: #fff; border-bottom: 1px solid var(--border); padding: 10px 20px; }
-        .filter-label { font-size: 11px; font-weight: bold; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
-        .categories-ribbon { display: flex; gap: 6px; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
-        .cat-btn { background: var(--light); border: 1px solid var(--border); padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
         .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
@@ -69,22 +70,37 @@
         
         .p-details { padding: 15px; display: flex; flex-direction: column; flex: 1; }
         .p-vendor { font-size: 11px; color: var(--orange); margin-bottom: 2px; text-transform: uppercase; font-weight: 800; }
-        .p-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--dark); }
-        .rating-stars { color: var(--gold); font-size: 12px; margin-bottom: 6px; }
         .p-price { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 12px; margin-top: auto; }
         
         .connect-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-        .btn-connect { border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; text-align: center; }
-        .btn-wa { background: var(--whatsapp); color: #fff; }
-        .btn-call { background: var(--primary); color: #fff; }
-        .btn-pay-now { background: var(--purple); color:#fff; border:none; padding:10px; border-radius:8px; font-weight:bold; font-size:12px; cursor:pointer; width:100%; text-align:center; }
+        .btn-connect { border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; text-align: center; color: #fff;}
+        .btn-wa { background: var(--whatsapp); }
+        .btn-call { background: var(--primary); }
+        
+        .paywall-locked-content { background: #f1f5f9; padding: 10px; border-radius: 8px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; border: 1px dashed #cbd5e1; }
+
+        /* Dynamic Sticky Bottom Ad Banner Area */
+        .sticky-bottom-ad-banner {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 75px;
+            background: linear-gradient(90deg, #1e293b, #0f172a); color: #fff;
+            z-index: 999; display: flex; align-items: center; padding: 10px 20px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.25); border-top: 3px solid var(--accent);
+        }
+        .ad-content-wrapper { display: flex; align-items: center; gap: 15px; width: 100%; }
+        .ad-image { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; background: #475569; }
+        .ad-text-box { flex: 1; min-width: 0; }
+        .ad-badge { background: var(--accent); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; display: inline-block; margin-bottom: 2px; }
+        .ad-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-desc { font-size: 11px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-btn-action { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none;}
+
+        /* Education Center Banner Section */
+        .edu-info-box { background: #eff6ff; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin-top: 30px; }
+        .edu-info-box h3 { font-size: 15px; color: var(--primary); margin-bottom: 6px; }
+        .edu-info-box ol { padding-left: 20px; font-size: 13px; color: #334155; line-height: 1.6; }
 
         .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-card { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .modal-body { padding: 25px; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline:none; }
+        .modal-card { background: #fff; width: 100%; max-width: 400px; border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -92,205 +108,199 @@
     <header>
         <div class="logo">SOKO KUU</div>
         <div class="nav-actions">
-            <button class="btn-simulator" id="time-machine-btn" onclick="simulateTimePassing()">⏩ SOGEZA SIKU 5</button>
+            <button class="btn-nav" onclick="simulateTimePassing()" style="background:var(--dark); color:#fff; font-size:10px;">⏩ +5 SIKU</button>
 
-            <select class="select-lang" id="language-selector" onchange="changeSystemLanguage(this.value)">
-                <option value="sw">🇹🇿 Kiswahili</option>
-                <option value="en">🇬🇧 English</option>
-            </select>
+            <div class="profile-nav-trigger" id="user-profile-widget" onclick="toggleProfilePanel()">
+                <img src="" id="widget-avatar" alt="Avatar">
+                <span id="widget-name">Profile</span>
+            </div>
             
-            <span class="user-welcome" id="user-display">🏪 Duka Lako</span>
             <span class="sub-badge sub-expired" id="account-sub-badge" onclick="triggerPaymentWindow()" style="display:none;">STATUS</span>
-            
             <button class="btn-nav" id="auth-nav-btn" onclick="openAuthModal()">👤 REG / INGIA</button>
         </div>
     </header>
 
-    <div class="vendor-panel" id="vendor-dashboard">
-        <div id="vendor-paywall-msg" class="paywall-alert-banner" style="display:none;"></div>
-        <h2 id="lang-vendor-panel-title" style="margin-bottom: 15px; color: var(--orange);">🛠️ PANEL YA MUUZAJI</h2>
-        
-        <form id="vendor-publish-form" onsubmit="handleVendorPublishProduct(event)">
+    <div class="app-panel profile-panel" id="profile-control-center">
+        <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 18px;">👤 Mipangilio ya Wasifu (Edit Profile)</h2>
+        <div class="profile-pic-uploader">
+            <img src="" id="profile-avatar-preview" class="profile-preview-lg" alt="Profile">
+            <div>
+                <label style="font-size: 12px; font-weight: bold; color: var(--primary); cursor: pointer; background: #eff6ff; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">
+                    📸 Piga/Weka Picha ya Sura
+                    <input type="file" accept="image/*" capture="user" onchange="updateProfilePhoto(this)" style="display:none;">
+                </label>
+            </div>
+        </div>
+        <div class="upload-form-grid">
+            <div class="form-group">
+                <label>Jina Lako Kamili</label>
+                <input type="text" id="edit-profile-name" oninput="saveProfileChanges()">
+            </div>
+            <div class="form-group">
+                <label>Aina ya Akaunti</label>
+                <select id="edit-profile-role" onchange="saveProfileChanges()">
+                    <option value="buyer">Mteja / Buyer</option>
+                    <option value="vendor">Muuzaji / Vendor</option>
+                </select>
+            </div>
+            <div class="form-group" id="edit-shop-block" style="display:none;">
+                <label>Jina la Duka Lako</label>
+                <input type="text" id="edit-profile-shop" oninput="saveProfileChanges()">
+            </div>
+        </div>
+        <button onclick="toggleProfilePanel()" style="width:100%; background:var(--primary); color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">💾 SUBIRI / FUNGA MIPANGILIO</button>
+    </div>
+
+    <div class="app-panel vendor-panel" id="vendor-dashboard">
+        <h2 style="margin-bottom: 15px; color: var(--orange);">🛠️ PANEL YA MUUZAJI: Pandisha Bidhaa</h2>
+        <form onsubmit="handleVendorPublishProduct(event)">
             <div class="upload-form-grid">
+                <div class="form-group"><label>Jina la Bidhaa</label><input type="text" id="new-p-title" required></div>
+                <div class="form-group"><label>Bei ya Bidhaa (TZS)</label><input type="number" id="new-p-price" required></div>
                 <div class="form-group">
-                    <label id="lang-lbl-pname">Jina la Bidhaa</label>
-                    <input type="text" id="new-p-title" required>
-                </div>
-                <div class="form-group">
-                    <label id="lang-lbl-pprice">Bei ya Bidhaa (TZS)</label>
-                    <input type="number" id="new-p-price" oninput="calculateAdminCommission(this.value)" required>
-                </div>
-                <div class="form-group">
-                    <label id="lang-lbl-ploc">Mkoa ulipo</label>
+                    <label>Mkoa ulipo</label>
                     <select id="new-p-location">
                         <option value="Dar es Salaam">Dar es Salaam</option>
                         <option value="Arusha">Arusha</option>
                         <option value="Mwanza">Mwanza</option>
                     </select>
                 </div>
+                <div class="form-group"><label>Namba ya WhatsApp</label><input type="tel" id="new-p-phone" required></div>
+                <div class="form-group"><label>Picha (Kamera)</label><input type="file" accept="image/*" capture="environment" onchange="processProductPhoto(this)" required></div>
+            </div>
+            <button type="submit" style="width: 100%; background: var(--orange); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;">🚀 PANDISHA SOKONI</button>
+        </form>
+    </div>
+
+    <div class="app-panel ads-post-panel">
+        <h2 style="color: var(--accent); margin-bottom: 12px; font-size: 16px;">🎯 Jiunge na Mzunguko wa Matangazo ya Chini! (Tsh 500 Tu)</h2>
+        <form onsubmit="handleAdPublishSubmit(event)">
+            <div class="upload-form-grid">
                 <div class="form-group">
-                    <label id="lang-lbl-pphone">Namba ya WhatsApp</label>
-                    <input type="tel" id="new-p-phone" required>
+                    <label>Kichwa cha Tangazo (Ujumbe Mfupi)</label>
+                    <input type="text" id="ad-form-title" placeholder="Mfano: Nunua Speares za Magari Punguzo 50%" required>
                 </div>
                 <div class="form-group">
-                    <label id="lang-lbl-pimage">Picha ya Bidhaa (Kamera)</label>
-                    <input type="file" id="new-p-image-file" accept="image/*" capture="environment" onchange="processCapturedPhoto(this)" required>
+                    <label>Maelezo Mafupi</label>
+                    <input type="text" id="ad-form-desc" placeholder="Mfano: Tupo Kariakoo, mikoani tunatuma bure..." required>
+                </div>
+                <div class="form-group">
+                    <label>Chagua Kifurushi cha Muda</label>
+                    <select id="ad-form-plan" onchange="calculateAdCostReport(this.value)">
+                        <option value="3">Siku 3 = Tsh 500</option>
+                        <option value="6">Siku 6 = Tsh 1,000</option>
+                        <option value="12">Siku 12 = Tsh 2,000</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Namba ya Simu / Link ya Whatsapp</label>
+                    <input type="tel" id="ad-form-phone" placeholder="Mfano: 0712345678" required>
+                </div>
+                <div class="form-group">
+                    <label>Picha ya Tangazo (Kamera/Faili)</label>
+                    <input type="file" accept="image/*" onchange="processAdPhoto(this)" required>
                 </div>
             </div>
-            <div class="commission-note" id="commission-display"></div>
-            <button type="submit" class="submit-post-btn" id="lang-btn-publish" style="width: 100%; margin-top: 15px;">🚀 PANDISHA BIDHAA</button>
+            <div id="ad-cost-report" style="background:#f0fdf4; color:var(--accent); padding:10px; border-radius:8px; font-size:12px; font-weight:bold; margin-bottom:10px;">Gharama ya Tangazo: Tsh 500 (Siku 3 za Mzunguko)</div>
+            <button type="submit" style="width:100%; background:var(--accent); color:white; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;">💳 LIPIA & RUSHA TANGAZO KWENYE MZUNGUKO</button>
         </form>
     </div>
 
     <div class="search-container">
-        <h1 id="lang-main-banner-title">Soko Kuu</h1>
-        <div class="search-box">
-            <input type="text" id="search-input" placeholder="..." oninput="applyFilters()">
-        </div>
-    </div>
-
-    <div class="filter-section">
-        <p class="filter-label" id="lang-lbl-filter-cat">Chuja kwa Makundi:</p>
-        <div class="categories-ribbon">
-            <button class="cat-btn active" id="cat-all" onclick="filterCategory('all', this)">Zote / All</button>
-            <button class="cat-btn" onclick="filterCategory('fashion', this)">Fashion</button>
-            <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
-        </div>
+        <h1>Soko Kuu la Mtandaoni</h1>
+        <div class="search-box"><input type="text" id="search-input" placeholder="Tafuta hapa..." oninput="applyFilters()"></div>
     </div>
 
     <div class="main-container">
-        <h2 class="grid-title" id="lang-grid-main-title">Bidhaa Zilizopo Sokoni</h2>
+        <h2 style="font-size: 16px; margin-bottom: 15px;">Bidhaa Zilizopo Sokoni</h2>
         <div class="products-grid" id="products-catalog"></div>
+
+        <div class="edu-info-box">
+            <h3>📢 Mwongozo wa Malipo na Kuweka Matangazo Kila Siku</h3>
+            <ol>
+                <li><strong>Malipo ya Akaunti ya Mwezi:</strong> Akaunti yako ikimaliza mwezi mmoja wa bure, unaweza kubonyeza beji ya hali ya akaunti iliyopo juu kulia ili kuamsha huduma kwa Tsh 1,000 (Mteja) au Tsh 2,500 (Muuzaji).</li>
+                <li><strong>Kupost Tangazo la Mzunguko (Ads):</strong> Jaza fomu ya kijani iliyopo hapo juu. Lipia Tsh 500 kwa siku 3 au Tsh 1,000 kwa siku 6.</li>
+                <li><strong>Mfumo wa Mzunguko unavyofanya kazi:</strong> Tangazo lako halitafunika ukurasa mzima, litaonekana kwa chini kabisa ya screen na litakuwa likibadilika-badilika kwa zamu (Auto-rotate) na matangazo ya watu wengine ili kutoa fursa sawa na sahihi kwa kila mfanyabiashara aliyelipia!</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="sticky-bottom-ad-banner" id="global-ad-rotator-banner" style="display: none;">
+        <div class="ad-content-wrapper" id="ad-live-injector-zone">
+            </div>
     </div>
 
     <div class="modal-overlay" id="auth-modal">
         <div class="modal-card">
-            <div class="modal-body">
-                <h3 id="lang-auth-modal-title" style="margin-bottom: 15px; font-size: 18px;">Jisajili Kwenye Soko Kuu</h3>
-                <form onsubmit="handleRegistrationSubmit(event)">
-                    <div class="form-group">
-                        <label id="lang-lbl-regname">Jina Kamili</label>
-                        <input type="text" id="auth-name" required>
-                    </div>
-                    <div class="form-group">
-                        <label id="lang-lbl-regrole">Chagua Aina ya Akaunti</label>
-                        <select id="auth-role" onchange="toggleRegRoleFields(this.value)">
-                            <option value="buyer">Mteja / Buyer (Tsh 1,000 / $0.5 pm)</option>
-                            <option value="vendor">Muuzaji / Vendor (Tsh 2,500 / $1.0 pm)</option>
-                        </select>
-                    </div>
-                    <div class="form-group" id="reg-shop-field" style="display:none;">
-                        <label id="lang-lbl-regshop">Jina la Duka Lako</label>
-                        <input type="text" id="auth-shop">
-                    </div>
-                    <div class="form-group">
-                        <label id="lang-lbl-regphone">Namba ya Simu</label>
-                        <input type="tel" id="auth-phone" required>
-                    </div>
-                    <button type="submit" style="width:100%; background:var(--primary); color:#fff; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;" id="lang-btn-regsubmit">Tengeneza Akaunti</button>
-                </form>
-            </div>
+            <h3 style="margin-bottom: 15px;">Sajili Akaunti Mpya (Mwezi 1 Bure)</h3>
+            <form onsubmit="handleRegistrationSubmit(event)">
+                <div class="form-group"><label>Jina Kamili</label><input type="text" id="auth-name" required></div>
+                <div class="form-group">
+                    <label>Aina ya Akaunti</label>
+                    <select id="auth-role" onchange="document.getElementById('reg-shop-field').style.display = this.value === 'vendor' ? 'block' : 'none'">
+                        <option value="buyer">Mteja / Buyer</option>
+                        <option value="vendor">Muuzaji / Vendor</option>
+                    </select>
+                </div>
+                <div class="form-group" id="reg-shop-field" style="display:none;"><label>Jina la Duka</label><input type="text" id="auth-shop"></div>
+                <div class="form-group"><label>Namba ya Simu</label><input type="tel" id="auth-phone" required></div>
+                <button type="submit" style="width:100%; background:var(--primary); color:#fff; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;">Fungua Akaunti</button>
+            </form>
         </div>
     </div>
 
     <script>
-        const dictionary = {
-            sw: {
-                searchPlace: "Tafuta bidhaa au duka...", bannerTitle: "Soko Kuu la Wafanyabiashara Hurubani", gridTitle: "Bidhaa Zilizopo Sokoni",
-                pName: "Jina la Bidhaa", pPrice: "Bei ya Bidhaa (TZS)", pLoc: "Mkoa ulipo", pPhone: "Namba ya WhatsApp", pImg: "Picha ya Bidhaa (Kamera)",
-                btnPublish: "🚀 PANDISHA BIDHAA SOKONI RASMI", vendorPanelTitle: "🛠️ PANEL YA MUUZAJI: Pandisha Bidhaa", filterCat: "Chuja kwa Makundi:",
-                regTitle: "Jisajili Kwenye Soko Kuu", regName: "Jina Kamili", regRole: "Chagua Aina ya Akaunti", regShop: "Jina la Duka Lako", regPhone: "Namba ya Simu", btnReg: "Tengeneza Akaunti",
-                buyerLockMsg: "🔒 MAWASILIANO YAMEFUNGLIWA! Kipindi chako cha bure kimeisha. Lipia ili ufungue mawasiliano.",
-                vendorLockMsg: "❌ ACCOUNT EXPIRED! Muda wako wa bure umeisha. Lipia ili uweze kupost tena.",
-                btnPayNow: "💳 ANZA KULIPIA AKAUNTI HAPA", subActive: "IMELIPIWA", subExpired: "HAIJALIPIWA", subTrial: "MWEZI BURE", commissionLbl: "Ripoti ya soko"
-            },
-            en: {
-                searchPlace: "Search products...", bannerTitle: "Multi-Vendor Digital Autonomous Market", gridTitle: "Live Catalog Products",
-                pName: "Product Name", pPrice: "Price (TZS)", pLoc: "Location/Region", pPhone: "WhatsApp Number", pImg: "Product Image (Camera)",
-                btnPublish: "🚀 PUBLISH PRODUCT TO MARKET NOW", vendorPanelTitle: "🛠️ VENDOR PANEL: Post New Product", filterCat: "Filter by Categories:",
-                regTitle: "Register to Soko Kuu Marketplace", regName: "Full Name", regRole: "Select Account Type", regShop: "Your Shop Name", regPhone: "Phone Number", btnReg: "Create Account Now",
-                buyerLockMsg: "🔒 COMMUNICATIONS LOCKED! Your free trial has ended. Please subscribe to unlock contacts.",
-                vendorLockMsg: "❌ ACCOUNT EXPIRED! Your trial expired. Subscribe to unlock vendor publishing.",
-                btnPayNow: "💳 SUBSCRIBE TO UPGRADE HERE", subActive: "PAID / ACTIVE", subExpired: "EXPIRED", subTrial: "FREE TRIAL", commissionLbl: "Market Report"
-            }
-        };
-
-        let currentLanguage = 'sw';
+        // Catalog Core Setup Array
         let productsDatabase = [
-            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, category: "fashion", vendor: "Vazi Bora Store", location: "Dar es Salaam", phone: "0711223344", rating: 4.9, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
-            { id: 2, title: "Smart Watch Series 9", price: 120000, category: "electronics", vendor: "Bongo Tech Lab", location: "Arusha", phone: "0755667788", rating: 5.0, image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
+            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, vendor: "Vazi Bora Store", location: "Dar es Salaam", phone: "0711223344", rating: 4.9, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
+            { id: 2, title: "Smart Watch Series 9", price: 120000, vendor: "Bongo Tech Lab", location: "Arusha", phone: "0755667788", rating: 5.0, image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
         ];
 
-        // Core Subscription Engine & Database Object Matrix
+        // 🎯 GLOBAL PAID ADS SIMULATOR DATABASE POOL
+        // Mfumo unaanza na matangazo matatu ya mfano yaliyolipwa tayari ili kuwasha rotator engine mara moja!
+        let globalPaidAdsDatabase = [
+            { id: 1, title: "Usafiri Salama wa Pikipiki", desc: "Piga simu sasa upelekwe popote Dar kwa haraka na usalama.", phone: "0712111111", daysLeft: 3, image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=150&q=80" },
+            { id: 2, title: "Chakula Kitamu Cha Nyumbani", desc: "Oda pilau, biriani na kuku choma, tunatuma maofisini bure.", phone: "0754222222", daysLeft: 6, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80" },
+            { id: 3, title: "Upunguzaji wa Uzito Salama", desc: "Dawa za asili zisizo na madhara zilizothibitishwa. Matokeo wiki 2.", phone: "0622333333", daysLeft: 2, image: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=150&q=80" }
+        ];
+
+        let activeAdIndexPointer = 0; // Kielekezi cha tangazo gani lipo hewani kwa sekunde husika
+
+        // User Global Profile Object State
         let currentUserAccount = {
-            role: 'buyer',
-            name: '',
-            shopName: '',
-            isSubscriptionPaid: false,
-            trialDaysLeft: 30, // Kila akaunti inaanza na Siku 30 za Bure!
-            isEarlyBirdDiscountEligible: true // Inakuwa true ikiwa siku zilizobaki zipo juu ya 14 (chini ya wiki mbili za matumizi)
+            role: 'buyer', name: '', shopName: '', phone: '',
+            isSubscriptionPaid: false, trialDaysLeft: 30,
+            avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>"
         };
 
-        let selectedCategory = 'all';
-        let capturedPhotoBase64 = "";
+        let tempProductImageBase64 = "";
+        let tempAdImageBase64 = "";
 
-        function changeSystemLanguage(lang) {
-            currentLanguage = lang;
-            const ln = dictionary[lang];
-            
-            document.getElementById('search-input').placeholder = ln.searchPlace;
-            document.getElementById('lang-main-banner-title').innerText = ln.bannerTitle;
-            document.getElementById('lang-grid-main-title').innerText = ln.gridTitle;
-            document.getElementById('lang-vendor-panel-title').innerText = ln.vendorPanelTitle;
-            document.getElementById('lang-lbl-pname').innerText = ln.pName;
-            document.getElementById('lang-lbl-pprice').innerText = ln.pPrice;
-            document.getElementById('lang-lbl-ploc').innerText = ln.pLoc;
-            document.getElementById('lang-lbl-pphone').innerText = ln.pPhone;
-            document.getElementById('lang-lbl-pimage').innerText = ln.pImg;
-            document.getElementById('lang-btn-publish').innerText = ln.btnPublish;
-            document.getElementById('lang-lbl-filter-cat').innerText = ln.filterCat;
-            document.getElementById('lang-auth-modal-title').innerText = ln.regTitle;
-            document.getElementById('lang-lbl-regname').innerText = ln.regName;
-            document.getElementById('lang-lbl-regrole').innerText = ln.regRole;
-            document.getElementById('lang-lbl-regshop').innerText = ln.regShop;
-            document.getElementById('lang-lbl-regphone').innerText = ln.regPhone;
-            document.getElementById('lang-btn-regsubmit').innerText = ln.btnReg;
+        function hasAccessRights() { return currentUserAccount.isSubscriptionPaid || currentUserAccount.trialDaysLeft > 0; }
 
-            updateSubscriptionBadgeUI();
-            applyFilters();
-        }
-
-        // Helper Engine to Check Authorization Access Gate
-        function hasAccessRights() {
-            // Mtumiaji anapata huduma ikiwa AMELIPIA AU bado ana SIKU ZA BURE (Trial active)
-            return currentUserAccount.isSubscriptionPaid || currentUserAccount.trialDaysLeft > 0;
-        }
-
+        // Render Live Products to Grid Catalog
         function renderCatalog(itemsToRender) {
-            const catalogContainer = document.getElementById('products-catalog');
-            catalogContainer.innerHTML = '';
-            const ln = dictionary[currentLanguage];
+            const container = document.getElementById('products-catalog');
+            container.innerHTML = '';
 
             itemsToRender.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                
-                let communicationBlockHTML = "";
+                let actionHTML = "";
+
                 if (hasAccessRights()) {
-                    const whatsappMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako ya "${p.title}" kwenye Soko Kuu, nahitaji kuinunua!`);
-                    const whatsappLink = `https://wa.me/255${p.phone.replace(/^0/, '')}?text=${whatsappMessage}`;
-                    
-                    communicationBlockHTML = `
-                        <div class="p-meta">📍 ${p.location}</div>
+                    const waMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako "${p.title}" kwenye Soko Kuu, nahitaji kuinunua!`);
+                    actionHTML = `
+                        <div style="font-size:12px; margin-bottom:8px;">📍 Mkoa: <strong>${p.location}</strong></div>
                         <div class="connect-buttons-grid">
-                            <a href="${whatsappLink}" target="_blank" class="btn-connect btn-wa">💬 CHAT WA</a>
+                            <a href="https://wa.me/255${p.phone.replace(/^0/, '')}?text=${waMessage}" target="_blank" class="btn-connect btn-wa">💬 WA CHAT</a>
                             <a href="tel:${p.phone}" class="btn-connect btn-call">📞 CALL</a>
                         </div>
                     `;
                 } else {
-                    communicationBlockHTML = `
-                        <div class="paywall-locked-content">${ln.buyerLockMsg}</div>
-                        <button class="btn-pay-now" onclick="triggerPaymentWindow()">${ln.btnPayNow}</button>
+                    actionHTML = `
+                        <div class="paywall-locked-content">🔒 MAWASILIANO YAMEFUNGLIWA! Kipindi chako cha bure kimeisha. Lipia ili ufungue mawasiliano.</div>
+                        <button onclick="triggerPaymentWindow()" style="width:100%; padding:8px; border-radius:8px; background:var(--purple); color:#fff; border:none; margin-top:5px; font-weight:bold; cursor:pointer;">💳 LIPIA AKAUNTI SASA</button>
                     `;
                 }
 
@@ -299,206 +309,246 @@
                     <div class="p-details">
                         <span class="p-vendor">🏬 ${hasAccessRights() ? p.vendor : "🔒 LOCKED STORE"}</span>
                         <h3 class="p-title">${p.title}</h3>
-                        <div class="rating-stars">⭐ ${p.rating.toFixed(1)}</div>
+                        <div style="color:var(--gold); font-size:12px; margin-bottom:6px;">⭐ ${p.rating.toFixed(1)}</div>
                         <div class="p-price">${p.price.toLocaleString()} TZS</div>
-                        ${communicationBlockHTML}
+                        ${actionHTML}
                     </div>
                 `;
-                catalogContainer.appendChild(card);
+                container.appendChild(card);
             });
         }
 
-        // Paywall Logic Engine for Vendors
-        function handleVendorPublishProduct(event) {
+        // 🎯 SMART AD ROTATION SYSTEM ENGINE (Mzunguko Sahihi wa Matangazo ya Chini)
+        function startPaidAdRotatorEngine() {
+            // Kama hakuna matangazo yaliyolipiwa kwenye pool, ficha kabisa banner la chini
+            if (globalPaidAdsDatabase.length === 0) {
+                document.getElementById('global-ad-rotator-banner').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('global-ad-rotator-banner').style.display = 'flex';
+            rotateToNextActivePaidAd(); // Washa tangazo la kwanza mara moja
+
+            // Badilisha tangazo kila baada ya sekunde 4 kiotomatiki
+            setInterval(() => {
+                rotateToNextActivePaidAd();
+            }, 4000); 
+        }
+
+        function rotateToNextActivePaidAd() {
+            if (globalPaidAdsDatabase.length === 0) return;
+
+            // Hakikisha index haivuki urefu wa database ya matangazo
+            if (activeAdIndexPointer >= globalPaidAdsDatabase.length) {
+                activeAdIndexPointer = 0;
+            }
+
+            const currentAd = globalPaidAdsDatabase[activeAdIndexPointer];
+            const injectorZone = document.getElementById('ad-live-injector-zone');
+
+            const targetWaLink = `https://wa.me/255${currentAd.phone.replace(/^0/, '')}?text=Habari, nimeona tangazo lako la "${encodeURIComponent(currentAd.title)}" chini ya Soko Kuu, nahitaji maelezo zaidi.`;
+
+            // Dungua data mpya kwenye screen ya chini
+            injectorZone.innerHTML = `
+                <img src="${currentAd.image}" class="ad-image" alt="Ad">
+                <div class="ad-text-box">
+                    <span class="ad-badge">Tangazo la Kulipia • Siku ${currentAd.daysLeft} Zimebaki</span>
+                    <div class="ad-title">${currentAd.title}</div>
+                    <div class="ad-desc">${currentAd.desc}</div>
+                </div>
+                <a href="${targetWaLink}" target="_blank" class="ad-btn-action">Fungua Fursa</a>
+            `;
+
+            // Kusogeza mbele kielekezi kwa ajili ya sekunde 4 zijazo
+            activeAdIndexPointer++;
+        }
+
+        // Handle Self Serve Ad Form Publish Submission
+        function handleAdPublishSubmit(event) {
             event.preventDefault();
-            const ln = dictionary[currentLanguage];
+            const title = document.getElementById('ad-form-title').value;
+            const desc = document.getElementById('ad-form-desc').value;
+            const planDays = parseInt(document.getElementById('ad-form-plan').value);
+            const phone = document.getElementById('ad-form-phone').value;
 
-            if (!hasAccessRights()) {
-                alert(ln.vendorLockMsg);
-                triggerPaymentWindow();
-                return;
-            }
+            const cost = planDays === 3 ? 500 : 1000;
 
-            const title = document.getElementById('new-p-title').value;
-            const price = parseInt(document.getElementById('new-p-price').value);
-            const location = document.getElementById('new-p-location').value;
-            const phone = document.getElementById('new-p-phone').value;
-
-            const newProduct = {
-                id: productsDatabase.length + 1,
-                title: title,
-                price: price,
-                category: 'electronics',
-                vendor: currentUserAccount.shopName,
-                location: location,
-                phone: phone,
-                rating: 5.0,
-                image: capturedPhotoBase64 || "https://via.placeholder.com/400x300?text=Soko+Kuu"
-            };
-
-            productsDatabase.unshift(newProduct);
-            applyFilters();
-
-            document.getElementById('new-p-title').value = "";
-            document.getElementById('new-p-price').value = "";
-            document.getElementById('new-p-image-file').value = "";
-            capturedPhotoBase64 = "";
+            const payCheck = confirm(`💳 PROMPT YA LUKU YA MATANGAZO\n\nMfumo umepokea ombi lako la tangazo la kulipia.\n\nGharama ya mzunguko wa siku ${planDays} ni: Tsh ${cost.toLocaleString()}\n\nJe, unathibitisha kuwa umelipia kiasi hiki ili tangazo lirushwe kwenye mzunguko wa screen za watumiaji wote sasa hivi?`);
             
-            alert("🚀 Umefanikiwa kupost bidhaa yako!");
-        }
+            if (payCheck) {
+                const newAdObject = {
+                    id: globalPaidAdsDatabase.length + 1,
+                    title: title,
+                    desc: desc,
+                    phone: phone,
+                    daysLeft: planDays,
+                    image: tempAdImageBase64 || "https://via.placeholder.com/150?text=Ad"
+                };
 
-        // Early Bird Discount Billing Engine Calculator 
-        function triggerPaymentWindow() {
-            const role = currentUserAccount.role;
-            const ln = dictionary[currentLanguage];
-            
-            // Bei za kawaida
-            let normalPriceTZS = role === 'buyer' ? 1000 : 2500;
-            let normalPriceUSD = role === 'buyer' ? 0.5 : 1.0;
-            
-            let finalPriceTZS = normalPriceTZS;
-            let finalPriceUSD = normalPriceUSD;
-            let discountUjumbe = "";
+                globalPaidAdsDatabase.unshift(newAdObject); // Tupa kwenye mzunguko mara moja juu kabisa!
+                activeAdIndexPointer = 0; // Rudisha rotator mwanzo ili tangazo jipya lionekane mara moja!
+                rotateToNextActivePaidAd();
 
-            // Angalia kama ana sifa ya kupata Punguzo la 20% (Kama bado hajamaliza wiki mbili za mwezi wa bure)
-            // Siku 30 za mwanzo, akilipia zikiwa zimebaki siku > 14 (yaani ndani ya wiki 2 za kwanza tangu ajiunge)
-            if (currentUserAccount.trialDaysLeft > 14) {
-                finalPriceTZS = normalPriceTZS * 0.8; // Makato ya 20%
-                finalPriceUSD = normalPriceUSD * 0.8;
-                discountUjumbe = `🔥 SHANGAZI KASHUKA! Umeamua kulipia mapema kipindi chako cha bure kikiwa bado kibichi (Zimebaki Siku ${currentUserAccount.trialDaysLeft}).\n\nUmeshinda PUNGUZO LA 20% kwa mwezi mmoja unaofuata!`;
-            } else {
-                discountUjumbe = `ℹ️ Kipindi chako cha ofa ya mapema kimeisha (Zimebaki Siku ${currentUserAccount.trialDaysLeft} za majaribio).\nUnalipia bei ya kawaida ya mwezi.`;
-            }
+                // Safisha fomu
+                document.getElementById('ad-form-title').value = "";
+                document.getElementById('ad-form-desc').value = "";
+                document.getElementById('ad-form-phone').value = "";
+                tempAdImageBase64 = "";
 
-            const confirmPayment = confirm(`💳 DIRISHA LA MALIPO YA MWEZI\n\n${discountUjumbe}\n\nKiasi cha kulipia mwezi ujao:\n💰 TZS ${finalPriceTZS.toLocaleString()} au $${finalPriceUSD}\n\nJe, unathibitisha kufanya malipo haya sasa hivi?`);
-            
-            if (confirmPayment) {
-                currentUserAccount.isSubscriptionPaid = true;
-                currentUserAccount.trialDaysLeft = 0; // Anavuka kwenda kwenye kulipia moja kwa moja
-                updateSubscriptionBadgeUI();
-                document.getElementById('vendor-paywall-msg').style.display = 'none';
-                applyFilters();
-                alert("🎉 Safi sana! Malipo yamefanikiwa. Akaunti yako imeshonwa leseni ya mwezi mmoja kamili sasa.");
+                alert("🎉 Hongera! Tangazo lako limeingizwa rasmi kwenye algorithm ya mzunguko wa soko. Litaanza kuonekana kwa watumiaji wote kwa uwiano sawa hivi sasa!");
             }
         }
 
-        // Testing Machine: Simulator passing time (+5 Days ahead)
-        function simulateTimePassing() {
-            if (currentUserAccount.trialDaysLeft <= 0) {
-                alert("Muda wa majaribio (Free Trial) ulishamalizika tayari!");
-                return;
-            }
-            
-            currentUserAccount.trialDaysLeft -= 5;
-            if (currentUserAccount.trialDaysLeft < 0) currentUserAccount.trialDaysLeft = 0;
-
-            alert(`⏰ MAPINDUZI YA MUDA! Siku 5 zimesogezwa mbele.\nSasa hivi zimesalia siku: ${currentUserAccount.trialDaysLeft} za Mwezi wa Bure.`);
-            
-            // Kama muda wa bure umeisha kabisa na hajalipia, funga mageti
-            if (currentUserAccount.trialDaysLeft === 0 && !currentUserAccount.isSubscriptionPaid) {
-                const ln = dictionary[currentLanguage];
-                if (currentUserAccount.role === 'vendor') {
-                    const paywallBanner = document.getElementById('vendor-paywall-msg');
-                    paywallBanner.innerText = ln.vendorLockMsg;
-                    paywallBanner.style.display = 'block';
-                }
-            }
-            updateSubscriptionBadgeUI();
-            applyFilters();
+        function calculateAdCostReport(days) {
+            const cost = days == "3" ? "Tsh 500 (Siku 3 za Mzunguko)" : (days == "6" ? "Tsh 1,000 (Siku 6 za Mzunguko)" : "Tsh 2,000 (Siku 12 za Mzunguko)");
+            document.getElementById('ad-cost-report').innerText = `Gharama ya Tangazo: ${cost}`;
         }
 
-        // Dynamic System Badge Logic Switcher
-        function updateSubscriptionBadgeUI() {
-            const badge = document.getElementById('account-sub-badge');
-            const ln = dictionary[currentLanguage];
-            badge.style.display = 'inline-block';
-
-            if (currentUserAccount.isSubscriptionPaid) {
-                badge.className = "sub-badge sub-active";
-                badge.innerText = `${ln.subActive}`;
-            } else if (currentUserAccount.trialDaysLeft > 0) {
-                badge.className = "sub-badge sub-trial";
-                // Inaonyesha ofa ya 20% ikiwa ipo ndani ya wiki mbili za kwanza (siku > 14)
-                let promoText = currentUserAccount.trialDaysLeft > 14 ? " + 🎁 20% OFF" : "";
-                badge.innerText = `${ln.subTrial}: ${currentUserAccount.trialDaysLeft} Days${promoText}`;
-            } else {
-                badge.className = "sub-badge sub-expired";
-                badge.innerText = ln.subExpired;
-            }
-        }
-
-        function processCapturedPhoto(inputElement) {
+        // 👤 PROFILE IMAGE & VARIABLE MUTATOR ENGINE
+        function updateProfilePhoto(inputElement) {
             const file = inputElement.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) { capturedPhotoBase64 = e.target.result; };
+                reader.onload = function(e) {
+                    currentUserAccount.avatar = e.target.result;
+                    document.getElementById('profile-avatar-preview').src = e.target.result;
+                    document.getElementById('widget-avatar').src = e.target.result;
+                    alert("📸 Picha ya wasifu (Profile Photo) imesasishwa kikamilifu!");
+                };
                 reader.readAsDataURL(file);
             }
         }
 
-        function calculateAdminCommission(val) {
-            const price = parseFloat(val);
-            const displayBox = document.getElementById('commission-display');
-            const ln = dictionary[currentLanguage];
-            if(!price || price <= 0) { displayBox.innerHTML = ""; return; }
-            const commission = price * 0.05;
-            displayBox.innerHTML = `💰 <strong>${ln.commissionLbl}:</strong> Makato ya Mfumo (5%): <span style="color:red;">${commission.toLocaleString()} TZS</span>`;
+        function saveProfileChanges() {
+            currentUserAccount.name = document.getElementById('edit-profile-name').value;
+            currentUserAccount.role = document.getElementById('edit-profile-role').value;
+            currentUserAccount.shopName = document.getElementById('edit-profile-shop').value || "Duka Lako";
+
+            // Update UI widget elements layout
+            document.getElementById('widget-name').innerText = currentUserAccount.role === 'buyer' ? currentUserAccount.name : currentUserAccount.shopName;
+            document.getElementById('edit-shop-block').style.display = currentUserAccount.role === 'vendor' ? 'block' : 'none';
+            
+            // Rekebisha muonekano wa duka la muuzaji kiotomatiki kulingana na mabadiliko yake
+            const dashboard = document.getElementById('vendor-dashboard');
+            dashboard.style.display = (currentUserAccount.role === 'vendor' && hasAccessRights()) ? 'block' : 'none';
         }
+
+        function toggleProfilePanel() {
+            const panel = document.getElementById('profile-control-center');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Vendor Product Posting Engine Logic
+        function handleVendorPublishProduct(event) {
+            event.preventDefault();
+            if (!hasAccessRights()) { alert("Muda wa bure umeisha! Lipia kuamsha duka."); return; }
+
+            const newProduct = {
+                id: productsDatabase.length + 1,
+                title: document.getElementById('new-p-title').value,
+                price: parseInt(document.getElementById('new-p-price').value),
+                vendor: currentUserAccount.shopName,
+                location: document.getElementById('new-p-location').value,
+                phone: document.getElementById('new-p-phone').value,
+                rating: 5.0,
+                image: tempProductImageBase64 || "https://via.placeholder.com/400x300?text=Soko+Kuu"
+            };
+
+            productsDatabase.unshift(newProduct);
+            applyFilters();
+            alert("🚀 Bidhaa imepostiwa!");
+        }
+
+        // Account Billing Subscription Manager Window
+        function triggerPaymentWindow() {
+            const isVendor = currentUserAccount.role === 'vendor';
+            const fee = isVendor ? 2500 : 1000;
+            const choice = confirm(`💳 USALAMA WA AKAUNTI\n\nLipia ada ya mwezi ili kuendelea kutumia mfumo:\n💰 Kiasi cha kulipa: Tsh ${fee.toLocaleString()} kwa mwezi mmoja.\n\nJe, umefanya malipo kupitia namba zetu za simu tayari?`);
+            
+            if (choice) {
+                currentUserAccount.isSubscriptionPaid = true;
+                currentUserAccount.trialDaysLeft = 0;
+                updateSubscriptionBadgeUI();
+                applyFilters();
+                alert("🎉 Malipo yamethibitishwa! Vizuizi vyote vimeondolewa.");
+            }
+        }
+
+        // Simulator passing time trigger tool
+        function simulateTimePassing() {
+            if (currentUserAccount.trialDaysLeft <= 0) { alert("Free trial iliisha."); return; }
+            currentUserAccount.trialDaysLeft -= 5;
+            if (currentUserAccount.trialDaysLeft < 0) currentUserAccount.trialDaysLeft = 0;
+            
+            // Kama matangazo yapo, punguza muda wake pia wa siku 3 au 6 kwa ajili ya mfano sahihi
+            globalPaidAdsDatabase.forEach(ad => {
+                ad.daysLeft -= 1;
+            });
+            globalPaidAdsDatabase = globalPaidAdsDatabase.filter(ad => ad.daysLeft > 0); // Futa matangazo yaliyoisha muda
+
+            alert(`⏰ Muda umesogea mbele! Siku ${currentUserAccount.trialDaysLeft} za bure zimesalia za akaunti.`);
+            updateSubscriptionBadgeUI();
+            applyFilters();
+        }
+
+        function updateSubscriptionBadgeUI() {
+            const badge = document.getElementById('account-sub-badge');
+            badge.style.display = 'inline-block';
+
+            if (currentUserAccount.isSubscriptionPaid) {
+                badge.className = "sub-badge sub-active"; badge.innerText = "IMELIPIWA";
+            } else if (currentUserAccount.trialDaysLeft > 0) {
+                badge.className = "sub-badge sub-trial"; badge.innerText = `BURE: ${currentUserAccount.trialDaysLeft} Siku`;
+            } else {
+                badge.className = "sub-badge sub-expired"; badge.innerText = "HAIJALIPIWA";
+            }
+            saveProfileChanges();
+        }
+
+        // Image Stream Base64 Encoders
+        function processProductPhoto(el) { const f = el.files[0]; if(f){ const r = new FileReader(); r.onload=function(e){tempProductImageBase64=e.target.result;}; r.readAsDataURL(f); }}
+        function processAdPhoto(el) { const f = el.files[0]; if(f){ const r = new FileReader(); r.onload=function(e){tempAdImageBase64=e.target.result;}; r.readAsDataURL(f); }}
 
         function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
         function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
-        function toggleRegRoleFields(val) { document.getElementById('reg-shop-field').style.display = val === 'vendor' ? 'block' : 'none'; }
 
         function handleRegistrationSubmit(event) {
             event.preventDefault();
             currentUserAccount.name = document.getElementById('auth-name').value;
             currentUserAccount.role = document.getElementById('auth-role').value;
             currentUserAccount.shopName = document.getElementById('auth-shop').value || "Mteja";
-            
-            // Rules: Akaunti mpya inapewa Mwezi mmoja bure (Trial days = 30)
-            currentUserAccount.trialDaysLeft = 30; 
+            currentUserAccount.trialDaysLeft = 30;
             currentUserAccount.isSubscriptionPaid = false;
 
             closeAuthModal();
-            
-            const welcomeLabel = document.getElementById('user-display');
-            const dashboard = document.getElementById('vendor-dashboard');
-            document.getElementById('time-machine-btn').style.display = 'inline-block'; // Washa simulator kwa ajili ya majaribio
 
-            if (currentUserAccount.role === 'buyer') {
-                welcomeLabel.innerText = `👤 ${currentUserAccount.name}`;
-                dashboard.style.display = 'none';
-                alert(`🎁 Karibu Soko Kuu!\nAkaunti yako mpya imepewa MWEZI MMOJA BURE wa kuona mawasiliano yote!\n\n💡 UKILIPIA LUKU mapema kabla ya wiki mbili kuisha, utapata punguzo la 20% mwezi ujao!`);
-            } else {
-                welcomeLabel.innerText = `🏪 ${currentUserAccount.shopName}`;
-                dashboard.style.display = 'block';
-                document.getElementById('vendor-paywall-msg').style.display = 'none';
-                alert(`🎁 Hongera!\nDuka lako limepewa MWEZI MMOJA BURE wa kupost bidhaa kwa kamera na kuunganishwa na wateja!\n\n💡 UKILIPIA LESENI mapema kabla wiki mbili hazijaisha, utapata punguzo la 20% mwezi ujao!`);
-            }
+            // Set profile forms default entries layout
+            document.getElementById('edit-profile-name').value = currentUserAccount.name;
+            document.getElementById('edit-profile-role').value = currentUserAccount.role;
+            document.getElementById('edit-profile-shop').value = currentUserAccount.shopName;
+            document.getElementById('profile-avatar-preview').src = currentUserAccount.avatar;
+            document.getElementById('widget-avatar').src = currentUserAccount.avatar;
 
+            document.getElementById('user-profile-widget').style.display = 'flex';
             document.getElementById('auth-nav-btn').style.display = 'none';
+
             updateSubscriptionBadgeUI();
             applyFilters();
+            
+            alert("🎁 Akaunti imeunganishwa na umepokea Siku 30 Bure!");
         }
 
-        function filterCategory(cat, element) {
-            selectedCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            applyFilters();
-        }
-
+        function filterCategory(cat, element) { applyFilters(); }
+        
         function applyFilters() {
             const keyword = document.getElementById('search-input').value.toLowerCase();
-            let results = productsDatabase.filter(p => {
-                const mCat = selectedCategory === 'all' || p.category === selectedCategory;
-                const mKey = p.title.toLowerCase().includes(keyword) || p.vendor.toLowerCase().includes(keyword);
-                return mCat && mKey;
-            });
+            let results = productsDatabase.filter(p => p.title.toLowerCase().includes(keyword));
             renderCatalog(results);
         }
 
-        changeSystemLanguage('sw');
+        // Kickstart soko na washa rotator engine ya matangazo kwa mpigo mmoja!
+        renderCatalog(productsDatabase);
+        startPaidAdRotatorEngine();
     </script>
 </body>
 </html>
