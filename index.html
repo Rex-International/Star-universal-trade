@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soko Kuu - Multi-Vendor Marketplace</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --accent: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        body { background: var(--light); color: var(--dark); padding-bottom: 60px; }
+
+        /* Navigation Header */
+        header {
+            background: #fff; border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100; padding: 12px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
+        .cart-icon-btn {
+            background: var(--light); border: 1px solid var(--border); padding: 8px 16px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; position: relative;
+        }
+        .cart-count {
+            background: var(--accent); color: #fff; font-size: 11px;
+            padding: 2px 6px; border-radius: 50%; position: absolute; top: -5px; right: -5px;
+        }
+
+        /* Search Dashboard Area */
+        .search-container {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff;
+            padding: 30px 20px; text-align: center;
+        }
+        .search-container h1 { font-size: 24px; margin-bottom: 15px; }
+        .search-box {
+            display: flex; max-width: 500px; margin: 0 auto; background: #fff;
+            border-radius: 25px; overflow: hidden; padding: 2px;
+        }
+        .search-box input {
+            flex: 1; border: none; padding: 12px 20px; font-size: 15px; outline: none;
+        }
+
+        /* Categories Ribbon */
+        .categories-ribbon {
+            display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto;
+            white-space: nowrap; background: #fff; border-bottom: 1px solid var(--border);
+        }
+        .cat-btn {
+            background: var(--light); border: 1px solid var(--border); padding: 8px 16px;
+            border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer;
+        }
+        .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+        /* Main Products Grid Grid Layout */
+        .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .grid-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; }
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px;
+        }
+        
+        /* Product Visual Cards */
+        .product-card {
+            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;
+        }
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .p-image-placeholder {
+            background: #e2e8f0; width: 100%; height: 140px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; color: #94a3b8;
+        }
+        .p-details { padding: 12px; display: flex; flex-direction: column; flex: 1; }
+        .p-vendor { font-size: 11px; color: #64748b; margin-bottom: 4px; text-transform: uppercase; font-weight: bold; }
+        .p-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+        .p-price { font-size: 16px; font-weight: 700; color: var(--dark); margin-top: auto; margin-bottom: 10px; }
+        .add-to-cart-btn {
+            background: var(--primary); color: #fff; border: none; padding: 8px;
+            border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
+            text-align: center; width: 100%;
+        }
+        .add-to-cart-btn:active { background: var(--primary-dark); }
+
+        /* Sliding Cart Drawer Panel */
+        .cart-drawer {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.15); z-index: 200;
+            max-height: 70%; display: flex; flex-direction: column;
+            transform: translateY(100%); transition: transform 0.3s ease-out;
+        }
+        .cart-drawer.open { transform: translateY(0); }
+        .cart-header {
+            padding: 15px 20px; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .cart-items-list { padding: 15px 20px; overflow-y: auto; flex: 1; }
+        .cart-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 0; border-bottom: 1px solid var(--light);
+        }
+        .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: var(--light); }
+        .total-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; font-size: 18px; }
+        .checkout-btn {
+            background: var(--accent); color: #fff; border: none; width: 100%;
+            padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">SOKO KUU</div>
+        <button class="cart-icon-btn" onclick="toggleCartDrawer()">
+            🛒 KAPU <span class="cart-count" id="cart-counter">0</span>
+        </button>
+    </header>
+
+    <div class="search-container">
+        <h1>Tafuta Bidhaa Kwenye Soko Kuu</h1>
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Tafuta nguo, simu, viatu..." oninput="handleSearchFilter()">
+        </div>
+    </div>
+
+    <div class="categories-ribbon">
+        <button class="cat-btn active" onclick="filterCategory('all', this)">Zote</button>
+        <button class="cat-btn" onclick="filterCategory('electronics', this)">Electronics</button>
+        <button class="cat-btn" onclick="filterCategory('fashion', this)">Fashion</button>
+        <button class="cat-btn" onclick="filterCategory('home', this)">Home & Living</button>
+    </div>
+
+    <div class="main-container">
+        <h2 class="grid-title">Bidhaa Zilizonaswa Hivi Punde</h2>
+        <div class="products-grid" id="products-catalog">
+            </div>
+    </div>
+
+    <div class="cart-drawer" id="cart-panel">
+        <div class="cart-header">
+            <h3>Kapu Lako la Manunuzi</h3>
+            <button onclick="toggleCartDrawer()" style="background:none; border:none; font-size:16px; font-weight:bold; color:red; cursor:pointer;">FUNGA</button>
+        </div>
+        <div class="cart-items-list" id="cart-items-container">
+            </div>
+        <div class="cart-footer">
+            <div class="total-row">
+                <span>JUMLA KUU:</span>
+                <span id="cart-total-price">0 TZS</span>
+            </div>
+            <button class="checkout-btn" onclick="triggerCheckoutAlert()">ENDELEA NA MALIPO</button>
+        </div>
+    </div>
+
+    <script>
+        // Prototype Database Matrix for Marketplace Simulation
+        const productsDatabase = [
+            { id: 1, title: "Smart TV Inch 43 4K UHD", price: 650000, category: "electronics", vendor: "Alpha Electronics", icon: "📺" },
+            { id: 2, title: "Raba za Kisasa za Michezo", price: 45000, category: "fashion", vendor: "Kasi Sports Shoes", icon: "👟" },
+            { id: 3, title: "Blender ya Matunda yenye Nguvu", price: 85000, category: "home", vendor: "Mama Kitchen Utensils", icon: "🍹" },
+            { id: 4, title: "Simu ya Mkononi Pro 128GB", price: 450000, category: "electronics", vendor: "Smart & Gadgets Ltd", icon: "📱" },
+            { id: 5, title: "Shati la Mitindo la Kiume (Cotton)", price: 25000, category: "fashion", vendor: "Classy Fits", icon: "👔" },
+            { id: 6, title: "Sufuria Seti ya Vipande 5", price: 120000, category: "home", vendor: "Modern Homewares", icon: "🍳" }
+        ];
+
+        let shoppingCart = [];
+        let selectedCategory = 'all';
+
+        // Render Database Records to Application Canvas Layout View ports
+        function renderCatalog(itemsToRender) {
+            const catalogContainer = document.getElementById('products-catalog');
+            catalogContainer.innerHTML = '';
+
+            if(itemsToRender.length === 0) {
+                catalogContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:20px;">Hakuna bidhaa iliyopatikana.</p>`;
+                return;
+            }
+
+            itemsToRender.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="p-image-placeholder">${p.icon}</div>
+                    <div class="p-details">
+                        <span class="p-vendor">🏬 ${p.vendor}</span>
+                        <h3 class="p-title">${p.title}</h3>
+                        <div class="p-price">${p.price.toLocaleString()} TZS</div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${p.id})">WEKA KWENYE KAPU</button>
+                    </div>
+                `;
+                catalogContainer.appendChild(card);
+            });
+        }
+
+        // Logic Controls: Filter via Ribbon Node Clicks
+        function filterCategory(cat, element) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
+            applyFilters();
+        }
+
+        // Logic Controls: Input Search Filtering Mechanics
+        function handleSearchFilter() {
+            applyFilters();
+        }
+
+        // Unified filtration matrix controller
+        function applyFilters() {
+            const searchKeyword = document.getElementById('search-input').value.toLowerCase();
+            
+            let filteredResults = productsDatabase.filter(p => {
+                const matchCategory = selectedCategory === 'all' || p.category === selectedCategory;
+                const matchKeyword = p.title.toLowerCase().includes(searchKeyword) || p.vendor.toLowerCase().includes(searchKeyword);
+                return matchCategory && matchKeyword;
+            });
+
+            renderCatalog(filteredResults);
+        }
+
+        // Action Trigger Command: Manage Cart Array Metrics
+        function addToCart(productId) {
+            const item = productsDatabase.find(p => p.id === productId);
+            if (item) {
+                shoppingCart.push(item);
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            // Update item counters badges
+            document.getElementById('cart-counter').innerText = shoppingCart.length;
+
+            const cartContainer = document.getElementById('cart-items-container');
+            cartContainer.innerHTML = '';
+
+            let totalPriceSum = 0;
+
+            shoppingCart.forEach((item, idx) => {
+                totalPriceSum += item.price;
+                const row = document.createElement('div');
+                row.className = 'cart-item';
+                row.innerHTML = `
+                    <div>
+                        <div style="font-weight:600; font-size:14px;">${item.title}</div>
+                        <div style="font-size:12px; color:#64748b;">Duka: ${item.vendor}</div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-weight:bold; font-size:14px;">${item.price.toLocaleString()} TZS</span>
+                        <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:red; font-weight:bold; cursor:pointer;">❌</button>
+                    </div>
+                `;
+                cartContainer.appendChild(row);
+            });
+
+            document.getElementById('cart-total-price').innerText = `${totalPriceSum.toLocaleString()} TZS`;
+        }
+
+        function removeFromCart(index) {
+            shoppingCart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCartDrawer() {
+            const panel = document.getElementById('cart-panel');
+            panel.classList.toggle('open');
+        }
+
+        function triggerCheckoutAlert() {
+            if(shoppingCart.length === 0) {
+                alert("Kapu lako liko tupu kwa sasa!");
+                return;
+            }
+            alert("Mfumo wa Malipo (Payment Gateway Integration):\nHii ni Hatua ya mwanzo tu ya muonekano. Kwenye mfumo kamili, hapa ndipo mteja atakapochagua kulipia kwa M-Pesa, TigoPesa, au Kadi ya Benki kabla ya kuwasiliana na wauzaji.");
+        }
+
+        // Initial setup run triggers
+        renderCatalog(productsDatabase);
+    </script>
+</body>
+</html>
