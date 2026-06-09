@@ -24,16 +24,20 @@
             display: flex; justify-content: space-between; align-items: center;
         }
         .logo { font-size: 22px; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
-        .cart-icon-btn {
+        .nav-actions { display: flex; gap: 10px; align-items: center; }
+        
+        .btn-nav {
             background: var(--light); border: 1px solid var(--border); padding: 8px 16px;
             border-radius: 20px; font-weight: bold; cursor: pointer; position: relative;
+            font-size: 13px;
         }
         .cart-count {
             background: var(--accent); color: #fff; font-size: 11px;
             padding: 2px 6px; border-radius: 50%; position: absolute; top: -5px; right: -5px;
         }
+        .user-welcome { font-size: 13px; font-weight: 600; color: var(--accent); display: none; }
 
-        /* Search Dashboard Area */
+        /* Search Area */
         .search-container {
             background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff;
             padding: 30px 20px; text-align: center;
@@ -58,14 +62,14 @@
         }
         .cat-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-        /* Main Products Grid Grid Layout */
+        /* Products Grid */
         .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
         .grid-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; text-transform: uppercase; }
         .products-grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px;
         }
         
-        /* Product Visual Cards */
+        /* Product Cards */
         .product-card {
             background: #fff; border: 1px solid var(--border); border-radius: 12px;
             overflow: hidden; display: flex; flex-direction: column; transition: transform 0.2s;
@@ -85,9 +89,42 @@
             border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
             text-align: center; width: 100%;
         }
-        .add-to-cart-btn:active { background: var(--primary-dark); }
 
-        /* Sliding Cart Drawer Panel */
+        /* Auth Modal Popup System */
+        .modal-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px);
+            z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-card {
+            background: #fff; width: 100%; max-width: 400px; border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--light); }
+        .tab-btn {
+            flex: 1; padding: 15px; border: none; background: none; font-weight: bold;
+            font-size: 14px; cursor: pointer; color: #64748b; text-align: center;
+        }
+        .tab-btn.active { color: var(--primary); border-bottom: 3px solid var(--primary); background: #fff; }
+        
+        .modal-body { padding: 25px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #334155; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px;
+            outline: none; font-size: 14px;
+        }
+        .form-group input:focus { border-color: var(--primary); }
+        .submit-auth-btn {
+            background: var(--primary); color: #fff; border: none; width: 100%;
+            padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-top: 10px;
+        }
+        .close-modal-x { float: right; font-size: 20px; background: none; border: none; cursor: pointer; color: #64748b; }
+
+        /* Cart Drawer */
         .cart-drawer {
             position: fixed; bottom: 0; left: 0; right: 0; background: #fff;
             border-top-left-radius: 20px; border-top-right-radius: 20px;
@@ -96,30 +133,25 @@
             transform: translateY(100%); transition: transform 0.3s ease-out;
         }
         .cart-drawer.open { transform: translateY(0); }
-        .cart-header {
-            padding: 15px 20px; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .cart-header { padding: 15px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-items-list { padding: 15px 20px; overflow-y: auto; flex: 1; }
-        .cart-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 0; border-bottom: 1px solid var(--light);
-        }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--light); }
         .cart-footer { padding: 20px; border-top: 1px solid var(--border); background: var(--light); }
         .total-row { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 15px; font-size: 18px; }
-        .checkout-btn {
-            background: var(--accent); color: #fff; border: none; width: 100%;
-            padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer;
-        }
+        .checkout-btn { background: var(--accent); color: #fff; border: none; width: 100%; padding: 14px; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo">SOKO KUU</div>
-        <button class="cart-icon-btn" onclick="toggleCartDrawer()">
-            🛒 KAPU <span class="cart-count" id="cart-counter">0</span>
-        </button>
+        <div class="nav-actions">
+            <span class="user-welcome" id="user-display">Mambo, Ally!</span>
+            <button class="btn-nav" id="auth-nav-btn" onclick="openAuthModal()">👤 REG/INGIA</button>
+            <button class="btn-nav" onclick="toggleCartDrawer()">
+                🛒 KAPU <span class="cart-count" id="cart-counter">0</span>
+            </button>
+        </div>
     </header>
 
     <div class="search-container">
@@ -138,17 +170,15 @@
 
     <div class="main-container">
         <h2 class="grid-title">Bidhaa Zilizonaswa Hivi Punde</h2>
-        <div class="products-grid" id="products-catalog">
-            </div>
+        <div class="products-grid" id="products-catalog"></div>
     </div>
 
     <div class="cart-drawer" id="cart-panel">
         <div class="cart-header">
             <h3>Kapu Lako la Manunuzi</h3>
-            <button onclick="toggleCartDrawer()" style="background:none; border:none; font-size:16px; font-weight:bold; color:red; cursor:pointer;">FUNGA</button>
+            <button onclick="toggleCartDrawer()" style="background:none; border:none; font-size:14px; font-weight:bold; color:red; cursor:pointer;">FUNGA</button>
         </div>
-        <div class="cart-items-list" id="cart-items-container">
-            </div>
+        <div class="cart-items-list" id="cart-items-container"></div>
         <div class="cart-footer">
             <div class="total-row">
                 <span>JUMLA KUU:</span>
@@ -158,8 +188,58 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card">
+            <div class="modal-tabs">
+                <button class="tab-btn active" id="tab-buyer" onclick="switchAuthTab('buyer')">MTEJA (BUYER)</button>
+                <button class="tab-btn" id="tab-vendor" onclick="switchAuthTab('vendor')">MUUZAJI (VENDOR)</button>
+            </div>
+            <div class="modal-body">
+                <button class="close-modal-x" onclick="closeAuthModal()">✕</button>
+                <h3 id="auth-title" style="margin-bottom: 20px; font-size: 18px;">Ukurasa wa Usajili wa Mteja</h3>
+                
+                <form id="auth-form" onsubmit="handleRegistrationSubmit(event)">
+                    <div class="form-group">
+                        <label>Jina Kamili</label>
+                        <input type="text" id="auth-name" placeholder="Mfano: Ally Juma" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Namba ya Simu</label>
+                        <input type="tel" id="auth-phone" placeholder="Mfano: 0712345678" required>
+                    </div>
+
+                    <div id="vendor-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Jina la Duka Lako</label>
+                            <input type="text" id="auth-shop" placeholder="Mfano: Ally Smart Gadgets">
+                        </div>
+                        <div class="form-group">
+                            <label>Aina ya Bidhaa Unazouza</label>
+                            <select id="auth-shop-cat">
+                                <option value="electronics">Electronics</option>
+                                <option value="fashion">Nguo & Mitindo</option>
+                                <option value="home">Vifaa vya Nyumbani</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Namba ya NIDA / Leseni (Kuhakiki Duka)</label>
+                            <input type="text" id="auth-nida" placeholder="Namba ya utambulisho">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Neno la Siri (Password)</label>
+                        <input type="password" placeholder="••••••••" required>
+                    </div>
+
+                    <button type="submit" class="submit-auth-btn" id="auth-submit-text">Tengeneza Akaunti ya Mteja</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Prototype Database Matrix for Marketplace Simulation
+        // Database Matrix Simulation
         const productsDatabase = [
             { id: 1, title: "Smart TV Inch 43 4K UHD", price: 650000, category: "electronics", vendor: "Alpha Electronics", icon: "📺" },
             { id: 2, title: "Raba za Kisasa za Michezo", price: 45000, category: "fashion", vendor: "Kasi Sports Shoes", icon: "👟" },
@@ -171,17 +251,15 @@
 
         let shoppingCart = [];
         let selectedCategory = 'all';
+        let currentRoleType = 'buyer'; // 'buyer' au 'vendor'
 
-        // Render Database Records to Application Canvas Layout View ports
         function renderCatalog(itemsToRender) {
             const catalogContainer = document.getElementById('products-catalog');
             catalogContainer.innerHTML = '';
-
             if(itemsToRender.length === 0) {
-                catalogContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:20px;">Hakuna bidhaa iliyopatikana.</p>`;
+                catalogContainer.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:20px;">Hakuna bidhaa.</p>`;
                 return;
             }
-
             itemsToRender.forEach(p => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
@@ -198,7 +276,59 @@
             });
         }
 
-        // Logic Controls: Filter via Ribbon Node Clicks
+        // Modal Tab Swapping Engine (Mteja vs Muuzaji)
+        function switchAuthTab(role) {
+            currentRoleType = role;
+            document.getElementById('tab-buyer').classList.remove('active');
+            document.getElementById('tab-vendor').classList.remove('active');
+            
+            const vendorFields = document.getElementById('vendor-fields');
+            const submitBtn = document.getElementById('auth-submit-text');
+            const title = document.getElementById('auth-title');
+
+            if (role === 'buyer') {
+                document.getElementById('tab-buyer').classList.add('active');
+                vendorFields.style.display = 'none';
+                title.innerText = "Ukurasa wa Usajili wa Mteja";
+                submitBtn.innerText = "Tengeneza Akaunti ya Mteja";
+                document.getElementById('auth-shop').removeAttribute('required');
+            } else {
+                document.getElementById('tab-vendor').classList.add('active');
+                vendorFields.style.display = 'block';
+                title.innerText = "Sajili Duka Lako Kama Muuzaji";
+                submitBtn.innerText = "Fungua Duka Lako Sokoni";
+                document.getElementById('auth-shop').setAttribute('required', 'true');
+            }
+        }
+
+        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
+        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+
+        // Handle Live Form Submission Data Mockup
+        function handleRegistrationSubmit(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('auth-name').value;
+            const shopInput = document.getElementById('auth-shop').value;
+
+            closeAuthModal();
+            
+            // Badilisha UI kuonyesha aliyefungua akaunti ameingia
+            const welcomeLabel = document.getElementById('user-display');
+            const authNavBtn = document.getElementById('auth-nav-btn');
+
+            if (currentRoleType === 'buyer') {
+                welcomeLabel.innerText = `👋 Mambo, ${nameInput}! (Mteja)`;
+                alert(`Hongera ${nameInput}!\nAkaunti yako ya Mteja imetengenezwa. Sasa unaweza kuweka oda.`);
+            } else {
+                welcomeLabel.innerText = `🏬 ${shopInput} (Muuzaji)`;
+                alert(`Hongera ${nameInput}!\nDuka lako la "${shopInput}" limeshasajiliwa kiprofeshonali. Sasa unaweza kupandisha bidhaa zako baada ya Admin kuhakiki.`);
+            }
+
+            welcomeLabel.style.display = 'inline-block';
+            authNavBtn.innerText = "👤 AKAUNTI";
+        }
+
+        // Filters Management
         function filterCategory(cat, element) {
             selectedCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
@@ -206,81 +336,53 @@
             applyFilters();
         }
 
-        // Logic Controls: Input Search Filtering Mechanics
-        function handleSearchFilter() {
-            applyFilters();
-        }
+        function handleSearchFilter() { applyFilters(); }
 
-        // Unified filtration matrix controller
         function applyFilters() {
-            const searchKeyword = document.getElementById('search-input').value.toLowerCase();
-            
-            let filteredResults = productsDatabase.filter(p => {
-                const matchCategory = selectedCategory === 'all' || p.category === selectedCategory;
-                const matchKeyword = p.title.toLowerCase().includes(searchKeyword) || p.vendor.toLowerCase().includes(searchKeyword);
-                return matchCategory && matchKeyword;
+            const keyword = document.getElementById('search-input').value.toLowerCase();
+            let results = productsDatabase.filter(p => {
+                const mCat = selectedCategory === 'all' || p.category === selectedCategory;
+                const mKey = p.title.toLowerCase().includes(keyword) || p.vendor.toLowerCase().includes(keyword);
+                return mCat && mKey;
             });
-
-            renderCatalog(filteredResults);
+            renderCatalog(results);
         }
 
-        // Action Trigger Command: Manage Cart Array Metrics
+        // Cart Actions
         function addToCart(productId) {
             const item = productsDatabase.find(p => p.id === productId);
-            if (item) {
-                shoppingCart.push(item);
-                updateCartUI();
-            }
+            if (item) { shoppingCart.push(item); updateCartUI(); }
         }
 
         function updateCartUI() {
-            // Update item counters badges
             document.getElementById('cart-counter').innerText = shoppingCart.length;
-
-            const cartContainer = document.getElementById('cart-items-container');
-            cartContainer.innerHTML = '';
-
-            let totalPriceSum = 0;
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+            let total = 0;
 
             shoppingCart.forEach((item, idx) => {
-                totalPriceSum += item.price;
+                total += item.price;
                 const row = document.createElement('div');
                 row.className = 'cart-item';
                 row.innerHTML = `
                     <div>
                         <div style="font-weight:600; font-size:14px;">${item.title}</div>
-                        <div style="font-size:12px; color:#64748b;">Duka: ${item.vendor}</div>
+                        <div style="font-size:11px; color:#64748b;">Duka: ${item.vendor}</div>
                     </div>
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-weight:bold; font-size:14px;">${item.price.toLocaleString()} TZS</span>
+                        <span style="font-weight:bold; font-size:13px;">${item.price.toLocaleString()} TZS</span>
                         <button onclick="removeFromCart(${idx})" style="background:none; border:none; color:red; font-weight:bold; cursor:pointer;">❌</button>
                     </div>
                 `;
-                cartContainer.appendChild(row);
+                container.appendChild(row);
             });
-
-            document.getElementById('cart-total-price').innerText = `${totalPriceSum.toLocaleString()} TZS`;
+            document.getElementById('cart-total-price').innerText = `${total.toLocaleString()} TZS`;
         }
 
-        function removeFromCart(index) {
-            shoppingCart.splice(index, 1);
-            updateCartUI();
-        }
+        function removeFromCart(index) { shoppingCart.splice(index, 1); updateCartUI(); }
+        function toggleCartDrawer() { document.getElementById('cart-panel').classList.toggle('open'); }
+        function triggerCheckoutAlert() { alert("Hatua ya Malipo itafuata baada ya kuweka Database ya kweli."); }
 
-        function toggleCartDrawer() {
-            const panel = document.getElementById('cart-panel');
-            panel.classList.toggle('open');
-        }
-
-        function triggerCheckoutAlert() {
-            if(shoppingCart.length === 0) {
-                alert("Kapu lako liko tupu kwa sasa!");
-                return;
-            }
-            alert("Mfumo wa Malipo (Payment Gateway Integration):\nHii ni Hatua ya mwanzo tu ya muonekano. Kwenye mfumo kamili, hapa ndipo mteja atakapochagua kulipia kwa M-Pesa, TigoPesa, au Kadi ya Benki kabla ya kuwasiliana na wauzaji.");
-        }
-
-        // Initial setup run triggers
         renderCatalog(productsDatabase);
     </script>
 </body>
