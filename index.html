@@ -7,599 +7,885 @@
     <title>Star Universal Trade (SUT) - Gaby-international</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1e3a8a;
-            --accent: #10b981;
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --border: #e2e8f0;
-            --orange: #f97316;
-            --whatsapp: #25d366;
-            --gold: #f59e0b;
-            --red: #ef4444;
-            --purple: #8b5cf6;
+            --primary-blue: #1e3a8a;
+            --premium-sky: #38bdf8;
+            --accent-emerald: #10b981;
+            --cream-bg: #fdfbf7;
+            --cream-card: #fffdf9;
+            --dark-slate: #0f172a;
+            --border-light: #e2e8f0;
+            --whatsapp-green: #25d366;
+            --gold-star: #f59e0b;
+            --danger-red: #ef4444;
+            --ad-purple: #8b5cf6;
+            --text-muted: #64748b;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: var(--light); color: var(--dark); padding-bottom: 120px; }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+        
+        /* Dynamic Styles base on Account Type */
+        body.mode-buyer { background-color: var(--cream-bg); color: var(--dark-slate); }
+        body.mode-vendor { background-color: #0c1e3d; color: #f8fafc; }
+
+        /* 🎬 INTRO SPLASH SCREEN */
+        #sut-intro-splash {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999; display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .intro-logo-wrapper { width: 85%; max-width: 450px; transform: scale(0.5); animation: zoomInLogo 1.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomInLogo { to { transform: scale(1); } }
+
+        /* HEADER AREA (Logo & Top Right Actions) */
         header {
             background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky; top: 0; z-index: 100; padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+            position: sticky; top: 0; z-index: 999; padding: 10px 15px;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-section { display: flex; align-items: center; gap: 12px; }
-        .nav-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        
-        .btn-nav { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        .btn-menu { background: var(--accent); color: #fff; border: none; padding: 8px 14px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 12px; }
-        
-        .profile-nav-trigger { display: none; align-items: center; gap: 8px; cursor: pointer; background: #ffedd5; padding: 4px 12px; border-radius: 15px; font-weight: 600; font-size: 13px; color: var(--orange); }
-        .profile-nav-trigger img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #cbd5e1; }
+        .header-logo-box { width: 180px; height: 42px; cursor: pointer; }
+        .header-right-tools { display: flex; align-items: center; gap: 8px; }
+        .header-btn { background: none; border: none; fill: #fff; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-        .sub-badge { font-size: 11px; padding: 4px 8px; border-radius: 8px; font-weight: bold; margin-left: 5px; cursor: pointer;}
-        .sub-trial { background: #ede9fe; color: var(--purple); border: 1px solid #c084fc; }
-        .sub-active { background: #dcfce7; color: #15803d; }
-        .sub-expired { background: #fee2e2; color: #b91c1c; }
-
-        .app-panel { background: #fff; border: 1px solid var(--border); margin: 20px; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-        .vendor-panel { border: 2px dashed var(--accent); display: none; }
-        .profile-panel { border: 2px solid var(--primary); display: none; }
+        /* MCHORO SECTION 2: MENU, SEARCH, PROFILE */
+        .search-profile-bar {
+            padding: 10px 15px; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.05); background: rgba(255,255,255,0.02);
+        }
+        body.mode-vendor .search-profile-bar { border-bottom-color: rgba(255,255,255,0.1); }
+        .search-input-wrapper { flex: 1; position: relative; }
+        .search-input-wrapper input {
+            width: 100%; padding: 10px 15px; border-radius: 20px;
+            border: 1px solid var(--border-light); outline: none; font-size: 14px;
+        }
+        body.mode-vendor .search-input-wrapper input { background: #1e293b; border-color: #334155; color: #fff; }
         
-        .vendor-tabs { display: flex; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 15px; }
-        .v-tab-btn { background: none; border: none; padding: 6px 12px; font-weight: bold; cursor: pointer; font-size: 13px; color: #64748b; }
-        .v-tab-btn.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
-        .vendor-tab-content { display: none; }
-        .vendor-tab-content.active { display: block; }
+        .profile-widget { text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; min-width: 55px; }
+        .profile-widget img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-emerald); background: #cbd5e1; }
+        .profile-widget span { font-size: 11px; font-weight: 700; margin-top: 2px; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .upload-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline:none; }
-        
-        .profile-pic-uploader { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .profile-preview-lg { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; background: #cbd5e1; border: 2px solid var(--primary); }
+        /* MCHORO SECTION 3: CATEGORIES HORIZONTAL SCROLL */
+        .categories-scroll-container {
+            display: flex; gap: 8px; overflow-x: auto; padding: 10px 15px;
+            scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
+        .categories-scroll-container::-webkit-scrollbar { display: none; }
+        .cat-chip {
+            padding: 6px 14px; border-radius: 15px; font-size: 12px; font-weight: 700;
+            white-space: nowrap; cursor: pointer; border: 1px solid var(--border-light);
+            background: #fff; color: var(--dark-slate);
+        }
+        body.mode-vendor .cat-chip { background: #1e293b; color: #f8fafc; border-color: #334155; }
+        .cat-chip.active { background: var(--accent-emerald) !important; color: #fff !important; border-color: var(--accent-emerald) !important; }
 
-        .search-container { background: linear-gradient(135deg, #1e3a8a, #0f172a); color: #fff; padding: 30px 20px; text-align: center; border-bottom: 3px solid var(--accent); }
-        .search-box { display: flex; max-width: 500px; margin: 15px auto 0 auto; background: #fff; border-radius: 25px; overflow: hidden; padding: 2px; }
-        .search-box input { flex: 1; border: none; padding: 12px 20px; font-size: 15px; outline: none; color: var(--dark); }
+        /* MCHORO SECTION 4: MAIN CATALOG GRID */
+        .main-catalog-arena { padding: 15px; max-width: 1200px; margin: 0 auto; padding-bottom: 110px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        
+        .product-card { border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--border-light); position: relative; }
+        body.mode-buyer .product-card { background: var(--cream-card); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        body.mode-vendor .product-card { background: #1e293b; border-color: #334155; }
+        
+        .p-image-box { width: 100%; height: 130px; background: #cbd5e1; position: relative; }
+        .p-image-box img { width: 100%; height: 100%; object-fit: cover; }
+        .p-country-badge { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,0.7); color: #fff; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+        
+        .p-info { padding: 10px; display: flex; flex-direction: column; flex: 1; }
+        .p-vendor-title { font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--accent-emerald); }
+        .p-name { font-size: 13px; font-weight: 700; margin: 3px 0; line-height: 1.3; }
+        .p-price { font-size: 15px; font-weight: 800; color: var(--gold-star); margin-top: auto; padding-bottom: 8px; }
+        
+        .card-action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .card-btn { text-decoration: none; border: none; padding: 8px; border-radius: 6px; font-size: 10px; font-weight: 900; color: #fff; text-align: center; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-wa { background: var(--whatsapp-green); }
+        .btn-call { background: var(--primary-blue); }
+        .btn-delete { background: var(--danger-red); grid-column: span 2; margin-top: 4px; padding: 6px; }
 
-        .main-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; }
-        
-        .product-card { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-        .p-img-box { width: 100%; height: 160px; background: #e2e8f0; }
-        .p-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .p-details { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-        .p-vendor { font-size: 11px; color: var(--accent); margin-bottom: 2px; text-transform: uppercase; font-weight: 800; }
-        .p-price { font-size: 18px; font-weight: 800; color: var(--dark); margin-bottom: 12px; margin-top: auto; }
-        
-        .connect-buttons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-        .btn-connect { border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; text-align: center; color: #fff;}
-        .btn-wa { background: var(--whatsapp); }
-        .btn-call { background: var(--primary); }
-        
-        .btn-delete-product { background: var(--red); color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 11px; cursor: pointer; width: 100%; margin-top: 5px; transition: 0.2s; }
-        .btn-delete-product:hover { background: #b91c1c; }
-
-        .paywall-locked-content { background: #f1f5f9; padding: 10px; border-radius: 8px; text-align: center; color: #64748b; font-size: 12px; font-weight: 600; border: 1px dashed #cbd5e1; }
-
+        /* MCHORO SECTION 5: STICKY BOTTOM AD BANNER */
         .sticky-bottom-ad-banner {
             position: fixed; bottom: 0; left: 0; right: 0; height: 75px;
             background: linear-gradient(90deg, #1e293b, #0f172a); color: #fff;
-            z-index: 999; display: flex; align-items: center; padding: 10px 20px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.25); border-top: 3px solid var(--accent);
+            z-index: 900; display: flex; align-items: center; padding: 8px 15px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.3); border-top: 2px solid var(--accent-emerald);
+            cursor: pointer;
         }
-        .ad-content-wrapper { display: flex; align-items: center; gap: 15px; width: 100%; }
-        .ad-image { width: 55px; height: 55px; border-radius: 6px; object-fit: cover; background: #475569; }
-        .ad-text-box { flex: 1; min-width: 0; }
-        .ad-badge { background: var(--accent); color: #fff; font-size: 9px; font-weight: 900; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; display: inline-block; margin-bottom: 2px; }
-        .ad-title { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ad-desc { font-size: 11px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .ad-btn-action { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-decoration: none;}
+        .ad-layout { display: flex; align-items: center; gap: 12px; width: 100%; }
+        .ad-img { width: 50px; height: 50px; border-radius: 6px; object-fit: cover; background: #475569; }
+        .ad-text { flex: 1; min-width: 0; }
+        .ad-badge { background: var(--ad-purple); color: #fff; font-size: 8px; font-weight: 900; padding: 2px 5px; border-radius: 3px; text-transform: uppercase; display: inline-block; }
+        .ad-title { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-desc { font-size: 10px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .timed-ad-toast {
-            position: fixed; top: 90px; right: 20px; background: #fff;
-            border-left: 5px solid var(--purple); padding: 15px; width: 320px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); border-radius: 8px;
-            z-index: 1001; display: none; animation: slideIn 0.4s ease;
+        /* 📢 TIMED PROMO TOAST FOR VENDORS */
+        .vendor-promo-toast {
+            position: fixed; top: 80px; right: 15px; background: #fff; width: 290px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-radius: 10px; padding: 12px;
+            border-left: 5px solid var(--ad-purple); z-index: 1001; display: none; color: var(--dark-slate);
         }
-        @keyframes slideIn { from { transform: translateX(120%); } to { transform: translateX(0); } }
-        .toast-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-        .toast-close-btn { background: none; border: none; font-size: 18px; font-weight: bold; color: #94a3b8; cursor: pointer; line-height: 1; }
+        .toast-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .toast-close { background: none; border: none; font-size: 18px; cursor: pointer; color: #94a3b8; }
 
-        .doc-section { margin-bottom: 20px; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
-        .doc-section h4 { color: var(--primary); margin-bottom: 6px; font-size: 14px; }
-        .doc-section p { font-size: 12px; color: #475569; line-height: 1.5; }
-
-        .modal-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-card { background: #fff; width: 100%; max-width: 450px; border-radius: 16px; padding: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
+        /* MODAL OVERLAYS FRAMEWORK */
+        .modal-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(4px);
+            z-index: 2000; display: none; align-items: center; justify-content: center; padding: 15px;
+        }
+        .modal-card {
+            background: #fff; width: 100%; max-width: 400px; border-radius: 16px;
+            padding: 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.25); max-height: 90vh; overflow-y: auto; color: var(--dark-slate);
+        }
+        .modal-card h3 { margin-bottom: 12px; border-bottom: 2px solid var(--border-light); padding-bottom: 6px; font-size: 16px; }
         
-        .logo-container { width: 240px; height: 50px; cursor: pointer; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 14px; outline: none;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent-emerald); }
+        .btn-submit { width:100%; border:none; padding:12px; color:#fff; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px; }
+
+        .sub-badge { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 900; margin-left: 5px; }
+        .sub-trial { background: #ede9fe; color: var(--ad-purple); }
+        .sub-expired { background: #fee2e2; color: var(--danger-red); }
+
+        .vendor-ops-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .op-card-btn { background: #f1f5f9; border: 1px solid var(--border-light); border-radius: 10px; padding: 12px; text-align: center; cursor: pointer; font-weight: bold; font-size: 11px; }
+        .op-card-btn:hover { border-color: var(--accent-emerald); background: #f0fdf4; }
     </style>
 </head>
-<body>
+<body class="mode-buyer">
+
+    <div id="sut-intro-splash">
+        <div class="intro-logo-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 160" width="100%">
+                <defs>
+                    <linearGradient id="introGrad" x1="0%" y1="0%" x2="100%" y2="50%">
+                        <stop offset="0%" stop-color="#38bdf8" />
+                        <stop offset="30%" stop-color="#f0fdf4" />
+                        <stop offset="100%" stop-color="#10b981" />
+                    </linearGradient>
+                </defs>
+                <g transform="translate(30, -5)">
+                    <path d="M30,60 Q45,35 60,60 Q75,85 90,60 Q75,35 60,60 Q45,85 30,60 Z" fill="none" stroke="url(#introGrad)" stroke-width="7" stroke-linecap="round"/>
+                    <polygon points="90,60 82,52 86,65" fill="#10b981"/>
+                    <polygon points="30,60 38,68 34,55" fill="#38bdf8"/>
+                    <path d="M60,48 L63,57 L72,60 L63,63 L60,72 L57,63 L48,60 L57,57 Z" fill="#ffffff"/>
+                </g>
+                <g transform="translate(290, 85)">
+                    <text x="0" y="5" font-family="'Segoe UI', sans-serif" font-size="22" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="3">STAR UNIVERSAL TRADE</text>
+                    <text x="0" y="32" font-family="'Montserrat', sans-serif" font-size="16" font-weight="800" fill="#10b981" text-anchor="middle" letter-spacing="3">GABY-INTERNATIONAL</text>
+                </g>
+            </svg>
+        </div>
+    </div>
 
     <header>
-        <div class="logo-section">
-            <button class="btn-menu" onclick="openMenuDocumentationModal()">☰ MENU / MAELEZO</button>
-            <div class="logo-container" onclick="window.location.reload()">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 160" width="100%" height="100%">
-                    <defs>
-                        <linearGradient id="premiumGradient" x1="0%" y1="0%" x2="100%" y2="50%">
-                            <stop offset="0%" stop-color="#38bdf8" />
-                            <stop offset="30%" stop-color="#f0fdf4" stop-opacity="0.9" />
-                            <stop offset="100%" stop-color="#10b981" />
-                        </linearGradient>
-                        <filter id="glowSubtle" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
-                            <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-                        </filter>
-                    </defs>
-                    <g transform="translate(30, -5)">
-                        <path d="M30,60 Q45,35 60,60 Q75,85 90,60 Q75,35 60,60 Q45,85 30,60 Z" fill="none" stroke="url(#premiumGradient)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polygon points="90,60 82,52 86,65" fill="#10b981"/>
-                        <polygon points="30,60 38,68 34,55" fill="#38bdf8"/>
-                        <path d="M60,48 L63,57 L72,60 L63,63 L60,72 L57,63 L48,60 L57,57 Z" fill="#ffffff" filter="url(#glowSubtle)"/>
-                        <circle cx="60" cy="60" r="16" fill="#ffffff" fill-opacity="0.05" stroke="#94a3b8" stroke-width="0.5"/>
-                        <text x="60" y="64" font-family="'Courier New', Courier, monospace" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="0.5">SUT</text>
-                    </g>
-                    <g transform="translate(290, 85)">
-                        <text x="0" y="5" font-family="'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="3">STAR UNIVERSAL TRADE</text>
-                        <text x="0" y="32" font-family="'Montserrat', 'Segoe UI', Roboto, sans-serif" font-size="17" font-weight="800" fill="#10b981" text-anchor="middle" letter-spacing="3">GABY-INTERNATIONAL</text>
-                    </g>
-                </svg>
-            </div>
+        <div class="header-logo-box" onclick="window.location.reload()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 160" width="100%" height="100%">
+                <g transform="translate(30, -5)">
+                    <path d="M30,60 Q45,35 60,60 Q75,85 90,60 Q75,35 60,60 Q45,85 30,60 Z" fill="none" stroke="url(#introGrad)" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M60,48 L63,57 L72,60 L63,63 L60,72 L57,63 L48,60 L57,57 Z" fill="#ffffff"/>
+                </g>
+                <g transform="translate(290, 95)">
+                    <text x="0" y="5" font-family="'Segoe UI', sans-serif" font-size="24" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="2">SUT</text>
+                    <text x="0" y="36" font-family="'Montserrat', sans-serif" font-size="16" font-weight="800" fill="#10b981" text-anchor="middle" letter-spacing="1">GABY-INTERNATIONAL</text>
+                </g>
+            </svg>
         </div>
-        <div class="nav-actions">
-            <button class="btn-nav" onclick="simulateTimePassing()" style="background:var(--accent); border:none; font-size:10px;">⏩ +5 SIKU</button>
-            <select id="language-selector" onchange="changeSystemLanguage(this.value)" class="btn-nav" style="padding:4px 8px;">
-                <option value="sw">🇹🇿 Kiswahili</option>
-                <option value="en">🇬🇧 English</option>
-            </select>
-            <div class="profile-nav-trigger" id="user-profile-widget" onclick="toggleProfilePanel()">
-                <img src="" id="widget-avatar" alt="Avatar">
-                <span id="widget-name">Profile</span>
-            </div>
-            <span class="sub-badge sub-expired" id="account-sub-badge" onclick="triggerPaymentWindow()" style="display:none;">STATUS</span>
-            <button class="btn-nav" id="auth-nav-btn" onclick="openAuthModal()">👤 REG / INGIA</button>
+        <div class="header-right-tools">
+            <button class="header-btn" onclick="openSettingsModal()" title="Settings">
+                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l-.38 2.65c-.03.24.17.42.42.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3-1.57-3-3.5s1.07-3.5 3-3.5 3 1.57 3 3.5-1.07 3.5-3 3.5z"/></svg>
+            </button>
         </div>
     </header>
 
-    <div class="timed-ad-toast" id="timed-ad-promo-popup">
-        <div class="toast-header">
-            <span style="font-size: 11px; font-weight: 900; color: var(--purple); text-transform: uppercase;">🚀 FURSA YA MATANGAZO</span>
-            <button class="toast-close-btn" onclick="dismissAdPromoToast()">×</button>
+    <div class="search-profile-bar">
+        <button class="header-btn" onclick="openMenuModal()" style="fill: currentColor;">
+            <svg width="28" height="28" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+        </button>
+        
+        <div class="search-input-wrapper">
+            <input type="text" id="sut-main-searcher" placeholder="Tafuta bidhaa au muuzaji..." oninput="filterCatalogNow()">
         </div>
-        <p style="font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px;">Kuza Mauzo kwa Tsh 500 Tu!</p>
-        <p style="font-size: 12px; color: #475569; margin-bottom: 8px;">Sasa unaweza kurusha tangazo lako likazunguka chini ya screen za wateja wote kwa siku 3. Rahisi na haraka!</p>
-        <button onclick="dismissAdPromoToast(); toggleProfilePanel(); switchVendorTab('vendor-ads-tab', 'tab-link-ads');" style="width: 100%; background: var(--purple); color: #fff; border: none; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;">📢 WEKA TANGAZO SASA</button>
+
+        <div class="profile-widget" onclick="openProfileEditPhotoDirect()">
+            <img src="" id="widget-user-avatar" alt="Avatar">
+            <span id="widget-user-name">Mgeni</span>
+        </div>
     </div>
 
-    <div class="app-panel profile-panel" id="profile-control-center">
-        <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 18px;">👤 Mipangilio ya Wasifu (Edit Profile)</h2>
-        <div class="profile-pic-uploader">
-            <img src="" id="profile-avatar-preview" class="profile-preview-lg" alt="Profile">
-            <div>
-                <label style="font-size: 12px; font-weight: bold; color: var(--primary); cursor: pointer; background: #eff6ff; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);">
-                    📸 Piga Picha au Chagua kutoka Gallery
-                    <input type="file" accept="image/*" onchange="updateProfilePhoto(this)" style="display:none;">
-                </label>
+    <div class="categories-scroll-container" id="sut-category-slider">
+        </div>
+
+    <div class="main-catalog-arena">
+        <div class="products-grid" id="sut-products-display-grid">
+            </div>
+    </div>
+
+    <div class="sticky-bottom-ad-banner" id="sut-sticky-bottom-ads" onclick="fireActiveAdContact()">
+        <div class="ad-layout" id="ad-banner-rotation-engine">
+            </div>
+    </div>
+
+    <div class="vendor-promo-toast" id="vendor-promo-toast-card">
+        <div class="toast-top">
+            <span style="font-size:10px; font-weight:900; color:var(--ad-purple);" id="lbl-promo-title">🚀 EXCLUSIVE PROMO</span>
+            <button class="toast-close" onclick="closePromoToast()">×</button>
+        </div>
+        <p style="font-size:12px; font-weight:700; margin-bottom:4px;" id="lbl-promo-body">Kuza Mauzo yako kwa Tsh 500 tu!</p>
+        <button onclick="closePromoToast(); openVendorManagementCenter('ads-tab')" style="width:100%; border:none; padding:6px; border-radius:4px; color:#fff; background:var(--ad-purple); font-size:10px; font-weight:bold; cursor:pointer;" id="lbl-promo-btn">WEKA TANGAZO SASA</button>
+    </div>
+
+    <div class="modal-overlay" id="onboarding-registration-modal" style="display: none;">
+        <div class="modal-card">
+            <div id="onboard-stage-1">
+                <h3 style="text-align:center;">🌍 SUT GLOBAL ONBOARDING</h3>
+                <div class="form-group">
+                    <label>Choose Language / Chagua Lugha</label>
+                    <select id="reg-lang" onchange="translateOnboardingLabels(this.value)">
+                        <option value="sw">🇹🇿 Kiswahili</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="ar">🇸🇦 العربية</option>
+                        <option value="zh">🇨🇳 中文</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="lbl-reg-nation">Taifa Unalopo (Country)</label>
+                    <select id="reg-nation">
+                        <option value="Tanzania">Tanzania</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="Uganda">Uganda</option>
+                        <option value="China">China</option>
+                        <option value="Dubai">Dubai</option>
+                    </select>
+                </div>
+                <button class="btn-submit" style="background:var(--primary-blue);" onclick="moveOnboardStage(2)" id="btn-next-1">ENDELEA / NEXT ➡️</button>
+            </div>
+
+            <div id="onboard-stage-2" style="display:none;">
+                <h3 id="lbl-stage2-title">👤 Aina ya Akaunti</h3>
+                <div class="form-group">
+                    <label id="lbl-reg-role">Chagua Daraja Lako</label>
+                    <select id="reg-role" onchange="toggleRegShopField(this.value)">
+                        <option value="buyer">Mnunuzi / Buyer</option>
+                        <option value="vendor">Muuzaji / Vendor</option>
+                    </select>
+                </div>
+                <div style="background:#eff6ff; padding:10px; border-radius:8px; font-size:12px; margin-bottom:12px; color:#1e40af; line-height:1.4;" id="box-role-info">
+                    <strong>💡 Sifa ya Akaunti ya Muuzaji:</strong> Ina kila kitu kama ya mnunuzi, pamoja na uwezo wa kipekee wa kupandisha bidhaa, kusimamia maduka, na kurusha matangazo.
+                </div>
+                <div class="form-group" id="reg-shop-wrapper" style="display:none;">
+                    <label id="lbl-reg-shop">Jina la Duka / Biashara</label>
+                    <input type="text" id="reg-shop-name">
+                </div>
+                <button class="btn-submit" style="background:var(--primary-blue);" onclick="moveOnboardStage(3)" id="btn-next-2">ENDELEA / NEXT ➡️</button>
+            </div>
+
+            <div id="onboard-stage-3" style="display:none;">
+                <h3 id="lbl-stage3-title">📝 Taarifa Zako</h3>
+                <div class="form-group">
+                    <label id="lbl-reg-name">Jina Lako Kamili</label>
+                    <input type="text" id="reg-fullname" required>
+                </div>
+                <div class="form-group">
+                    <label id="lbl-reg-phone">Namba ya Simu (WhatsApp)</label>
+                    <input type="tel" id="reg-phone" placeholder="Mfano: 0712345678" required>
+                </div>
+                <div class="form-group">
+                    <label id="lbl-reg-email">Barua Pepe / Email (Hiari / Optional)</label>
+                    <input type="email" id="reg-email" placeholder="name@example.com">
+                    <span style="font-size:10px; color:var(--text-muted);" id="lbl-email-note">Muhimu ili kurudisha akaunti ukipoteza kifaa au namba.</span>
+                </div>
+                <div class="form-group">
+                    <label id="lbl-reg-avatar">Picha ya Wasifu (Profile Picture)</label>
+                    <input type="file" accept="image/*" onchange="processOnboardingAvatar(this)">
+                </div>
+                <button class="btn-submit" style="background:var(--accent-emerald);" onclick="completeSystemOnboarding()" id="btn-submit-reg">HOYEE! KAMILISHA 🎉</button>
+            </div>
+
+            <div id="onboard-stage-4" style="display:none; text-align:center;">
+                <h2 style="color:var(--accent-emerald); margin-bottom:10px;" id="lbl-congrats-title">🎉 PONGEZI SUT!</h2>
+                <p id="lbl-congrats-welcome" style="font-size:14px; font-weight:bold; margin-bottom:12px;">Karibu sana kwenye soko letu la kimataifa.</p>
+                <div style="background:#f3e8ff; padding:12px; border-radius:8px; font-size:12px; text-align:left; color:#6b21a8; line-height:1.5; margin-bottom:15px;" id="box-sub-info">
+                    🎁 <strong>OFA YA KARIBU:</strong> Umepata siku 30 za kutumia soko bure kabisa! Siku hizi zikiisha utalipia kulingana na aina ya akaunti yako:<br><br>
+                    • <strong>Muuzaji (Vendor):</strong> TSh 2,500 / $1 USD kwa mwezi.<br>
+                    • <strong>Mnunuzi (Buyer):</strong> TSh 1,000 / $0.5 USD kwa mwezi.
+                </div>
+                <button class="btn-submit" style="background:var(--dark-slate);" onclick="closeOnboardingModalAndLaunch()" id="btn-start-market">INGIA SOKONI NOW 🚀</button>
             </div>
         </div>
-        <div class="upload-form-grid">
-            <div class="form-group"><label>Jina Lako Kamili</label><input type="text" id="edit-profile-name" oninput="saveProfileChanges()"></div>
+    </div>
+
+    <div class="modal-overlay" id="sut-settings-modal">
+        <div class="modal-card">
+            <h3 id="lbl-settings-header">⚙️ Mipangilio (Settings)</h3>
             <div class="form-group">
-                <label>Aina ya Akaunti</label>
-                <select id="edit-profile-role" onchange="saveProfileChanges()">
-                    <option value="buyer">Mteja / Buyer</option>
+                <label id="lbl-set-lang">Badili Lugha (Language)</label>
+                <select id="set-system-lang" onchange="applySystemLanguageChange(this.value)">
+                    <option value="sw">🇹🇿 Kiswahili</option>
+                    <option value="en">🇬🇧 English</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                    <option value="zh">🇨🇳 中文</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label id="lbl-set-role">Badili Aina ya Akaunti (Account Type)</label>
+                <select id="set-system-role" onchange="applySystemRoleChange(this.value)">
+                    <option value="buyer">Mnunuzi / Buyer</option>
                     <option value="vendor">Muuzaji / Vendor</option>
                 </select>
             </div>
-            <div class="form-group" id="edit-shop-block" style="display:none;"><label>Jina la Duka / Biashara</label><input type="text" id="edit-profile-shop" oninput="saveProfileChanges()"></div>
+            <div class="form-group">
+                <label id="lbl-set-phone">Badili Namba ya Simu / WhatsApp</label>
+                <input type="tel" id="set-profile-phone" oninput="saveSettingsAdjustments()">
+            </div>
+            <div class="form-group">
+                <label id="lbl-set-email">Badili Email Address</label>
+                <input type="email" id="set-profile-email" oninput="saveSettingsAdjustments()">
+            </div>
+            <button class="btn-submit" style="background:var(--dark-slate);" onclick="closeSettingsModal()">FUNGA / CLOSE</button>
         </div>
-        <button onclick="toggleProfilePanel()" style="width:100%; background:var(--primary); color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer; margin-top:10px;">💾 SUBIRI / FUNGA MIPANGILIO</button>
     </div>
 
-    <div class="app-panel vendor-panel" id="vendor-dashboard">
-        <div class="vendor-tabs">
-            <button class="v-tab-btn active" id="tab-link-post" onclick="switchVendorTab('vendor-post-tab', 'tab-link-post')">📦 PANDISHA BIDHAA</button>
-            <button class="v-tab-btn" id="tab-link-ads" onclick="switchVendorTab('vendor-ads-tab', 'tab-link-ads')">📢 MATANGAZO YAKO (FORM)</button>
-        </div>
+    <div class="modal-overlay" id="sut-menu-modal">
+        <div class="modal-card">
+            <h3 id="lbl-menu-header">📖 SUT CHUO & MAELEZO</h3>
+            
+            <div style="margin-bottom:12px; background:#f8fafc; padding:10px; border-radius:8px; font-size:12px;" id="box-menu-body">
+                <h4 style="color:var(--primary-blue); margin-bottom:4px;" id="lbl-menu-h1">1. Jinsi ya kutumia Soko</h4>
+                <p id="lbl-menu-p1">Tafuta bidhaa unayotaka kwa kutumia kifungo cha Search, kisha wasiliana moja kwa moja na muuzaji kwa kubonyeza kitufe cha WhatsApp au Piga Simu.</p>
+                
+                <h4 style="color:var(--primary-blue); margin-top:8px; margin-bottom:4px;" id="lbl-menu-h2">2. Taratibu za Malipo ya Mwezi</h4>
+                <p id="lbl-menu-p2-buyer">Baada ya siku 30 za majaribio kuisha, akaunti yako itahitaji malipo ya Tsh 1,000 / $0.5 kila mwezi ili kuendelea kufurahia huduma.</p>
+                <p id="lbl-menu-p2-vendor" style="display:none;">Baada ya siku 30 za majaribio kuisha, akaunti yako kama muuzaji itahitaji malipo ya Tsh 2,500 / $1 kila mwezi ili kuendelea kupost na kuona wateja.</p>
+            </div>
 
-        <div class="vendor-tab-content active" id="vendor-post-tab">
-            <h3 style="margin-bottom: 12px; color: var(--accent); font-size: 15px;">Tupa Bidhaa Mpya Sokoni</h3>
-            <form onsubmit="handleVendorPublishProduct(event)">
-                <div class="upload-form-grid">
-                    <div class="form-group"><label>Jina la Bidhaa</label><input type="text" id="new-p-title" required></div>
-                    <div class="form-group"><label>Bei ya Bidhaa (TZS)</label><input type="number" id="new-p-price" required></div>
+            <div id="vendor-exclusive-dash-zone" style="display:none; border-top:2px dashed var(--accent-emerald); padding-top:10px;">
+                <h4 style="color:var(--accent-emerald); font-size:13px; margin-bottom:8px; text-align:center;">🏬 MIPANGILIO YA BIASHARA YAKO</h4>
+                <div class="vendor-ops-grid">
+                    <div class="op-card-btn" onclick="openVendorActionModal('post')">📦 Fomu ya Kupost Bidhaa</div>
+                    <div class="op-card-btn" onclick="openVendorActionModal('ads')">📢 Kulipia Matangazo</div>
+                </div>
+            </div>
+
+            <button class="btn-submit" style="background:var(--danger-red); margin-top:15px;" onclick="closeMenuModal()">X CLOSE</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="vendor-action-modal">
+        <div class="modal-card">
+            <div id="v-subform-post" style="display:none;">
+                <h3 style="color:var(--accent-emerald);">📦 PANDISHA BIDHAA SOKONI</h3>
+                <form onsubmit="executeProductPublish(event)">
+                    <div class="form-group"><label>Jina la Bidhaa</label><input type="text" id="v-p-title" required></div>
+                    <div class="form-group"><label>Bei ya Bidhaa (TZS)</label><input type="number" id="v-p-price" required></div>
                     <div class="form-group">
                         <label>Mkoa ulipo</label>
-                        <select id="new-p-location">
+                        <select id="v-p-loc">
                             <option value="Dar es Salaam">Dar es Salaam</option>
                             <option value="Arusha">Arusha</option>
                             <option value="Mwanza">Mwanza</option>
                             <option value="Dodoma">Dodoma</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Namba ya WhatsApp</label><input type="tel" id="new-p-phone" required></div>
-                    <div class="form-group"><label>Picha (Kamera au Gallery)</label><input type="file" accept="image/*" onchange="processProductPhoto(this)" required></div>
-                </div>
-                <button type="submit" style="width: 100%; background: var(--accent); color: #fff; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px;">🚀 PANDISHA SOKONI</button>
-            </form>
-        </div>
+                    <div class="form-group"><label>Picha ya Bidhaa</label><input type="file" accept="image/*" onchange="encodeProductFile(this)" required></div>
+                    <button type="submit" class="btn-submit" style="background:var(--accent-emerald);">🚀 RUSHA SOKONI</button>
+                </form>
+            </div>
 
-        <div class="vendor-tab-content" id="vendor-ads-tab">
-            <h3 style="margin-bottom: 12px; color: var(--purple); font-size: 15px;">Fomu ya Kulipia na Kurusha Tangazo</h3>
-            <form onsubmit="handleAdPublishSubmit(event)">
-                <div class="upload-form-grid">
-                    <div class="form-group"><label>Kichwa cha Tangazo</label><input type="text" id="ad-form-title" placeholder="Mfano: Nunua Viatu Vya Watoto" required></div>
-                    <div class="form-group"><label>Maelezo Mafupi</label><input type="text" id="ad-form-desc" placeholder="Tupo hapa, mikoani tunatuma..." required></div>
+            <div id="v-subform-ads" style="display:none;">
+                <h3 style="color:var(--ad-purple);">📢 FOMU YA KULIPIA TANGAZO</h3>
+                <form onsubmit="executePaidAdPublish(event)">
+                    <div class="form-group"><label>Kichwa cha Tangazo</label><input type="text" id="v-ad-title" placeholder="Mfano: Gaby Tech Delivery" required></div>
+                    <div class="form-group"><label>Maelezo Mafupi</label><input type="text" id="v-ad-desc" placeholder="Mzigo unakuja haraka sana..." required></div>
                     <div class="form-group">
                         <label>Chagua Kifurushi</label>
-                        <select id="ad-form-plan" onchange="calculateAdCostReport(this.value)">
+                        <select id="v-ad-days" onchange="updateAdCostVisual(this.value)">
                             <option value="3">Siku 3 = Tsh 500</option>
                             <option value="6">Siku 6 = Tsh 1,000</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Namba ya WhatsApp</label><input type="tel" id="ad-form-phone" placeholder="Mfano: 0712345678" required></div>
-                    <div class="form-group"><label>Picha ya Tangazo (Cam/Gallery)</label><input type="file" accept="image/*" onchange="processAdPhoto(this)" required></div>
-                </div>
-                <div id="ad-cost-report" style="background:#f3e8ff; color:var(--purple); padding:10px; border-radius:8px; font-size:12px; font-weight:bold; margin-bottom:10px;">Gharama: Tsh 500 (Siku 3 za Mzunguko)</div>
-                <button type="submit" style="width:100%; background:var(--purple); color:white; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;">💳 LIPIA & RUSHA TANGAZO</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="search-container">
-        <h1 style="font-size: 24px; font-weight: 800; letter-spacing: 1px;">Soko la Kimataifa la Kidijitali</h1>
-        <div class="search-box"><input type="text" id="search-input" placeholder="Tafuta bidhaa unazotaka hapa..." oninput="applyFilters()"></div>
-    </div>
-
-    <div class="main-container">
-        <h2 style="font-size: 16px; margin-bottom: 15px; color: var(--dark);">Bidhaa Zilizopo Sokoni</h2>
-        <div class="products-grid" id="products-catalog"></div>
-    </div>
-
-    <div class="sticky-bottom-ad-banner" id="global-ad-rotator-banner" style="display: none;">
-        <div class="ad-content-wrapper" id="ad-live-injector-zone"></div>
-    </div>
-
-    <div class="modal-overlay" id="documentation-menu-modal">
-        <div class="modal-card">
-            <h3 style="margin-bottom: 15px; border-bottom: 3px solid var(--accent); padding-bottom: 8px; color: var(--dark);">📖 MWONGOZO & MIPANGILIO</h3>
+                    <div class="form-group"><label>Picha ya Tangazo</label><input type="file" accept="image/*" onchange="encodeAdFile(this)" required></div>
+                    <div id="ad-cost-tag" style="background:#f3e8ff; color:var(--ad-purple); font-size:12px; font-weight:bold; padding:8px; border-radius:6px; margin-bottom:10px;">Gharama: Tsh 500</div>
+                    <button type="submit" class="btn-submit" style="background:var(--ad-purple);">💳 LIPIA & WEKA LIVE</button>
+                </form>
+            </div>
             
-            <div class="doc-section">
-                <h4>🌍 1. Kubadili Lugha (Language Settings)</h4>
-                <p>Muda wowote unaweza kubadili lugha juu kulia kwenye header ya soko kwa kuchagua Kiswahili au English ili kurahisisha usomaji wako.</p>
-            </div>
-
-            <div class="doc-section">
-                <h4>👤 2. Badili Profile & Aina ya Akaunti</h4>
-                <p>Gusa picha au jina lako lililopo juu kulia ili kufungua panel ya wasifu. Hapo unaweza kupiga picha live kwa kamera au kuchagua kutoka gallery, kubadili jina, na kuhama kutoka akaunti ya Mteja kwenda Muuzaji au kinyume chake.</p>
-            </div>
-
-            <div class="doc-section">
-                <h4>🗑️ 3. Kufuta Bidhaa Uliyopost</h4>
-                <p>Kama wewe ni muuzaji, nenda kwenye bidhaa uliyopost mwenyewe. Chini ya kadi hiyo utapata kitufe chekundu cha <strong>"Futa Bidhaa Hii"</strong>. Ukikibonyeza, bidhaa itatoweka sokoni mara moja.</p>
-            </div>
-
-            <div class="doc-section">
-                <h4>📢 4. Fomu ya Kujaza Matangazo</h4>
-                <p>Ukiwa ndani ya akaunti ya Muuzaji, fungua panel yako kisha ubonyeze sehemu ya <strong>"MATANGAZO YAKO"</strong> ili kupata fomu ya kulipia matangazo ya mzunguko wa chini.</p>
-            </div>
-
-            <button onclick="closeMenuDocumentationModal()" style="width:100%; background:var(--dark); color:#fff; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;">ELEWA / FUNGA</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="auth-modal">
-        <div class="modal-card">
-            <h3 style="margin-bottom: 15px; color: var(--dark);">Sajili Akaunti Mpya SUT (Mwezi 1 Bure)</h3>
-            <form onsubmit="handleRegistrationSubmit(event)">
-                <div class="form-group"><label>Jina Kamili</label><input type="text" id="auth-name" required></div>
-                <div class="form-group">
-                    <label>Aina ya Akaunti</label>
-                    <select id="auth-role" onchange="document.getElementById('reg-shop-field').style.display = this.value === 'vendor' ? 'block' : 'none'">
-                        <option value="buyer">Mteja / Buyer</option>
-                        <option value="vendor">Muuzaji / Vendor</option>
-                    </select>
-                </div>
-                <div class="form-group" id="reg-shop-field" style="display:none;"><label>Jina la Duka</label><input type="text" id="auth-shop"></div>
-                <div class="form-group"><label>Namba ya Simu / WhatsApp</label><input type="tel" id="auth-phone" required></div>
-                <button type="submit" style="width:100%; background:var(--accent); color:#fff; border:none; padding:12px; font-weight:bold; border-radius:8px; cursor:pointer;">Fungua Akaunti</button>
-            </form>
+            <button class="btn-submit" style="background:var(--dark-slate); margin-top:10px;" onclick="closeVendorActionModal()">NYUMA / BACK</button>
         </div>
     </div>
 
     <script>
-        let productsDatabase = [
-            { id: 1, title: "Shati la Kisasa la Kiume", price: 35000, vendor: "Gaby Vazi Store", vendorPhone: "0711223344", location: "Dar es Salaam", phone: "0711223344", rating: 4.9, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=400&q=80" },
-            { id: 2, title: "Smart Watch Series 10", price: 145000, vendor: "SUT Global Tech", vendorPhone: "0755667788", location: "Arusha", phone: "0755667788", rating: 5.0, image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=400&q=80" }
+        const systemDictionary = {
+            sw: {
+                searchPlaceholder: "Tafuta bidhaa au muuzaji...", categories: ["Zote", "Mavazi", "Chakula", "Electronics", "Vitabu"],
+                lblNation: "Taifa Unalopo (Country)", btnNext: "ENDELEA ➡️", lblStage2: "👤 Aina ya Akaunti", lblRole: "Chagua Daraja Lako",
+                boxRole: "<strong>💡 Sifa ya Akaunti ya Muuzaji:</strong> Ina kila kitu kama ya mnunuzi, pamoja na uwezo wa kipekee wa kupandisha bidhaa, kusimamia maduka, na kurusha matangazo.",
+                lblShop: "Jina la Duka / Biashara", lblStage3: "📝 Taarifa Zako", lblName: "Jina Lako Kamili", lblPhone: "Namba ya Simu (WhatsApp)",
+                lblEmail: "Barua Pepe / Email (Hiari)", lblEmailNote: "Muhimu ili kurudisha akaunti ukipoteza kifaa au namba.", lblAvatar: "Picha ya Wasifu (Profile Picture)",
+                btnFinish: "HOYEE! KAMILISHA 🎉", lblCongrats: "🎉 PONGEZI SUT!", lblWelcome: "Karibu sana kwenye soko letu la kimataifa.",
+                boxSub: "🎁 <strong>OFA YA KARIBU:</strong> Umepata siku 30 za kutumia soko bure kabisa! Siku hizi zikiisha utalipia kulingana na aina ya akaunti yako:<br><br>• <strong>Muuzaji (Vendor):</strong> TSh 2,500 / $1 USD kwa mwezi.<br>• <strong>Mnunuzi (Buyer):</strong> TSh 1,000 / $0.5 USD kwa mwezi.",
+                btnStart: "INGIA SOKONI NOW 🚀", promoTitle: "🚀 FURSA YA MATANGAZO", promoBody: "Kuza Mauzo yako kwa Tsh 500 tu!", promoBtn: "WEKA TANGAZO SASA"
+            },
+            en: {
+                searchPlaceholder: "Search products or vendors...", categories: ["All", "Clothing", "Food", "Electronics", "Books"],
+                lblNation: "Your Current Country", btnNext: "CONTINUE ➡️", lblStage2: "👤 Account Type", lblRole: "Select Your Tier",
+                boxRole: "<strong>💡 Vendor Account Feature:</strong> Has all buyer privileges plus exclusive powers to upload products, run stores, and publish slider ads.",
+                lblShop: "Shop / Business Name", lblStage3: "📝 Your Personal Bio", lblName: "Full Name", lblPhone: "Phone Number (WhatsApp)",
+                lblEmail: "Email Address (Optional)", lblEmailNote: "Crucial for recovering account if you lose your device.", lblAvatar: "Upload Profile Picture",
+                btnFinish: "HOORAY! COMPLETE 🎉", lblCongrats: "🎉 CONGRATULATIONS SUT!", lblWelcome: "Welcome to our global marketplace platform.",
+                boxSub: "🎁 <strong>WELCOME OFFER:</strong> You received 30 days premium trial for free! After expiration, subscription costs apply based on account type:<br><br>• <strong>Vendor:</strong> TSh 2,500 / $1 USD per month.<br>• <strong>Buyer:</strong> TSh 1,000 / $0.5 USD per month.",
+                btnStart: "ENTER MARKETPLACE NOW 🚀", promoTitle: "🚀 ADVERTISEMENT PROMO", promoBody: "Boost your sales for only Tsh 500!", promoBtn: "PROMOTE NOW"
+            },
+            fr: {
+                searchPlaceholder: "Rechercher des produits...", categories: ["Tout", "Vêtements", "Nourriture", "Électronique", "Livres"],
+                lblNation: "Votre Pays Actuel", btnNext: "CONTINUER ➡️", lblStage2: "👤 Type de Compte", lblRole: "Sélectionnez votre niveau",
+                boxRole: "<strong>💡 Fonctionnalité Vendeur:</strong> Possède tous les privilèges de l'acheteur plus le pouvoir d'uploader des produits.",
+                lblShop: "Nom du magasin / Entreprise", lblStage3: "📝 Vos Informations", lblName: "Nom Complet", lblPhone: "Numéro de WhatsApp",
+                lblEmail: "Adresse Email (Optionnel)", lblEmailNote: "Crucial pour récupérer le compte.", lblAvatar: "Photo de Profil",
+                btnFinish: "TERMINER 🎉", lblCongrats: "🎉 FÉLICITATIONS SUT!", lblWelcome: "Bienvenue sur notre marché mondial.",
+                boxSub: "🎁 <strong>OFFRE DE BIENVENUE:</strong> 30 jours gratuits! Après expiration:<br>• Vendeur: TSh 2,500 / $1 USD par mois.<br>• Acheteur: TSh 1,000 / $0.5 USD par mois.",
+                btnStart: "ENTRER MAINTENANT 🚀", promoTitle: "🚀 PUBLICITÉ PROMO", promoBody: "Boostez vos ventes pour seulement 500 Tsh!", promoBtn: "BOOSTER"
+            },
+            ar: {
+                searchPlaceholder: "البحث عن المنتجات أو البائعين...", categories: ["الكل", "ملابس", "طعام", "إلكترونيات", "كتب"],
+                lblNation: "بلدك الحالي", btnNext: "استمرار ➡️", lblStage2: "👤 نوع الحساب", lblRole: "اختر نوع حسابك",
+                boxRole: "<strong>💡 حساب البائع:</strong> يتمتع بجميع ميزات المشتري بالإضافة إلى القدرة على رفع المنتجات.",
+                lblShop: "اسم المتجر / الشركة", lblStage3: "📝 معلوماتك الشخصية", lblName: "الاسم الكامل", lblPhone: "رقم الواتساب",
+                lblEmail: "البريد الإلكتروني (اختياري)", lblEmailNote: "مهم لاستعادة الحساب.", lblAvatar: "صورة الحساب الشخصي",
+                btnFinish: "اكتمل التسجيل 🎉", lblCongrats: "🎉 تهانينا SUT!", lblWelcome: "مرحباً بك في سوقنا العالمي.",
+                boxSub: "🎁 <strong>عرض ترحيبي:</strong> لقد حصلت على 30 يوماً مجاناً! بعد انتهاء الصلاحية:<br>• البائع: 2,500 TSh / 1 دولار شهرياً.<br>• المشتري: 1,000 TSh / 0.5 دولار شهرياً.",
+                btnStart: "دخول السوق الآن 🚀", promoTitle: "🚀 عروض ترويجية", promoBody: "زد مبيعاتك بـ 500 شلن فقط!", promoBtn: "أعلن الآن"
+            },
+            zh: {
+                searchPlaceholder: "搜索商品或商家...", categories: ["全部", "服装", "食品", "电子产品", "书籍"],
+                lblNation: "您所在的国家", btnNext: "继续下步 ➡️", lblStage2: "👤 账户类型", lblRole: "选择您的账户级别",
+                boxRole: "<strong>💡 商家账户特权:</strong> 拥有买家所有权限，加额外上传商品及投放滚动广告能力。",
+                lblShop: "店铺/企业名称", lblStage3: "📝 填写您的个人信息", lblName: "真实全名", lblPhone: "微信/WhatsApp号码",
+                lblEmail: "电子邮件（可选）", lblEmailNote: "设备丢失时找回账户的关键。", lblAvatar: "上传头像照片",
+                btnFinish: "大功告成！完成 🎉", lblCongrats: "🎉 恭喜加入 SUT!", lblWelcome: "欢迎来到我们的全球数码贸易市场。",
+                boxSub: "🎁 <strong>迎新福利:</strong> 获得30天免费尊享体验！过期后按月计费：<br>• 商家：每月 TSh 2,500 / $1 美元。<br>• 买家：每月 TSh 1,000 / $0.5 美元。",
+                btnStart: "立即进入市场 🚀", promoTitle: "🚀 广告促销推广", promoBody: "仅需 500 坦桑尼亚先令即可提升销量！", promoBtn: "立即发布广告"
+            }
+        };
+    </script>
+
+    <script>
+        // Databases Initialization
+        let activeDatabaseProducts = [
+            { id: 1, title: "Designer Luxury Male Shirt", price: 45000, vendor: "Gaby-International", vendorPhone: "0712000111", country: "Tanzania", category: "Mavazi", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=300&q=80" },
+            { id: 2, title: "SmartWatch Ultra Tech v2", price: 180000, vendor: "SUT Asia Hub", vendorPhone: "0788333222", country: "China", category: "Electronics", image: "https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?auto=format&fit=crop&w=300&q=80" }
         ];
 
-        let globalPaidAdsDatabase = [
-            { id: 1, title: "Gaby International Logistics", desc: "Kusafirisha mizigo kutoka China na Dubai kuja TZ kwa usalama.", phone: "0712111111", daysLeft: 3, image: "https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=150&q=80" },
-            { id: 2, title: "Chakula Kitamu Cha Nyumbani", desc: "Oda pilau, biriani na kuku choma, tunatuma popote bure.", phone: "0754222222", daysLeft: 6, image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=150&q=80" }
+        let activePaidSliderAds = [
+            { id: 1, title: "Gaby Cargo Shipping Express", desc: "Tunasafirisha Makontena kutoka China, Dubai kwenda Afrika nzima.", phone: "0712000111", image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=150&q=80" },
+            { id: 2, title: "SUT Corporate Training Academy", desc: "Jifunze biashara ya kimataifa ya kidijitali upate duka lako.", phone: "0755999888", image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=150&q=80" }
         ];
 
-        let activeAdIndexPointer = 0;
-        let currentUserAccount = {
-            role: 'buyer', name: '', shopName: '', phone: '',
-            isSubscriptionPaid: false, trialDaysLeft: 30,
-            avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>"
+        let globalCurrentAdIndex = 0;
+        let selectedFilterCategory = "Zote";
+        
+        let localUserSession = {
+            registered: false, name: '', role: 'buyer', shopName: '', phone: '', email: '', country: 'Tanzania', lang: 'sw',
+            trialDaysLeft: 30, isPremiumPaid: false,
+            avatar: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981'><circle cx='12' cy='8' r='4'/><path d='M12 14c-6.1 0-11 2.9-11 6v2h22v-2c0-3.1-4.9-6-11-6z'/></svg>"
         };
 
-        let tempProductImageBase64 = "";
-        let tempAdImageBase64 = "";
+        let temporaryProductBase64 = "";
+        let temporaryAdBase64 = "";
 
-        function hasAccessRights() { return currentUserAccount.isSubscriptionPaid || currentUserAccount.trialDaysLeft > 0; }
+        // 🎬 STAGE 1: INTRO SOUND & ANIMATION ENGINE
+        window.addEventListener('DOMContentLoaded', () => {
+            triggerIntroductionAudioChime();
+            setTimeout(() => {
+                const splash = document.getElementById('sut-intro-splash');
+                splash.style.opacity = '0';
+                splash.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    checkUserSessionStatusAndRoute();
+                }, 800);
+            }, 3500); 
+        });
 
-        function renderCatalog(itemsToRender) {
-            const container = document.getElementById('products-catalog');
-            container.innerHTML = '';
+        function triggerIntroductionAudioChime() {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if(!AudioCtx) return;
+                const ctx = new AudioCtx();
+                
+                // Note 1 (Mng'ao wa Kwanza)
+                let osc1 = ctx.createOscillator(), gain1 = ctx.createGain();
+                osc1.type = 'sine'; osc1.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                gain1.gain.setValueAtTime(0.1, ctx.currentTime); gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
+                osc1.connect(gain1); gain1.connect(ctx.destination); osc1.start(); osc1.stop(ctx.currentTime + 1.5);
 
-            itemsToRender.forEach(p => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                let actionHTML = "";
-
-                let deleteButtonHTML = "";
-                if (currentUserAccount.role === 'vendor' && p.vendorPhone === currentUserAccount.phone && currentUserAccount.phone !== '') {
-                    deleteButtonHTML = `<button class="btn-delete-product" onclick="handleDeleteProductOperation(${p.id})">🗑️ Futa Bidhaa Hii</button>`;
-                }
-
-                if (hasAccessRights()) {
-                    const waMessage = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako "${p.title}" kwenye soko la Star Universal Trade, nahitaji kuinunua!`);
-                    actionHTML = `
-                        <div style="font-size:12px; margin-bottom:8px;">📍 Mkoa: <strong>${p.location}</strong></div>
-                        <div class="connect-buttons-grid">
-                            <a href="https://wa.me/255${p.phone.replace(/^0/, '')}?text=${waMessage}" target="_blank" class="btn-connect btn-wa">💬 WA CHAT</a>
-                            <a href="tel:${p.phone}" class="btn-connect btn-call">📞 CALL</a>
-                        </div>
-                        ${deleteButtonHTML}
-                    `;
-                } else {
-                    actionHTML = `
-                        <div class="paywall-locked-content">🔒 MAWASILIANO YAMEFUNGLIWA! Muda wako wa bure umeisha.</div>
-                        <button onclick="triggerPaymentWindow()" style="width:100%; padding:8px; border-radius:8px; background:var(--purple); color:#fff; border:none; margin-top:5px; font-weight:bold; cursor:pointer;">💳 LIPIA AKAUNTI</button>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="p-img-box"><img src="${p.image}" alt="Product"></div>
-                    <div class="p-details">
-                        <span class="p-vendor">🏬 ${hasAccessRights() ? p.vendor : "🔒 LOCKED STORE"}</span>
-                        <h3 class="p-title">${p.title}</h3>
-                        <div style="color:var(--gold); font-size:12px; margin-bottom:6px;">⭐ ${p.rating.toFixed(1)}</div>
-                        <div class="p-price">${p.price.toLocaleString()} TZS</div>
-                        ${actionHTML}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+                // Note 2 (Kishindo cha Hadhi ya Kimataifa - baada ya sekunde 0.3)
+                setTimeout(() => {
+                    let osc2 = ctx.createOscillator(), gain2 = ctx.createGain();
+                    osc2.type = 'triangle'; osc2.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
+                    gain2.gain.setValueAtTime(0.15, ctx.currentTime); gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.0);
+                    osc2.connect(gain2); gain2.connect(ctx.destination); osc2.start(); osc2.stop(ctx.currentTime + 2.0);
+                }, 300);
+            } catch(e) { console.log("Audio presentation skipped until user interactions."); }
         }
 
-        function handleDeleteProductOperation(productId) {
-            if(confirm("Je, una uhakika unataka kufuta bidhaa hii kabisa kwenye soko la SUT?")) {
-                productsDatabase = productsDatabase.filter(p => p.id !== productId);
-                applyFilters();
-                alert("🗑️ Bidhaa imeondolewa sokoni successfully!");
+        // 🚀 STAGE 2: SESSION MANAGEMENT & LOCALIZATION ROUTING
+        function checkUserSessionStatusAndRoute() {
+            const cache = localStorage.getItem('sut_premium_user_session');
+            if (cache) {
+                localUserSession = JSON.parse(cache);
+                applySystemThemeLayoutMode();
+                rebuildCategoryChipsUI();
+                renderMarketCatalogGrid();
+                launchGlobalAdsRotatorSystem();
+                if(localUserSession.role === 'vendor') triggerVendorExclusivePromoToast();
+            } else {
+                openOnboardingModal();
             }
         }
 
-        function startPaidAdRotatorEngine() {
-            if (globalPaidAdsDatabase.length === 0) {
-                document.getElementById('global-ad-rotator-banner').style.display = 'none';
+        function openOnboardingModal() {
+            document.getElementById('onboarding-registration-modal').style.display = 'flex';
+            translateOnboardingLabels('sw');
+        }
+
+        function translateOnboardingLabels(lang) {
+            const dict = systemDictionary[lang];
+            document.getElementById('sut-main-searcher').placeholder = dict.searchPlaceholder;
+            document.getElementById('lbl-reg-nation').innerText = dict.lblNation;
+            document.getElementById('btn-next-1').innerText = dict.btnNext;
+            document.getElementById('lbl-stage2-title').innerText = dict.lblStage2;
+            document.getElementById('lbl-reg-role').innerText = dict.lblRole;
+            document.getElementById('box-role-info').innerHTML = dict.boxRole;
+            document.getElementById('lbl-reg-shop').innerText = dict.lblShop;
+            document.getElementById('btn-next-2').innerText = dict.btnNext;
+            document.getElementById('lbl-stage3-title').innerText = dict.lblStage3;
+            document.getElementById('lbl-reg-name').innerText = dict.lblName;
+            document.getElementById('lbl-reg-phone').innerText = dict.lblPhone;
+            document.getElementById('lbl-reg-email').innerText = dict.lblEmail;
+            document.getElementById('lbl-email-note').innerText = dict.lblEmailNote;
+            document.getElementById('lbl-reg-avatar').innerText = dict.lblAvatar;
+            document.getElementById('btn-submit-reg').innerText = dict.btnFinish;
+            document.getElementById('lbl-congrats-title').innerText = dict.lblCongrats;
+            document.getElementById('lbl-congrats-welcome').innerText = dict.lblWelcome;
+            document.getElementById('box-sub-info').innerHTML = dict.boxSub;
+            document.getElementById('btn-start-market').innerText = dict.btnStart;
+            
+            document.getElementById('lbl-promo-title').innerText = dict.promoTitle;
+            document.getElementById('lbl-promo-body').innerText = dict.promoBody;
+            document.getElementById('lbl-promo-btn').innerText = dict.promoBtn;
+        }
+
+        function moveOnboardStage(targetStage) {
+            document.getElementById('onboard-stage-1').style.display = 'none';
+            document.getElementById('onboard-stage-2').style.display = 'none';
+            document.getElementById('onboard-stage-3').style.display = 'none';
+            document.getElementById('onboard-stage-4').style.display = 'none';
+            document.getElementById('onboard-stage-' + targetStage).style.display = 'block';
+        }
+
+        function toggleRegShopField(role) {
+            document.getElementById('reg-shop-wrapper').style.display = role === 'vendor' ? 'block' : 'none';
+        }
+
+        function processOnboardingAvatar(input) {
+            const f = input.files[0];
+            if(f) {
+                const r = new FileReader();
+                r.onload = function(e) { localUserSession.avatar = e.target.result; };
+                r.readAsDataURL(f);
+            }
+        }
+
+        function completeSystemOnboarding() {
+            const fullname = document.getElementById('reg-fullname').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            
+            if(!fullname || !phone) {
+                alert(localUserSession.lang === 'sw' ? "Tafadhali jaza Jina na Namba ya Simu kuendelea!" : "Please fill Name and Phone number!");
                 return;
             }
-            document.getElementById('global-ad-rotator-banner').style.display = 'flex';
-            rotateToNextActivePaidAd();
-            setInterval(rotateToNextActivePaidAd, 4000); 
+
+            localUserSession.name = fullname;
+            localUserSession.phone = phone;
+            localUserSession.email = document.getElementById('reg-email').value.trim();
+            localUserSession.lang = document.getElementById('reg-lang').value;
+            localUserSession.country = document.getElementById('reg-nation').value;
+            localUserSession.role = document.getElementById('reg-role').value;
+            localUserSession.shopName = document.getElementById('reg-shop-name').value.trim() || fullname + " Store";
+            localUserSession.registered = true;
+
+            moveOnboardStage(4); 
         }
 
-        function rotateToNextActivePaidAd() {
-            if (globalPaidAdsDatabase.length === 0) return;
-            if (activeAdIndexPointer >= globalPaidAdsDatabase.length) activeAdIndexPointer = 0;
-
-            const currentAd = globalPaidAdsDatabase[activeAdIndexPointer];
-            const injectorZone = document.getElementById('ad-live-injector-zone');
-            const targetWaLink = `https://wa.me/255${currentAd.phone.replace(/^0/, '')}?text=Habari, nimeona tangazo lako la "${encodeURIComponent(currentAd.title)}" chini ya Star Universal Trade...`;
-
-            injectorZone.innerHTML = `
-                <img src="${currentAd.image}" class="ad-image" alt="Ad">
-                <div class="ad-text-box">
-                    <span class="ad-badge">Matangazo ya Kulipia • Siku ${currentAd.daysLeft} Zimebaki</span>
-                    <div class="ad-title">${currentAd.title}</div>
-                    <div class="ad-desc">${currentAd.desc}</div>
-                </div>
-                <a href="${targetWaLink}" target="_blank" class="ad-btn-action">Fungua</a>
-            `;
-            activeAdIndexPointer++;
-        }
-
-        function activateTimedAdToastSystem() {
-            setTimeout(showAdPromoToast, 5000); // Tokeo la 1 baada ya sekunde 5
-            setTimeout(showAdPromoToast, 45000); // Tokeo la 2 baada ya sekunde 45
-        }
-
-        function showAdPromoToast() {
-            const toast = document.getElementById('timed-ad-promo-popup');
-            toast.style.display = 'block';
-            setTimeout(dismissAdPromoToast, 8000); // Inakaa sekunde 8 kisha inapotea
-        }
-
-        function dismissAdPromoToast() {
-            document.getElementById('timed-ad-promo-popup').style.display = 'none';
-        }
-
-        function handleAdPublishSubmit(event) {
-            event.preventDefault();
-            const title = document.getElementById('ad-form-title').value;
-            const desc = document.getElementById('ad-form-desc').value;
-            const planDays = parseInt(document.getElementById('ad-form-plan').value);
-            const phone = document.getElementById('ad-form-phone').value;
-            const cost = planDays === 3 ? 500 : 1000;
-
-            if (confirm(`Thibitisha malipo ya Tsh ${cost.toLocaleString()} kwa ajili ya kurusha tangazo lako la mzunguko kwa siku ${planDays}?`)) {
-                globalPaidAdsDatabase.unshift({
-                    id: globalPaidAdsDatabase.length + 1,
-                    title: title, desc: desc, phone: phone, daysLeft: planDays,
-                    image: tempAdImageBase64 || "https://via.placeholder.com/150?text=SUT+Ad"
-                });
-                activeAdIndexPointer = 0;
-                rotateToNextActivePaidAd();
-
-                document.getElementById('ad-form-title').value = "";
-                document.getElementById('ad-form-desc').value = "";
-                document.getElementById('ad-form-phone').value = "";
-                tempAdImageBase64 = "";
-                alert("🎉 Tangazo lako limepokelewa na limeingizwa kwenye mzunguko wa chini wa soko!");
-            }
-        }
-
-        function calculateAdCostReport(days) {
-            document.getElementById('ad-cost-report').innerText = `Gharama: Tsh ${days == "3" ? "500 (Siku 3)" : "1,000 (Siku 6)"} za Mzunguko`;
-        }
-
-        function switchVendorTab(tabId, btnId) {
-            document.querySelectorAll('.vendor-tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.v-tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.getElementById(btnId).classList.add('active');
-        }
-
-        function openMenuDocumentationModal() { document.getElementById('documentation-menu-modal').style.display = 'flex'; }
-        function closeMenuDocumentationModal() { document.getElementById('documentation-menu-modal').style.display = 'none'; }
-
-        function updateProfilePhoto(inputElement) {
-            const file = inputElement.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    currentUserAccount.avatar = e.target.result;
-                    document.getElementById('profile-avatar-preview').src = e.target.result;
-                    document.getElementById('widget-avatar').src = e.target.result;
-                    alert("📸 Picha imepokelewa na kusasishwa kwa mafanikio!");
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function saveProfileChanges() {
-            currentUserAccount.name = document.getElementById('edit-profile-name').value;
-            currentUserAccount.role = document.getElementById('edit-profile-role').value;
-            currentUserAccount.shopName = document.getElementById('edit-profile-shop').value || "Biashara Yako";
-
-            document.getElementById('widget-name').innerText = currentUserAccount.role === 'buyer' ? currentUserAccount.name : currentUserAccount.shopName;
-            document.getElementById('edit-shop-block').style.display = currentUserAccount.role === 'vendor' ? 'block' : 'none';
+        function closeOnboardingModalAndLaunch() {
+            localStorage.setItem('sut_premium_user_session', JSON.stringify(localUserSession));
+            document.getElementById('onboarding-registration-modal').style.display = 'none';
             
-            document.getElementById('vendor-dashboard').style.display = (currentUserAccount.role === 'vendor' && hasAccessRights()) ? 'block' : 'none';
+            applySystemThemeLayoutMode();
+            rebuildCategoryChipsUI();
+            renderMarketCatalogGrid();
+            launchGlobalAdsRotatorSystem();
+            
+            if(localUserSession.role === 'vendor') triggerVendorExclusivePromoToast();
         }
 
-        function toggleProfilePanel() {
-            const panel = document.getElementById('profile-control-center');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        function applySystemThemeLayoutMode() {
+            document.body.className = localUserSession.role === 'vendor' ? 'mode-vendor' : 'mode-buyer';
+            
+            document.getElementById('widget-user-avatar').src = localUserSession.avatar;
+            document.getElementById('widget-user-name').innerText = localUserSession.role === 'vendor' ? localUserSession.shopName : localUserSession.name;
+            
+            // Sync current settings inside panel fields
+            document.getElementById('set-system-lang').value = localUserSession.lang;
+            document.getElementById('set-system-role').value = localUserSession.role;
+            document.getElementById('set-profile-phone').value = localUserSession.phone;
+            document.getElementById('set-profile-email').value = localUserSession.email;
+
+            // Render specific configuration on help documentation panel
+            if(localUserSession.role === 'vendor') {
+                document.getElementById('lbl-menu-p2-vendor').style.display = 'block';
+                document.getElementById('lbl-menu-p2-buyer').style.display = 'none';
+                document.getElementById('vendor-exclusive-dash-zone').style.display = 'block';
+            } else {
+                document.getElementById('lbl-menu-p2-vendor').style.display = 'none';
+                document.getElementById('lbl-menu-p2-buyer').style.display = 'block';
+                document.getElementById('vendor-exclusive-dash-zone').style.display = 'none';
+            }
         }
 
-        function handleVendorPublishProduct(event) {
-            event.preventDefault();
-            if (!hasAccessRights()) { alert("Muda wa bure umeisha!"); return; }
+        function rebuildCategoryChipsUI() {
+            const container = document.getElementById('sut-category-slider');
+            container.innerHTML = "";
+            const activeList = systemDictionary[localUserSession.lang].categories;
+            
+            activeList.forEach((cat, idx) => {
+                const chip = document.createElement('div');
+                chip.className = `cat-chip ${idx === 0 ? 'active' : ''}`;
+                chip.innerText = cat;
+                chip.onclick = function() {
+                    document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    selectedFilterCategory = (idx === 0) ? "Zote" : systemDictionary['sw'].categories[idx];
+                    renderMarketCatalogGrid();
+                };
+                container.appendChild(chip);
+            });
+        }
 
-            productsDatabase.unshift({
-                id: productsDatabase.length + 1,
-                title: document.getElementById('new-p-title').value,
-                price: parseInt(document.getElementById('new-p-price').value),
-                vendor: currentUserAccount.shopName,
-                vendorPhone: currentUserAccount.phone,
-                location: document.getElementById('new-p-location').value,
-                phone: document.getElementById('new-p-phone').value,
-                rating: 5.0,
-                image: tempProductImageBase64 || "https://via.placeholder.com/400x300?text=SUT+Product"
+        // 📱 MCHORO SECTION 4: PRODUCT CATALOG RENDER CONTROLLER
+        function renderMarketCatalogGrid(filteredItems = null) {
+            const grid = document.getElementById('sut-products-display-grid');
+            grid.innerHTML = "";
+            
+            let source = filteredItems ? filteredItems : activeDatabaseProducts;
+
+            // Filter out by Category Chip if not "Zote"
+            if(!filteredItems && selectedFilterCategory !== "Zote") {
+                source = source.filter(p => p.category === selectedFilterCategory);
+            }
+
+            // High Intelligence Sorting: Bring User's Country Products to top first!
+            source.sort((a,b) => {
+                if(a.country === localUserSession.country && b.country !== localUserSession.country) return -1;
+                if(a.country !== localUserSession.country && b.country === localUserSession.country) return 1;
+                return 0;
             });
 
-            document.getElementById('new-p-title').value = "";
-            document.getElementById('new-p-price').value = "";
-            document.getElementById('new-p-phone').value = "";
-            tempProductImageBase64 = "";
-            applyFilters();
-            alert("🚀 Bidhaa imepandishwa kwenye soko la kimataifa la SUT!");
+            source.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "product-card";
+
+                let deleteBtnHtml = "";
+                if(localUserSession.role === 'vendor' && p.vendorPhone === localUserSession.phone) {
+                    deleteBtnHtml = `<button class="card-btn btn-delete" onclick="executeDeleteProductItem(${p.id})">🗑️ Futa Bidhaa Hii</button>`;
+                }
+
+                const waTxt = encodeURIComponent(`Habari ${p.vendor}, nimeona bidhaa yako ya "${p.title}" kwenye soko la Star Universal Trade (SUT). Nahitaji kununua!`);
+
+                card.innerHTML = `
+                    <div class="p-image-box">
+                        <img src="${p.image}" alt="Product Photo">
+                        <span class="p-country-badge">${p.country.toUpperCase()}</span>
+                    </div>
+                    <div class="p-info">
+                        <span class="p-vendor-title">🏬 ${p.vendor}</span>
+                        <div class="p-name">${p.title}</div>
+                        <div class="p-price">${p.price.toLocaleString()} TZS</div>
+                        <div class="card-action-grid">
+                            <a href="https://wa.me/255${p.phone.replace(/^0/, '')}?text=${waTxt}" target="_blank" class="card-btn btn-wa">WHATSAPP</a>
+                            <a href="tel:${p.phone}" class="card-btn btn-call">PIGA SIMU</a>
+                            ${deleteBtnHtml}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
         }
 
-        function triggerPaymentWindow() {
-            if (confirm("Je, unataka kuamsha kifurushi cha mwezi mmoja cha SUT Premium?")) {
-                currentUserAccount.isSubscriptionPaid = true;
-                currentUserAccount.trialDaysLeft = 0;
-                updateSubscriptionBadgeUI();
-                applyFilters();
+        function executeDeleteProductItem(id) {
+            if(confirm(localUserSession.lang === 'sw' ? "Je, una uhakika unataka kuiondoa bidhaa hii sokoni?" : "Are you sure you want to delete this product?")) {
+                activeDatabaseProducts = activeDatabaseProducts.filter(p => p.id !== id);
+                renderMarketCatalogGrid();
             }
         }
 
-        function simulateTimePassing() {
-            if (currentUserAccount.trialDaysLeft <= 0) return;
-            currentUserAccount.trialDaysLeft -= 5;
-            if (currentUserAccount.trialDaysLeft < 0) currentUserAccount.trialDaysLeft = 0;
-            updateSubscriptionBadgeUI();
-            applyFilters();
+        function filterCatalogNow() {
+            const needle = document.getElementById('sut-main-searcher').value.toLowerCase();
+            const hits = activeDatabaseProducts.filter(p => 
+                p.title.toLowerCase().includes(needle) || 
+                p.vendor.toLowerCase().includes(needle)
+            );
+            renderMarketCatalogGrid(hits);
         }
 
-        function updateSubscriptionBadgeUI() {
-            const badge = document.getElementById('account-sub-badge');
-            badge.style.display = 'inline-block';
-            if (currentUserAccount.isSubscriptionPaid) {
-                badge.className = "sub-badge sub-active"; badge.innerText = "SUT PREMIUM";
-            } else if (currentUserAccount.trialDaysLeft > 0) {
-                badge.className = "sub-badge sub-trial"; badge.innerText = `BURE: ${currentUserAccount.trialDaysLeft} SIKU`;
-            } else {
-                badge.className = "sub-badge sub-expired"; badge.innerText = "HAIJALIPIWA";
+        // 📱 PROFILE EDIT DIRECT ON CLICK IMAGE
+        function openProfileEditPhotoDirect() {
+            const input = document.createElement('input');
+            input.type = 'file'; input.accept = 'image/*';
+            input.onchange = function() {
+                const file = input.files[0];
+                if(file) {
+                    const r = new FileReader();
+                    r.onload = function(e) {
+                        localUserSession.avatar = e.target.result;
+                        localStorage.setItem('sut_premium_user_session', JSON.stringify(localUserSession));
+                        applySystemThemeLayoutMode();
+                        alert(localUserSession.lang === 'sw' ? "📸 Picha ya Wasifu imebadilishwa kikamilifu!" : "Profile photo updated successfully!");
+                    };
+                    r.readAsDataURL(file);
+                }
+            };
+            input.click();
+        }
+
+        // ⚙️ SETTINGS ENGINE
+        function openSettingsModal() { document.getElementById('sut-settings-modal').style.display = 'flex'; }
+        function closeSettingsModal() { document.getElementById('sut-settings-modal').style.display = 'none'; }
+
+        function applySystemLanguageChange(lang) {
+            localUserSession.lang = lang;
+            localStorage.setItem('sut_premium_user_session', JSON.stringify(localUserSession));
+            translateOnboardingLabels(lang);
+            rebuildCategoryChipsUI();
+            applySystemThemeLayoutMode();
+        }
+
+        function applySystemRoleChange(role) {
+            localUserSession.role = role;
+            localStorage.setItem('sut_premium_user_session', JSON.stringify(localUserSession));
+            applySystemThemeLayoutMode();
+            renderMarketCatalogGrid();
+        }
+
+        function saveSettingsAdjustments() {
+            localUserSession.phone = document.getElementById('set-profile-phone').value;
+            localUserSession.email = document.getElementById('set-profile-email').value;
+            localStorage.setItem('sut_premium_user_session', JSON.stringify(localUserSession));
+        }
+
+        // 📖 MENU CONTROL ZONE
+        function openMenuModal() { document.getElementById('sut-menu-modal').style.display = 'flex'; }
+        function closeMenuModal() { document.getElementById('sut-menu-modal').style.display = 'none'; }
+
+        // 🏬 VENDOR BACKEND OPERATIONS (Post Product / Ads Form Setup)
+        function openVendorActionModal(mode) {
+            closeMenuModal();
+            document.getElementById('vendor-action-modal').style.display = 'flex';
+            document.getElementById('v-subform-post').style.display = mode === 'post' ? 'block' : 'none';
+            document.getElementById('v-subform-ads').style.display = mode === 'ads' ? 'block' : 'none';
+        }
+        function closeVendorActionModal() { document.getElementById('vendor-action-modal').style.display = 'none'; }
+
+        function encodeProductFile(el) { const f = el.files[0]; if(f){ const r=new FileReader(); r.onload=function(e){temporaryProductBase64=e.target.result;}; r.readAsDataURL(f); }}
+        function encodeAdFile(el) { const f = el.files[0]; if(f){ const r=new FileReader(); r.onload=function(e){temporaryAdBase64=e.target.result;}; r.readAsDataURL(f); }}
+
+        function executeProductPublish(e) {
+            e.preventDefault();
+            const product = {
+                id: activeDatabaseProducts.length + 1,
+                title: document.getElementById('v-p-title').value,
+                price: parseInt(document.getElementById('v-p-price').value),
+                vendor: localUserSession.shopName,
+                vendorPhone: localUserSession.phone,
+                country: localUserSession.country,
+                category: "Electronics", // Default fallback bucket
+                phone: localUserSession.phone,
+                image: temporaryProductBase64 || "https://via.placeholder.com/300?text=SUT+Item"
+            };
+            activeDatabaseProducts.unshift(product);
+            renderMarketCatalogGrid();
+            closeVendorActionModal();
+            alert("🚀 Bidhaa yako imerushwa kimataifa kwenye soko la SUT!");
+        }
+
+        function updateAdCostVisual(days) {
+            document.getElementById('ad-cost-tag').innerText = `Gharama: Tsh ${days === "3" ? "500" : "1,000"}`;
+        }
+
+        function executePaidAdPublish(e) {
+            e.preventDefault();
+            const days = document.getElementById('v-ad-days').value;
+            const cost = days === "3" ? 500 : 1000;
+            if(confirm(`Thibitisha Kulipia Shilingi ${cost} kwa ajili ya kurusha tangazo hili la chini?`)) {
+                const newAd = {
+                    id: activePaidSliderAds.length + 1,
+                    title: document.getElementById('v-ad-title').value,
+                    desc: document.getElementById('v-ad-desc').value,
+                    phone: localUserSession.phone,
+                    image: temporaryAdBase64 || "https://via.placeholder.com/150?text=Ad"
+                };
+                activePaidSliderAds.unshift(newAd);
+                globalCurrentAdIndex = 0;
+                rotatePaidBottomAdsWorker();
+                closeVendorActionModal();
+                alert("🎉 Tangazo limeanza kuruka kwenye mzunguko wa chini wa soko!");
             }
-            saveProfileChanges();
         }
 
-        function processProductPhoto(el) { const f = el.files[0]; if(f){ const r = new FileReader(); r.onload=function(e){tempProductImageBase64=e.target.result;}; r.readAsDataURL(f); }}
-        function processAdPhoto(el) { const f = el.files[0]; if(f){ const r = new FileReader(); r.onload=function(e){tempAdImageBase64=e.target.result;}; r.readAsDataURL(f); }}
-
-        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
-
-        function handleRegistrationSubmit(event) {
-            event.preventDefault();
-            currentUserAccount.name = document.getElementById('auth-name').value;
-            currentUserAccount.role = document.getElementById('auth-role').value;
-            currentUserAccount.shopName = document.getElementById('auth-shop').value || "Mwanachama SUT";
-            currentUserAccount.phone = document.getElementById('auth-phone').value;
-            currentUserAccount.trialDaysLeft = 30;
-            currentUserAccount.isSubscriptionPaid = false;
-
-            closeAuthModal();
-
-            document.getElementById('edit-profile-name').value = currentUserAccount.name;
-            document.getElementById('edit-profile-role').value = currentUserAccount.role;
-            document.getElementById('edit-profile-shop').value = currentUserAccount.shopName;
-            document.getElementById('profile-avatar-preview').src = currentUserAccount.avatar;
-            document.getElementById('widget-avatar').src = currentUserAccount.avatar;
-
-            document.getElementById('user-profile-widget').style.display = 'flex';
-            document.getElementById('auth-nav-btn').style.display = 'none';
-
-            updateSubscriptionBadgeUI();
-            applyFilters();
-            alert("🎁 Karibu Star Universal Trade! Akaunti yako imepewa Siku 30 za majaribio ya Bure.");
+        // 📱 MCHORO SECTION 5: PAID ADS BOTTOM BANNER ROTATOR ENGINE
+        function launchGlobalAdsRotatorSystem() {
+            if(activePaidSliderAds.length === 0) return;
+            rotatePaidBottomAdsWorker();
+            setInterval(rotatePaidBottomAdsWorker, 4500); // Badilisha kila baada ya sekunde 4.5
         }
 
-        function applyFilters() {
-            const keyword = document.getElementById('search-input').value.toLowerCase();
-            let results = productsDatabase.filter(p => p.title.toLowerCase().includes(keyword));
-            renderCatalog(results);
+        function rotatePaidBottomAdsWorker() {
+            if(activePaidSliderAds.length === 0) return;
+            if(globalCurrentAdIndex >= activePaidSliderAds.length) globalCurrentAdIndex = 0;
+            
+            const item = activePaidSliderAds[globalCurrentAdIndex];
+            const zone = document.getElementById('ad-banner-rotation-engine');
+            
+            zone.innerHTML = `
+                <img src="${item.image}" class="ad-img" alt="Ad Campaign">
+                <div class="ad-text">
+                    <span class="ad-badge">GLOBAL SPONSOR</span>
+                    <div class="ad-title">${item.title}</div>
+                    <div class="ad-desc">${item.desc}</div>
+                </div>
+            `;
         }
 
-        function changeSystemLanguage(lang) {
-            alert(lang === 'sw' ? 'Mfumo sasa upo kwenye Kiswahili!' : 'System is now set to English!');
+        function fireActiveAdContact() {
+            const item = activePaidSliderAds[globalCurrentAdIndex - 1 >= 0 ? globalCurrentAdIndex - 1 : activePaidSliderAds.length - 1];
+            if(!item) return;
+            const wa = `https://wa.me/255${item.phone.replace(/^0/, '')}?text=Habari, nimeona tangazo lako la "${encodeURIComponent(item.title)}" chini ya soko la SUT...`;
+            window.open(wa, '_blank');
         }
 
-        renderCatalog(productsDatabase);
-        startPaidAdRotatorEngine();
-        activateTimedAdToastSystem();
+        // 📢 TIMED EXCLUSIVE TOAST ROUTINES (Sekunde 8 automatic vanish)
+        function triggerVendorExclusivePromoToast() {
+            setTimeout(() => {
+                document.getElementById('vendor-promo-toast-card').style.display = 'block';
+                setTimeout(closePromoToast, 8000); // Potea baada ya sekunde 8 kamili
+            }, 5000); // Tokea sekunde 5 baada ya soko kufunguka
+        }
+        function closePromoToast() { document.getElementById('vendor-promo-toast-card').style.display = 'none'; }
     </script>
 </body>
 </html>
