@@ -1,16 +1,19 @@
 import { db } from "./firebase.js";
-import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+import { collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-async function test() {
+async function testFirebaseConnection() {
   try {
-    await addDoc(collection(db, "test"), {
-      message: "SUT connected successfully",
-      time: Date.now()
+    const docRef = await addDoc(collection(db, "system_logs"), {
+      message: "SUT Firebase connected successfully",
+      status: "active",
+      createdAt: serverTimestamp()
     });
-    console.log("Firebase WORKING 🔥");
-  } catch (e) {
-    console.error("Error:", e);
+
+    console.log("🔥 Firebase WORKING! Document ID:", docRef.id);
+  } catch (error) {
+    console.error("❌ Firebase Error:", error.message);
   }
 }
 
-test();
+testFirebaseConnection();
