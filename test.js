@@ -139,4 +139,10 @@ onAuthStateChanged(auth, (user) => {
     console.log("🚫 No user logged in");
     localStorage.removeItem("sut_user");
   }
-});
+});// ===============================
+// MAKE FUNCTIONS AVAILABLE TO HTML
+// ===============================
+window.loginWithGoogle = loginWithGoogle;
+window.registerWithEmail = registerWithEmail;
+window.loginWithEmail = loginWithEmail;
+window.logoutUser = logoutUser;
