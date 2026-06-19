@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
 import {
   getAuth,
   GoogleAuthProvider,
@@ -16,9 +17,6 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
-
-// 🔥 Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyDTTV7h23M7RE4c4f3xa0GWWFVibs1HcOk",
   authDomain: "star-universal-trade-55d73.firebaseapp.com",
@@ -33,14 +31,11 @@ const app = initializeApp(firebaseConfig);
 // SERVICES
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 
 // GOOGLE AUTH
 const googleProvider = new GoogleAuthProvider();
 
-// =========================
 // 🔐 AUTH FUNCTIONS
-// =========================
 export function loginWithGoogle() {
   return signInWithPopup(auth, googleProvider);
 }
@@ -57,9 +52,7 @@ export function logoutUser() {
   return signOut(auth);
 }
 
-// =========================
-// 🛒 FIRESTORE HELPERS
-// =========================
+// 📦 SAVE PRODUCT TO FIRESTORE
 export async function saveProduct(product) {
   return await addDoc(collection(db, "products"), {
     ...product,
@@ -67,24 +60,19 @@ export async function saveProduct(product) {
   });
 }
 
-// =========================
-// 🌍 GLOBAL FOR YOUR HTML UI
-// =========================
+// 🌍 MAKE FUNCTIONS GLOBAL FOR HTML
 window.loginWithGoogle = loginWithGoogle;
 window.registerWithEmail = registerWithEmail;
 window.loginWithEmail = loginWithEmail;
 window.logoutUser = logoutUser;
-window.saveProduct = saveProduct;
 
-// =========================
-// 👤 AUTO USER TRACKING
-// =========================
+// 👤 TRACK USER SESSION
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("🔥 Logged in:", user.email);
     window.currentUser = user;
+    console.log("🔥 Logged in:", user.email);
   } else {
-    console.log("❌ Logged out");
     window.currentUser = null;
+    console.log("❌ Logged out");
   }
 });
