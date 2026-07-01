@@ -3,17 +3,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/fireba
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
 import {
   getFirestore,
+  doc,
+  setDoc,
+  getDoc,
   collection,
   addDoc,
+  getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
@@ -28,90 +32,178 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
-const db = getFirestore(app);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 const googleProvider = new GoogleAuthProvider();
 
 window.currentUser = null;
 
+// =========================
 // REGISTER
+// =========================
 window.registerWithEmail = async (email, password) => {
+
+  if (!email || !password) {
+    alert("Jaza Email na Password.");
+    return;
+  }
+
   try {
-    const user = await createUserWithEmailAndPassword(
+
+    const credential = await createUserWithEmailAndPassword(
       auth,
       email,
       password
     );
 
-    alert("✅ Account Created");
-    console.log(user);
+    const user = credential.user;
 
-  } catch (error) {
-    alert(error.message);
+    await setDoc(doc(db, "users", user.uid), {
+
+      uid: user.uid,
+      email: user.email,
+      fullName: "",
+      phone: "",
+      role: "buyer",
+      status: "active",
+      verified: false,
+      createdAt: serverTimestamp()
+
+    });
+
+    alert("Account imefunguliwa.");
+
+  } catch (e) {
+
+    alert(e.message);
+
   }
+
 };
 
+// =========================
 // LOGIN
+// =========================
 window.loginWithEmail = async (email, password) => {
+
   try {
-    const user = await signInWithEmailAndPassword(
+
+    await signInWithEmailAndPassword(
       auth,
       email,
       password
     );
 
-    alert("✅ Login Success");
-    console.log(user);
+    alert("Login Success");
 
-  } catch (error) {
-    alert(error.message);
+  } catch (e) {
+
+    alert(e.message);
+
   }
+
 };
 
+// =========================
 // GOOGLE LOGIN
+// =========================
 window.loginWithGoogle = async () => {
+
   try {
+
     const result = await signInWithPopup(
       auth,
       googleProvider
     );
 
-    alert("✅ Google Login Success");
+    const user = result.user;
 
-  } catch (error) {
-    alert(error.message);
+    const ref = doc(db, "users", user.uid);
+
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) {
+
+      await setDoc(ref, {
+
+        uid: user.uid,
+        email: user.email,
+        fullName: user.displayName || "",
+        phone: "",
+        role: "buyer",
+        status: "active",
+        verified: true,
+        createdAt: serverTimestamp()
+
+      });
+
+    }
+
+    alert("Google Login Success");
+
+  } catch (e) {
+
+    alert(e.message);
+
   }
+
 };
 
+// =========================
 // LOGOUT
+// =========================
 window.logoutUser = async () => {
+
   await signOut(auth);
-  alert("👋 Logged Out");
+
 };
 
+// =========================
 // SAVE PRODUCT
+// =========================
 export async function saveProduct(product) {
 
   await addDoc(collection(db, "products"), {
+
     ...product,
     createdAt: serverTimestamp()
+
   });
 
 }
 
+// =========================
+// GET PRODUCTS
+// =========================
+export async function getProducts() {
+
+  const snapshot = await getDocs(
+    collection(db, "products")
+  );
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+}
+
+// =========================
 // USER STATE
-onAuthStateChanged(auth, (user) => {
+// =========================
+onAuthStateChanged(auth, user => {
+
+  window.currentUser = user;
 
   if (user) {
-    window.currentUser = user;
 
-    console.log("Logged In:", user.email);
+    console.log("Logged:", user.email);
 
   } else {
-    window.currentUser = null;
 
     console.log("No User");
+
   }
 
 });
