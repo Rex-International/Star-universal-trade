@@ -1,1 +1,82 @@
 
+<!DOCTYPE html>
+<html lang="sw">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SUT Login</title>
+
+<link rel="stylesheet" href="../css/auth.css">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+<img src="../assets/logo.png" class="logo">
+
+<h2>STAR UNIVERSAL TRADE</h2>
+
+<p>Karibu tena.</p>
+
+<form id="login-form">
+
+<input
+id="login-email"
+type="email"
+placeholder="Email"
+required
+>
+
+<input
+id="login-password"
+type="password"
+placeholder="Password"
+required
+>
+
+<button type="submit">
+
+LOGIN
+
+</button>
+
+</form>
+
+<button
+id="google-login"
+class="google-btn">
+
+Continue With Google
+
+</button>
+
+<p>
+
+Huna Account?
+
+<a href="register.html">
+
+Register
+
+</a>
+
+</p>
+
+</div>
+
+</div>
+
+<script type="module" src="../firebase/firebase.js"></script>
+
+<script type="module" src="../js/auth.js"></script>
+
+</body>
+
+</html>
