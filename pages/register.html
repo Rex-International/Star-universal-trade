@@ -1,1 +1,82 @@
+<!DOCTYPE html>
+<html lang="sw">
 
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SUT Register</title>
+
+<link rel="stylesheet" href="../css/auth.css">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-card">
+
+<img src="../assets/logo.png" class="logo" alt="SUT Logo">
+
+<h2>STAR UNIVERSAL TRADE</h2>
+
+<p>Fungua akaunti mpya.</p>
+
+<form id="register-form">
+
+<input
+id="register-email"
+type="email"
+placeholder="Email"
+required
+>
+
+<input
+id="register-password"
+type="password"
+placeholder="Password"
+minlength="6"
+required
+>
+
+<button type="submit">
+
+CREATE ACCOUNT
+
+</button>
+
+</form>
+
+<button
+id="google-login"
+class="google-btn">
+
+CONTINUE WITH GOOGLE
+
+</button>
+
+<p>
+
+Una akaunti tayari?
+
+<a href="login.html">
+
+Login
+
+</a>
+
+</p>
+
+</div>
+
+</div>
+
+<script type="module" src="../firebase/firebase.js"></script>
+
+<script type="module" src="../js/auth.js"></script>
+
+</body>
+
+</html>
