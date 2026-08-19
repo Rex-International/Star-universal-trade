@@ -1,0 +1,25 @@
+{
+  "name": "star-universal-trade",
+  "version": "1.0.0",
+  "description": "E-commerce marketplace - Star Universal Trade by Gaby International",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "dev": "http-server -p 3000 -c-1",
+    "build": "echo 'Static HTML build - no compilation needed'",
+    "start": "http-server -p 8080",
+    "lint": "echo 'No linting configured'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "ecommerce",
+    "marketplace",
+    "star-universal-trade",
+    "gaby-international"
+  ],
+  "author": "Rex International",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
