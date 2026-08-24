@@ -329,7 +329,72 @@ function renderSellerDash(){const v=$('#view');if(!S.user)return renderAuth();
  if(!S.store){v.innerHTML=`<div class="max-w-md mx-auto px-4 py-14"><div class="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 rounded-3xl p-6"><h1 class="font-serif text-2xl font-bold mb-4 text-slate-900 dark:text-slate-100">${t('create_store')}</h1><input id="stName" placeholder="${t('store_name')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-800 text-slate-900 dark:text-slate-100 mb-2"/><input id="stCountry" placeholder="${t('country')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-800 text-slate-900 dark:text-slate-100 mb-2"/><textarea id="stDesc" rows="3" placeholder="${t('store_desc')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-slate-50 dark:bg-navy-800 text-slate-900 dark:text-slate-100 mb-3"></textarea><button onclick="createStore()" class="w-full btn-gold py-3 rounded-xl text-white font-semibold">${t('create_store')}</button></div></div>`;return;}
  v.innerHTML=`<div class="max-w-7xl mx-auto px-4 py-8"><div class="flex items-center justify-between mb-6"><h1 class="font-serif text-2xl font-bold text-slate-900 dark:text-slate-100">${esc(S.store.name)}</h1><button onclick="openProductForm()" class="btn-gold px-5 py-2 rounded-full text-white">+ ${t('add_product')}</button></div><div id="myProducts" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">${skel(4)}</div></div>`;
  loadMyProducts();}
-async function createStore(){if(!sb)return toast(t('error'),'error');const name=$('#stName').value.trim();if(!name)return toast(t('error'),'error');try{const {data,error}=await sb.from('stores').insert({owner_uid:S.user.uid,name,country:$('#stCountry').value,description:$('#stDesc').value}).select().single();if(error)throw error;S.store=data;await sb.from('profiles').update({is_seller:true}).eq('id',S.user.uid);toast(t('create_store')+' ✓','success');renderSellerDash();}catch(e){toast(e.message,'error');}}
+async function createStore(){
+  if(!S.user)return toast(t('login_first'),'error');
+  if(!sb)return toast(t('error'),'error');
+
+  const name=$('#stName').value.trim();
+  const country=$('#stCountry').value.trim();
+  const description=$('#stDesc').value.trim();
+
+  if(!name)return toast(t('error'),'error');
+
+  try{
+    const {data:existing,error:checkError}=await sb
+      .from('stores')
+      .select('id,name,slug')
+      .eq('owner_uid',S.user.uid)
+      .limit(1);
+
+    if(checkError)throw checkError;
+
+    if(existing && existing.length){
+      S.store=existing[0];
+      return toast('You already have a store','error');
+    }
+
+    const slug=name
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g,'-')
+      .replace(/^-+|-+$/g,'');
+
+    const {data,error}=await sb
+      .from('stores')
+      .insert({
+        owner_uid:S.user.uid,
+        name:name,
+        slug:slug || null,
+        country:country || null,
+        description:description || null
+      })
+      .select('*')
+      .single();
+
+    if(error)throw error;
+
+    S.store=data;
+
+    const {error:profileError}=await sb
+      .from('profiles')
+      .update({is_seller:true})
+      .eq('id',S.user.uid);
+
+    if(profileError)throw profileError;
+
+    if(S.profile){
+      S.profile.is_seller=true;
+    }
+
+    toast(t('create_store')+' ✓','success');
+    renderSellerDash();
+
+  }catch(e){
+    console.error('createStore:',e);
+    toast(e.message || t('error'),'error');
+  }
+}
+
 async function loadMyProducts(){const prods=await sbSelect('products',{eq:[['seller_uid',S.user.uid]]});const grid=$('#myProducts');if(!grid)return;grid.innerHTML=prods.length?prods.map(p=>`<div class="bg-white dark:bg-navy-900 border border-slate-200 dark:border-navy-800 rounded-2xl p-3"><div class="font-semibold text-sm line-clamp-2 text-slate-900 dark:text-slate-100">${esc(p.name)}</div><div class="text-gold-600 font-bold">${money(p.price,p.currency)}</div><div class="text-xs text-slate-500 dark:text-slate-400">${p.status}</div><div class="flex gap-2 mt-2"><button onclick="toggleProductStatus('${p.id}','${p.status==='active'?'paused':'active'}')" class="text-xs underline text-slate-700 dark:text-slate-200">${p.status==='active'?t('pause'):t('activate')}</button><button onclick="deleteProduct('${p.id}')" class="text-xs underline text-red-600">${t('delete')}</button></div></div>`).join(''):`<div class="col-span-full text-center py-10 text-slate-500 dark:text-slate-400">${t('empty_products')}</div>`;}
 function openProductForm(){openModal(`<h3 class="font-serif text-xl font-bold mb-3 text-slate-900 dark:text-slate-100">${t('add_product')}</h3><input id="pName" placeholder="${t('product_name')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-900 dark:text-slate-100 mb-2"/><textarea id="pDesc" rows="3" placeholder="${t('description')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-900 dark:text-slate-100 mb-2"></textarea><div class="grid grid-cols-2 gap-2"><input id="pPrice" type="number" placeholder="${t('price')}" class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-900 dark:text-slate-100"/><input id="pStock" type="number" placeholder="${t('stock')}" class="px-3 py-2.5 rounded-xl border border-slate-200 dark:border-navy-700 bg-white dark:bg-navy-800 text-slate-900 dark:text-slate-100"/></div><input id="pImg" type="file" accept="image/*" multiple class="mt-2 text-sm"/><button onclick="saveProduct()" class="mt-3 w-full btn-gold py-3 rounded-xl text-white font-semibold">${t('publish')}</button>`);}
 async function saveProduct(){if(!sb)return toast(t('error'),'error');if(!S.store)return toast(t('create_store'),'error');const name=$('#pName').value.trim(),price=+$('#pPrice').value;if(!name||!price)return toast(t('error'),'error');try{const {data:prod,error}=await sb.from('products').insert({seller_uid:S.user.uid,store_id:S.store.id,name,description:$('#pDesc').value,price,currency:'USD',stock:+$('#pStock').value||0,status:'active',is_restricted:false,delivery_available:true}).select().single();if(error)throw error;const files=$('#pImg').files;if(files&&files.length){for(const f of files){try{const {error:ue}=await sb.storage.from('media').upload(`products/${prod.id}/${Date.now()}_${f.name}`,f);if(!ue){const {data:pub}=sb.storage.from('media').getPublicUrl(`products/${prod.id}/${Date.now()}_${f.name}`);await sb.from('product_media').insert({product_id:prod.id,url:pub.publicUrl,type:'image'});}}catch(err){console.warn('upload',err);}}closeModal();toast(t('publish')+' ✓','success');loadMyProducts();}}catch(e){toast(e.message,'error');}}
