@@ -607,11 +607,7 @@ function toggleMobileNav(){
   const n = $('#mobileNav');
   if(!n)return;
 
-  if(!n.innerHTML.trim() && typeof renderMobileNav === 'function'){
-    renderMobileNav();
-  }
-
-  n.classList.toggle('hide');
+  n.classList.toggle('hidden');
 }
 
 function toggleDark(){
