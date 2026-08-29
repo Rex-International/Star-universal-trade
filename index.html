@@ -143,13 +143,90 @@ try{
   console.warn('Supabase init error:',e);
 }
 
+
+/* ================= APP STATE & CORE HELPERS ================= */
+const PAGE=12;
+const S={
+  route:'home',
+  routeArg:'',
+  q:'',
+  cat:'',
+  browsePage:0,
+  user:null,
+  profile:null,
+  store:null,
+  favIds:new Set(),
+  wishlist:[],
+  chatConv:null,
+  chatPoll:null,
+  notifTimer:null,
+  lang:localStorage.getItem('sut_lang')||'en'
+};
+
+const I18N={
+  en:{
+    home:'Home',browse:'Browse',categories:'Categories',messages:'Messages',account:'Account',settings:'Settings',
+    wishlist:'Wishlist',notifications:'Notifications',signin:'Sign in',signout:'Sign out',dashboard:'Dashboard',
+    buying_requests:'Buying Requests',about:'About',support:'Support',marketplace:'Marketplace',sell:'Sell',
+    become_seller:'Become a Seller',add_product:'Add Product',create_store:'Create Store',view_store:'View Store',
+    contact_seller:'Contact Seller',add_fav:'Add to Wishlist',saved:'Saved',featured:'Featured',load_more:'Load More',
+    no_results:'No results found.',empty:'Nothing here yet.',empty_products:'No products yet.',no_conv:'No conversations yet.',
+    no_notif:'No notifications.',no_orders:'No orders yet.',select_conv:'Select a conversation.',login_first:'Please sign in first.',
+    error:'Something went wrong.',welcome:'Welcome',language:'Language',dark_mode:'Dark mode',or:'or',
+    continue_google:'Continue with Google',create_account:'Create account',full_name:'Full name',display_name:'Display name',
+    email:'Email',password:'Password',product_name:'Product name',description:'Description',price:'Price',stock:'Stock',
+    country:'Country',store_name:'Store name',store_desc:'Store description',tagline:'Tagline',publish:'Publish',
+    save:'Save',delete:'Delete',activate:'Activate',pause:'Pause',propose:'Propose',respond:'Respond',report:'Report',
+    reviews:'Reviews',write_review:'Write a review',send:'Send',type_message:'Type a message…',submit:'Submit',
+    post_request:'Post Request',orders:'Orders',arrangements:'Arrangements',terms:'Terms',privacy:'Privacy',
+    company:'Company',contact_us:'Contact us'
+  },
+  sw:{
+    home:'Nyumbani',browse:'Bidhaa',categories:'Makundi',messages:'Ujumbe',account:'Akaunti',settings:'Mipangilio',
+    wishlist:'Vipendwa',notifications:'Arifa',signin:'Ingia',signout:'Toka',dashboard:'Dashibodi',
+    buying_requests:'Maombi ya Ununuzi',about:'Kuhusu',support:'Msaada',marketplace:'Soko',sell:'Uza',
+    become_seller:'Kuwa Muuzaji',add_product:'Ongeza Bidhaa',create_store:'Fungua Duka',view_store:'Tazama Duka',
+    contact_seller:'Wasiliana na Muuzaji',add_fav:'Ongeza Vipendwa',saved:'Imehifadhiwa',featured:'Zilizochaguliwa',load_more:'Pakia zaidi',
+    no_results:'Hakuna matokeo.',empty:'Hakuna kitu hapa bado.',empty_products:'Hakuna bidhaa bado.',no_conv:'Hakuna mazungumzo bado.',
+    no_notif:'Hakuna arifa.',no_orders:'Hakuna oda bado.',select_conv:'Chagua mazungumzo.',login_first:'Tafadhali ingia kwanza.',
+    error:'Kuna tatizo.',welcome:'Karibu',language:'Lugha',dark_mode:'Mwonekano wa giza',or:'au',
+    continue_google:'Endelea na Google',create_account:'Fungua akaunti',full_name:'Jina kamili',display_name:'Jina la kuonyesha',
+    email:'Barua pepe',password:'Nenosiri',product_name:'Jina la bidhaa',description:'Maelezo',price:'Bei',stock:'Stoki',
+    country:'Nchi',store_name:'Jina la duka',store_desc:'Maelezo ya duka',tagline:'Kauli mbiu',publish:'Chapisha',
+    save:'Hifadhi',delete:'Futa',activate:'Washa',pause:'Sitisha',propose:'Pendekeza',respond:'Jibu',report:'Ripoti',
+    reviews:'Maoni',write_review:'Andika maoni',send:'Tuma',type_message:'Andika ujumbe…',submit:'Tuma',
+    post_request:'Tuma Ombi',orders:'Oda',arrangements:'Mipango',terms:'Masharti',privacy:'Faragha',
+    company:'Kampuni',contact_us:'Wasiliana nasi'
+  },
+  fr:{home:'Accueil',browse:'Parcourir',categories:'Catégories',messages:'Messages',account:'Compte',settings:'Paramètres',wishlist:'Favoris',notifications:'Notifications',signin:'Connexion',signout:'Déconnexion',dashboard:'Tableau de bord',buying_requests:'Demandes d’achat',about:'À propos',support:'Assistance',marketplace:'Marché',sell:'Vendre',become_seller:'Devenir vendeur',add_product:'Ajouter un produit',create_store:'Créer une boutique',view_store:'Voir la boutique',contact_seller:'Contacter le vendeur',add_fav:'Ajouter aux favoris',saved:'Enregistré',featured:'À la une',load_more:'Charger plus',no_results:'Aucun résultat.',empty:'Rien ici pour le moment.',empty_products:'Aucun produit.',no_conv:'Aucune conversation.',no_notif:'Aucune notification.',no_orders:'Aucune commande.',select_conv:'Sélectionnez une conversation.',login_first:'Veuillez vous connecter.',error:'Une erreur est survenue.',welcome:'Bienvenue',language:'Langue',dark_mode:'Mode sombre',or:'ou',continue_google:'Continuer avec Google',create_account:'Créer un compte',full_name:'Nom complet',display_name:'Nom affiché',email:'E-mail',password:'Mot de passe',product_name:'Nom du produit',description:'Description',price:'Prix',stock:'Stock',country:'Pays',store_name:'Nom de la boutique',store_desc:'Description de la boutique',tagline:'Slogan',publish:'Publier',save:'Enregistrer',delete:'Supprimer',activate:'Activer',pause:'Suspendre',propose:'Proposer',respond:'Répondre',report:'Signaler',reviews:'Avis',write_review:'Écrire un avis',send:'Envoyer',type_message:'Écrire un message…',submit:'Envoyer',post_request:'Publier une demande',orders:'Commandes',arrangements:'Accords',terms:'Conditions',privacy:'Confidentialité',company:'Entreprise',contact_us:'Nous contacter'},
+  ar:{home:'الرئيسية',browse:'تصفح',categories:'الفئات',messages:'الرسائل',account:'الحساب',settings:'الإعدادات',wishlist:'المفضلة',notifications:'الإشعارات',signin:'تسجيل الدخول',signout:'تسجيل الخروج',dashboard:'لوحة التحكم',buying_requests:'طلبات الشراء',about:'حول',support:'الدعم',marketplace:'السوق',sell:'بيع',become_seller:'كن بائعًا',add_product:'إضافة منتج',create_store:'إنشاء متجر',view_store:'عرض المتجر',contact_seller:'تواصل مع البائع',add_fav:'إضافة للمفضلة',saved:'محفوظ',featured:'مميز',load_more:'تحميل المزيد',no_results:'لا توجد نتائج.',empty:'لا يوجد شيء هنا بعد.',empty_products:'لا توجد منتجات.',no_conv:'لا توجد محادثات.',no_notif:'لا توجد إشعارات.',no_orders:'لا توجد طلبات.',select_conv:'اختر محادثة.',login_first:'يرجى تسجيل الدخول أولاً.',error:'حدث خطأ.',welcome:'مرحبًا',language:'اللغة',dark_mode:'الوضع الداكن',or:'أو',continue_google:'المتابعة مع Google',create_account:'إنشاء حساب',full_name:'الاسم الكامل',display_name:'الاسم المعروض',email:'البريد الإلكتروني',password:'كلمة المرور',product_name:'اسم المنتج',description:'الوصف',price:'السعر',stock:'المخزون',country:'الدولة',store_name:'اسم المتجر',store_desc:'وصف المتجر',tagline:'الشعار',publish:'نشر',save:'حفظ',delete:'حذف',activate:'تفعيل',pause:'إيقاف',propose:'اقتراح',respond:'رد',report:'إبلاغ',reviews:'التقييمات',write_review:'اكتب تقييمًا',send:'إرسال',type_message:'اكتب رسالة…',submit:'إرسال',post_request:'نشر طلب',orders:'الطلبات',arrangements:'الترتيبات',terms:'الشروط',privacy:'الخصوصية',company:'الشركة',contact_us:'اتصل بنا'}
+};
+
+function $(sel){return document.querySelector(sel);}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function money(v){const n=Number(v||0);return new Intl.NumberFormat('en-US',{maximumFractionDigits:2}).format(n);}
+function toast(message,type='info'){
+  let stack=$('#toastStack');
+  if(!stack){stack=document.createElement('div');stack.id='toastStack';stack.className='fixed top-20 right-4 z-[100] space-y-2';document.body.appendChild(stack);}
+  const el=document.createElement('div');el.className='px-4 py-3 rounded-xl bg-navy-900 text-white shadow-xl max-w-sm';el.textContent=String(message??'');
+  stack.appendChild(el);setTimeout(()=>el.remove(),3500);
+}
+function t(key){const lang=S.lang||'en';return (I18N[lang]&&I18N[lang][key])||I18N.en[key]||key;}
+function setLang(lang){if(!I18N[lang])lang='en';S.lang=lang;localStorage.setItem('sut_lang',lang);const el=$('#langSel');if(el)el.value=lang;applyI18n();render();}
+function applyI18n(){
+  document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';
+  document.documentElement.lang=S.lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(k)el.textContent=t(k);});
+  const sel=$('#langSel');if(sel)sel.value=S.lang;
+}
+
 async function sbSelect(table,opts){if(!sb)return[];opts=opts||{};try{let q=sb.from(table).select(opts.select||'*');if(opts.eq)opts.eq.forEach(e=>q=q.eq(e[0],e[1]));if(opts.or)q=q.or(opts.or);if(opts.order)q=q.order(opts.order[0],{ascending:opts.order[1]!==false});if(opts.limit)q=q.limit(opts.limit);if(opts.range)q=q.range(opts.range[0],opts.range[1]);const {data,error}=await q;if(error){console.warn('select',table,error.message);return[];}return data||[];}catch(e){console.warn('select',table,e);return[];}}
 
 async function getCategories(){return await sbSelect('categories',{eq:[['is_active',true]],order:['name',true]});}
 async function getProducts(opts){if(!sb)return[];opts=opts||{};let eq=[['status','active'],['is_restricted',false]];if(opts.category)eq.push(['category_id',opts.category]);
  let orq=opts.q?`name.ilike.%${opts.q}%,description.ilike.%${opts.q}%`:null;
  let range=[(opts.page||0)*PAGE,(opts.page||0)*PAGE+PAGE-1];
- try{let q=sb.from('products').select('*,stores(id,name)').eq('status','active').eq('is_restricted',false);
+ try{let q=sb.from('products').select('*,stores(id,name),product_media(*)').eq('status','active').eq('is_restricted',false);
   if(opts.category)q=q.eq('category_id',opts.category);
   if(opts.q)q=q.or(`name.ilike.%${opts.q}%,description.ilike.%${opts.q}%`);
   if(opts.min!=null&&opts.min!=='')q=q.gte('price',+opts.min);
