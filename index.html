@@ -265,15 +265,24 @@ async function googleSignIn(){
   if(!sb)return toast(t('error'),'error');
 
   try{
+    const redirectUrl =
+      window.location.origin +
+      window.location.pathname +
+      window.location.search;
+
     const {error}=await sb.auth.signInWithOAuth({
       provider:'google',
       options:{
-        redirectTo:window.location.origin + window.location.pathname
+        redirectTo:redirectUrl,
+        queryParams:{
+          prompt:'select_account'
+        }
       }
     });
 
     if(error)throw error;
   }catch(e){
+    console.error('Google sign-in error:',e);
     toast(e.message,'error');
   }
 }
