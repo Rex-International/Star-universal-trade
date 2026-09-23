@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Search, Menu, X, ChevronRight, MapPin, Mail, Instagram, MessageCircle, ShieldCheck, Store, ShoppingBag, AlertCircle } from "lucide-react";
 import "./styles.css";
 
-const API_URL = "https://script.google.com/macros/s/AKfycbya639VDCYf0EcbgdsvSwOzcK6Q9avsyeZMSgEld-5Eh0Qy2RIXrQeW0FGYvzzur3YTog/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwXQ8-DrJvaTPvM09pObAs0Uf8WpF-wZbGAFfLNShl5o5mjkf4YImZVTRhTO-QyxTl3Kg/exec";
 
 const fallbackProducts = [
   {id:"p1",name:"Premium Product",price:"Contact seller",category:"Featured",location:"Tanzania",seller:"SUT Marketplace",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=80"},
