@@ -1,0 +1,25 @@
+SUT Phase 3 refinement — Admin Console and Store Sharing
+
+Changes in this build:
+- Admin Communication Centre now loads recipient records from Supabase `profiles` and `stores`, supports text filtering and multi-selection, and fills contact fields when one recipient is selected.
+- WhatsApp and email actions now require a recipient contact and open a prefilled external-app draft. They do not claim a message was delivered. To avoid accidentally sending to the wrong people, these external-app actions open one recipient at a time.
+- In-app messaging remains a draft/queue attempt through the existing `messages` table; actual availability depends on the deployed schema and RLS policies.
+- Store share preview retains a generated branded promotional image and direct store URL; adds a Download Promo Image option and clearer Share Image + Link action. Native file sharing depends on browser/OS support; fallback remains available.
+
+Validation performed:
+- JavaScript syntax check (`node --check app.js`) passed.
+- ZIP archive integrity checked after packaging.
+
+Important deployment notes:
+- This is a frontend refinement. The live Supabase schema and policies were not changed or remotely verified here.
+- Recipient loading assumes the existing `profiles` and `stores` tables are readable by the signed-in admin and that common contact columns exist. If your schema uses different column names, the contact fields may be blank; the loader attempts common names.
+- WhatsApp/email only open drafts; a human must press Send. No automatic delivery is claimed.
+
+SUT refinement follow-up — 2026-11-07
+- Store QR is now generated in the browser using QRCode.js, then embedded as PNG data in the promo SVG. This removes dependence on the remote QRServer image endpoint.
+- Store category cover is fetched and embedded into the share artwork when CORS permits; a branded local SVG fallback prevents a broken/blank cover when the photo host blocks access.
+- Store share preparation is asynchronous and reports QR-generation/network errors instead of silently showing a broken image.
+- Promo artwork is self-contained (embedded QR and cover data) to improve PNG export reliability.
+- Admin Console “Warn seller” now resolves the listing's store owner and inserts a targeted `SUT Seller Warning` into that seller's `sut_messages` inbox. It asks for a warning reason and reports success only after Supabase accepts the insert.
+- The warning uses the existing `sut_messages` table and admin-insert RLS policy from migration `20261025_sut_in_app_messaging.sql`; no existing tables or data are deleted or renamed.
+- Validation: `node --check app.js`, `node --check sw.js`, HTML/manifest checks, and ZIP integrity check passed. Live Supabase/RLS, QR scanning on another device, and hosted PNG export still require testing with the user's project and public URL.

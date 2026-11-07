@@ -1,0 +1,9 @@
+SUT refinement — 25 October 2026
+
+1. Admin in-app messaging now targets selected user accounts and uses a dedicated sut_messages table rather than attempting to write a null-recipient draft to a guessed messages table.
+2. Added a Supabase SQL migration with RLS policies for admin send, recipient-only inbox reads, and recipient read-status updates.
+3. Notifications page reads messages from the signed-in user's inbox and supports Mark read.
+4. Store promo image download now rasterizes the SVG promo into PNG where browser canvas support allows; SVG fallback is retained.
+5. Public Request response no longer prompts for a custom response before opening WhatsApp. It opens WhatsApp directly with a prefilled response and store link when buyer contact can be parsed.
+
+Required: apply supabase/migrations/20261025_sut_in_app_messaging.sql in Supabase SQL Editor before testing in-app messaging. Static checks do not prove live Supabase/RLS success.
